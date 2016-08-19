@@ -35,7 +35,7 @@ setTimeout(() => {
 
 // Initialize service worker.
 if ('serviceWorker' in navigator) {
-  (<any> navigator).serviceWorker.register('/sw.js').then(registration => {
+  (<any> navigator).serviceWorker.register('/service-worker.js').then(registration => {
     console.log("Service Worker Registered");
     push.initialize(registration);
   });
