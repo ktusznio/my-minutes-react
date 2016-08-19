@@ -1,4 +1,4 @@
 src/config.ts
-push-server.config.js
+push-server/push-server.config.js
 /node_modules/
 /typings/
