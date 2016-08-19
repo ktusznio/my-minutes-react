@@ -1,9 +1,10 @@
 import * as React from 'react';
 
-import * as c from './theme/colors';
 import * as m from '../models';
-import * as format from '../utils/format';
 import { IViewTask } from '../selectors';
+import * as format from '../utils/format';
+import * as taskUtils from '../utils/task';
+import * as c from './theme/colors';
 
 interface IRunningDurationProps {
   task: IViewTask;
@@ -52,30 +53,6 @@ export default class RunningDuration extends React.Component<IRunningDurationPro
     }
   }
 
-  getTaskTime(): number {
-    const { task } = this.props;
-
-    if (!task.activeSession) {
-      return task.durationOfAllSessions;
-    }
-
-    const now = Date.now();
-    const startedAt = task.activeSession.startedAt;
-    return now - startedAt + task.durationOfAllSessions;
-  }
-
-  getGoalRemainder(): number {
-    const { task } = this.props;
-
-    if (!task.activeSession) {
-      return task.msLeftForGoal;
-    }
-
-    const now = (new Date()).getTime();
-    const sessionDuration = now - task.activeSession.startedAt;
-    return task.msLeftForGoal - sessionDuration;
-  }
-
   render() {
     return (
       <span style={this.props.style}>
@@ -98,31 +75,36 @@ export default class RunningDuration extends React.Component<IRunningDurationPro
       return null;
     }
 
-    const goalLeft = this.getGoalRemainder();
+    const goalRemainder = taskUtils.getGoalRemainder(this.props.task);
 
     let color = c.black;
     let message;
     if (goal.type === m.GoalType.AT_LEAST) {
-      if (goalLeft > 0) {
-        message = format.duration(goalLeft, format.DURATION_H_M) + ' to go!'
+      if (goalRemainder > 0) {
+        message = format.duration(goalRemainder, format.DURATION_H_M) + ' to go!'
       } else {
         color = c.green;
         message = 'All done!';
       }
     } else {
-      if (goalLeft > 0) {
-        message = format.duration(goalLeft, format.DURATION_H_M) + ' left!';
+      if (goalRemainder > 0) {
+        message = format.duration(goalRemainder, format.DURATION_H_M) + ' left!';
       } else {
         color = c.red;
         message = "Time's up!";
       }
     }
 
-    return <span style={{ color }}>{message}</span>
+    return (
+      <span style={{ color }}>{message}</span>
+    );
   }
 
   renderTask() {
-    const taskTime = this.getTaskTime();
-    return <span>{format.duration(taskTime, format.DURATION_H_M_S)}</span>;
+    const taskTime = taskUtils.getTaskTime(this.props.task);
+
+    return (
+      <span>{format.duration(taskTime, format.DURATION_H_M_S)}</span>
+    );
   }
 }

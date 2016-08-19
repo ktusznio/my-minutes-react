@@ -1,15 +1,10 @@
 import { cloneDeep } from 'lodash';
 
-// Push Message
+// Push payload.
 
-export type PushMessageId = string;
-
-export interface IPushMessage {
-  payload: {
-    title: string;
-    body: string;
-  }
-  delay?: number;
+export interface IPushPayload {
+  title: string;
+  body: string;
 }
 
 // User.

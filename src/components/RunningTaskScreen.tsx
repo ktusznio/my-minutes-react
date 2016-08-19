@@ -15,8 +15,8 @@ import StartTaskButton from './StartTaskButton';
 
 export interface IRunningTaskScreenProps {
   task: IViewTask;
-  startTask: ((task: m.ITask) => void);
-  stopTask: ((task: m.ITask) => void);
+  startTask: ((task: IViewTask) => void);
+  stopTask: ((task: IViewTask) => void);
   params: RouteParams;
 }
 
@@ -25,8 +25,8 @@ const mapStateToProps = (state: IAppState, props: IRunningTaskScreenProps) => ({
 });
 
 const mapDispatchToProps = (dispatch: Redux.Dispatch) => ({
-  startTask: (task: m.ITask) => dispatch(startTask(task)),
-  stopTask: (task: m.ITask) => dispatch(stopTask(task)),
+  startTask: (task: IViewTask) => dispatch(startTask(task)),
+  stopTask: (task: IViewTask) => dispatch(stopTask(task)),
 });
 
 const style = {

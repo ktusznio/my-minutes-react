@@ -5,6 +5,9 @@ import * as actionTypes from '../actionTypes';
 import * as db from '../firebase/database';
 import { IAppState, IGetAppState } from '../reducer';
 import { ITasksState } from '../reducers/tasks';
+import { IViewTask } from '../selectors';
+import pushClient from '../pushClient';
+import * as taskUtils from '../utils/task';
 
 export const startListeningToTasks = (user) =>
   (dispatch: Redux.Dispatch) => {
@@ -70,20 +73,45 @@ const deleteTaskError = (error, task: m.ITask) => ({
   error,
 });
 
-export const startTask = (task: m.ITask) =>
-  (dispatch: Redux.Dispatch, getState: IGetAppState) =>
+export const startTask = (task: IViewTask) =>
+  (dispatch: Redux.Dispatch, getState: IGetAppState) => {
+    // Start the task in firebase.
     db.startTask(getState().auth.user.uid, task)
       .catch(error => dispatch(startTaskError(error)));
+
+    // Schedule a push notification for goals with remaining time.
+    if (task.goal.type !== m.GoalType.NONE) {
+      const delay = taskUtils.getGoalRemainder(task);
+
+      if (delay > 0) {
+        pushClient.schedulePush(task.id, {
+          title: 'My Minutes',
+          body: `You\'ve hit your "${task.name}" goal!`,
+        }, delay);
+      }
+    }
+  }
 
 const startTaskError = (error: Error) => ({
   type: actionTypes.START_TASK_ERROR,
   error,
 });
 
-export const stopTask = (task: m.ITask) =>
-  (dispatch: Redux.Dispatch, getState: IGetAppState) =>
+export const stopTask = (task: IViewTask) =>
+  (dispatch: Redux.Dispatch, getState: IGetAppState) => {
+    // Stop the task in firebase.
     db.stopTask(getState().auth.user.uid, task)
       .catch(error => dispatch(stopTaskError(error)));
+
+    // Cancel scheduled push notification.
+    if (task.goal.type !== m.GoalType.NONE) {
+      const delay = taskUtils.getGoalRemainder(task);
+
+      if (delay > 0) {
+        pushClient.cancelPush(task.id);
+      }
+    }
+  }
 
 const stopTaskError = (error: Error) => ({
   type: actionTypes.STOP_TASK_ERROR,

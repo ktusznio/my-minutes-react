@@ -10,7 +10,6 @@ import * as m from '../models';
 import { IAppState } from '../reducer';
 import { getTasks } from '../reducers/tasks';
 import { tasksSelector, viewTaskToTask, IViewTask } from '../selectors';
-import * as push from '../utils/push';
 import * as routes from '../utils/routes';
 import Navigation from './Navigation';
 import { Screen, ScreenContent } from './Screen';
@@ -18,7 +17,6 @@ import TaskList from './TaskList';
 
 export interface ITasksScreenProps {
   onAddTask: ((task: m.ITask) => void);
-  onSendPush: () => void;
   tasks: IViewTask[];
   user: m.IUser;
 }
@@ -37,16 +35,6 @@ const mapDispatchToProps = (dispatch: Redux.Dispatch, props: ITasksScreenProps) 
     dispatch(saveTask(viewTaskToTask(task))).then((task: m.ITask) => {
       browserHistory.push(routes.task(task.id));
     });
-  },
-
-  onSendPush: () => {
-    const message = {
-      payload: {
-        title: 'My Minutes',
-        body: 'Way to go!',
-      },
-    };
-    push.sendPush(props.user.uid, message);
   },
 });
 
@@ -77,11 +65,6 @@ class TasksScreen extends React.Component<ITasksScreenProps, ITasksScreenState> 
     this.closeAddTaskDialog();
   };
 
-  sendPushNotification = (e: React.FormEvent) => {
-    e.preventDefault();
-    this.props.onSendPush();
-  }
-
   render() {
     const addTaskDialogActions = [
       <FlatButton
@@ -100,7 +83,6 @@ class TasksScreen extends React.Component<ITasksScreenProps, ITasksScreenState> 
       <Screen>
         <Navigation title="My Minutes" />
         <ScreenContent>
-          <button onTouchTap={this.sendPushNotification}>Send Push</button>
           <TaskList tasks={this.props.tasks} />
         </ScreenContent>
 

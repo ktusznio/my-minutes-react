@@ -10,7 +10,7 @@ import 'whatwg-fetch';
 import config from './config';
 import { createRouter } from './router';
 import store from './store';
-import * as push from './utils/push';
+import pushClient from './pushClient';
 
 injectTapEventPlugin();
 
@@ -37,6 +37,6 @@ setTimeout(() => {
 if ('serviceWorker' in navigator) {
   (<any> navigator).serviceWorker.register('/service-worker.js').then(registration => {
     console.log("Service Worker Registered");
-    push.initialize(registration);
+    pushClient.initialize(registration);
   });
 }

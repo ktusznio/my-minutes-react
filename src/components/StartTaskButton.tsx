@@ -15,19 +15,19 @@ import * as routes from '../utils/routes';
 import * as c from './theme/colors';
 
 interface IStartTaskButtonProps {
-  onStartTask?: (task: m.ITask) => void;
-  onStopTask?: (task: m.ITask) => void;
+  onStartTask?: (task: IViewTask) => void;
+  onStopTask?: (task: IViewTask) => void;
   task: IViewTask;
 }
 
 interface IConnectedStartTaskButtonProps extends IStartTaskButtonProps {
-  startTask: (task: m.ITask) => void;
-  stopTask: (task: m.ITask) => void;
+  startTask: (task: IViewTask) => void;
+  stopTask: (task: IViewTask) => void;
 }
 
 const mapDispatchToProps = (dispatch: Redux.Dispatch) => ({
-  startTask: (task: m.ITask) => dispatch(startTask(task)),
-  stopTask: (task: m.ITask) => dispatch(stopTask(task)),
+  startTask: (task: IViewTask) => dispatch(startTask(task)),
+  stopTask: (task: IViewTask) => dispatch(stopTask(task)),
 });
 
 const style = {
@@ -51,19 +51,19 @@ const style = {
   }
 };
 
-const handleStartTask = (props) =>
-  props.startTask(props.task).then(() => {
-    if (props.onStartTask) {
-      props.onStartTask(props.task);
-    }
-  })
+const handleStartTask = (props) => {
+  props.startTask(props.task);
+  if (props.onStartTask) {
+    props.onStartTask(props.task);
+  }
+};
 
-const handleStopTask = (props) =>
-  props.stopTask(props.task).then(() => {
-    if (props.onStopTask) {
-      props.onStopTask(props.task);
-    }
-  })
+const handleStopTask = (props) => {
+  props.stopTask(props.task);
+  if (props.onStopTask) {
+    props.onStopTask(props.task);
+  }
+};
 
 const StartTaskButton = (props: IStartTaskButtonProps) => {
   const { task } = props;
