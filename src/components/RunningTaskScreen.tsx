@@ -12,6 +12,7 @@ import NavigationBackIcon from './NavigationBackIcon';
 import RunningDuration from './RunningDuration';
 import { Screen, ScreenContent } from './Screen';
 import StartTaskButton from './StartTaskButton';
+import TaskHistoryDots from './TaskHistoryDots';
 
 export interface IRunningTaskScreenProps {
   task: IViewTask;
@@ -56,6 +57,7 @@ const RunningTaskScreen = (props: IRunningTaskScreenProps) => {
         </Column>
         <div style={{ flex: 1, margin: '40px auto 0' }}>
           <StartTaskButton task={task} />
+          <TaskHistoryDots task={task} />
         </div>
       </ScreenContent>
     </Screen>

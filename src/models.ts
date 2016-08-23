@@ -63,6 +63,14 @@ export const enum GoalType {
   AT_MOST,
 }
 
+export const enum GoalStatus {
+  NO_GOAL,
+  PENDING,
+  PASS,
+  FAIL,
+  FUTURE,
+}
+
 export interface IGoal {
   duration: number;
   type: GoalType;

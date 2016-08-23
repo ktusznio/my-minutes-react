@@ -5,7 +5,7 @@
   "scripts": {
     "start": "webpack-dev-server --config webpack.dev.js --content-base public --progress --colors",
     "start:push": "NODE_ENV=development node push-server",
-    "test": "ava",
+    "test": "NODE_ENV=development ava",
     "build": "NODE_ENV=development webpack --config webpack.dev.js --progress --colors",
     "build:beta": "NODE_ENV=beta webpack --config webpack.beta.js --progress --colors",
     "typings:update": "typings ls | awk '$2 ~ /.+/ {print $2}' | xargs -I {} typings i dt~{} -SG"

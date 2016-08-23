@@ -10,6 +10,7 @@ import * as routes from '../utils/routes';
 import * as format from '../utils/format';
 import RunningDuration from './RunningDuration';
 import StartTaskButton from './StartTaskButton';
+import TaskHistoryDots from './TaskHistoryDots';
 import theme from './theme';
 
 export interface ITaskListItemProps {
@@ -50,6 +51,7 @@ const TaskListItem = (props: ITaskListItemProps) => {
     <div style={style.root}>
       <Link style={style.leftColumn} to={routes.task(task.id)}>
         <div style={style.taskName}>{task.name}</div>
+        <TaskHistoryDots task={task} />
         <RunningDuration task={task} />
       </Link>
       <div style={style.rightColumn}>

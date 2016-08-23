@@ -19,16 +19,6 @@ interface ISessionsStateSessions {
   }
 }
 
-export const taskSessionsForDate = (sessions: ISessionsStateSessions, taskId: m.TaskId, date: moment.Moment): m.ISession[] => {
-  const dateKey = date.format('YYYY-MM-DD');
-  if (!sessions || !sessions[taskId] || !sessions[taskId][dateKey]) {
-    return [];
-  }
-
-  const sessionsById = sessions[taskId][dateKey];
-  return Object.keys(sessionsById).map(id => sessionsById[id]);
-}
-
 export default function sessions(
   sessionsState: ISessionsState = buildSessionsState(),
   action
