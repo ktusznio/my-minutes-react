@@ -12,7 +12,7 @@ const handleFacebookLoginTap = () => {
 
 const LoginScreen = (props) =>
   <Screen>
-    <Navigation title="Login" />
+    <Navigation title="My Minutes" />
     <ScreenContent>
       <RaisedButton
        label="Login with Facebook"

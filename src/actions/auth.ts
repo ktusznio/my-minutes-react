@@ -22,7 +22,6 @@ export const startListeningToAuth = () =>
   }
 
 export const loginSuccess = (user: firebase.User) => {
-  browserHistory.push('/');
   return {
     type: actionTypes.LOGIN_SUCCESS,
     user,
