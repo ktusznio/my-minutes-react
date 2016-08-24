@@ -67,4 +67,4 @@ const buildViewTask = (
 };
 
 const getActiveSession = (sessions: m.ISession[] = []): m.ISession =>
-  find(sessions, session => !!session.stoppedAt);
+  find(sessions, session => !session.stoppedAt);

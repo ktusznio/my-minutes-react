@@ -9,32 +9,38 @@ import * as path from './path';
 export interface IListenToRefAction {
   type: string;
   ref: firebase.database.Reference;
-  listener: (snapshot: firebase.database.DataSnapshot) => void;
 }
 
 interface ITasksListener {
-  (tasks: ITasksState): void
+  (event: string, data: any): void
 }
 
-interface IRefAndListener {
-  ref: firebase.database.Reference;
-  listener: (snapshot: firebase.database.DataSnapshot) => void;
-}
+export const listenToTasks = (uid: m.UserId, callback: ITasksListener): firebase.database.Reference => {
+  const ref = database.ref(path.tasks(uid));
+  ref.orderByKey();
 
-export const listenToTasks = (uid: m.UserId, callback: ITasksListener): IRefAndListener => {
-  const ref = database.ref(path.tasks(uid))
-  const listener = ref.on(
-    'value',
-    snapshot => callback(snapshot.val() as ITasksState)
+  ref.on(
+    'child_added',
+    childData => callback('child_added', childData.val())
   );
 
-  return { ref, listener };
+  ref.on(
+    'child_changed',
+    childData => callback('child_changed', childData.val())
+  );
+
+  ref.on(
+    'child_removed',
+    childData => callback('child_removed', childData.key)
+  );
+
+  return ref;
 };
 
-export const stopListeningToTasks = (tasksRef, listener) =>
-  tasksRef.off('value', listener);
+export const stopListeningToTasks = (tasksRef) =>
+  tasksRef.off();
 
-export const saveTask = (uid: m.UserId, task: m.ITask): firebase.Promise<m.ITask> => {
+export const saveTask = (uid: m.UserId, task: m.ITask): firebase.Promise<void> => {
   if (task.id) {
     return database.ref(path.task(uid, task.id)).set(task);
   } else {
@@ -91,18 +97,25 @@ export const stopTask = (uid: m.UserId, task: m.ITask) => {
 }
 
 interface ISessionsListener {
-  (sessions: ISessionsState): void
+  (event: string, taskId: m.TaskId, sessionOrSessionId): void
 }
 
-export const listenToSessions = (uid: m.UserId, callback: ISessionsListener): IRefAndListener => {
+export const listenToSessions = (uid: m.UserId, callback: ISessionsListener): firebase.database.Reference => {
   const ref = database.ref(path.sessions(uid))
-  const listener = ref.on(
-    'value',
-    snapshot => callback(snapshot.val() as ISessionsState)
+  ref.orderByKey();
+
+  ref.on(
+    'child_added',
+    childData => callback('child_added', childData.key, childData.val())
   );
 
-  return { ref, listener };
+  ref.on(
+    'child_changed',
+    childData => callback('child_changed', childData.key, childData.val())
+  );
+
+  return ref;
 };
 
-export const stopListeningToSessions = (sessionsRef, listener) =>
-  sessionsRef.off('value', listener);
+export const stopListeningToSessions = (sessionsRef) =>
+  sessionsRef.off();

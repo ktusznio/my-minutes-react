@@ -36,12 +36,15 @@ const mapStateToProps = (state: IAppState, props: ITaskScreenProps) => ({
 
 const mapDispatchToProps = (dispatch) => ({
   onDeleteTask: (task: m.ITask) => {
-    dispatch(deleteTask(task)).catch(e => console.error('error deleting task', e, task));
+    dispatch(deleteTask(task)).catch(
+      e => console.error('error deleting task', e, task)
+    );
     browserHistory.goBack();
   },
   onSubmit: (task: IViewTask) => {
-    dispatch(saveTask(viewTaskToTask(task)))
-      .catch((e) => console.error('error saving task', e, task));
+    dispatch(saveTask(viewTaskToTask(task))).catch(
+      e => console.error('error saving task', e, task)
+    );
     browserHistory.goBack();
   },
 });

@@ -1,6 +1,5 @@
 import * as moment from 'moment';
 
-import { IReceiveSessionsAction } from '../actions/sessions';
 import * as actionTypes from '../actionTypes';
 import * as db from '../firebase/database';
 import * as m from '../models';
@@ -8,7 +7,6 @@ import * as m from '../models';
 export interface ISessionsState {
   sessions: ISessionsStateSessions;
   sessionsRef: firebase.database.Reference;
-  sessionsListener: (snapshot: firebase.database.DataSnapshot) => void;
 }
 
 interface ISessionsStateSessions {
@@ -28,21 +26,34 @@ export default function sessions(
     const listenToSessionsAction: db.IListenToRefAction = action;
     return Object.assign({}, sessionsState, {
       sessionsRef: listenToSessionsAction.ref,
-      sessionsListener: listenToSessionsAction.listener,
     });
   }
 
   case actionTypes.STOP_LISTENING_TO_SESSIONS: {
     return Object.assign({}, sessionsState, {
       sessionsRef: null,
-      sessionsListener: null,
     });
   }
 
-  case actionTypes.RECEIVE_SESSIONS: {
-    const receiveSessionsAction: IReceiveSessionsAction = action;
+  case actionTypes.SESSION_ADDED: {
+    const { taskId, sessionsByDate } = action;
     return Object.assign({}, sessionsState, {
-      sessions: action.snapshot || {},
+      sessions: Object.assign(
+        {},
+        sessionsState.sessions,
+        { [taskId]: sessionsByDate }
+      ),
+    });
+  }
+
+  case actionTypes.SESSION_CHANGED: {
+    const { taskId, sessionsByDate } = action;
+    return Object.assign({}, sessionsState, {
+      sessions: Object.assign(
+        {},
+        sessionsState.sessions,
+        { [taskId]: sessionsByDate }
+      ),
     });
   }
 

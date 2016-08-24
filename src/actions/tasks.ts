@@ -11,32 +11,53 @@ import * as taskUtils from '../utils/task';
 
 export const startListeningToTasks = (user) =>
   (dispatch: Redux.Dispatch) => {
-    const { ref, listener } = db.listenToTasks(
+    const ref = db.listenToTasks(
       user.uid,
-      (tasks: ITasksState) => dispatch(receiveTasks(tasks))
+      (event: string, taskOrTaskId) => {
+        switch (event) {
+          case 'child_added':
+            dispatch(taskAdded(taskOrTaskId));
+            return;
+
+          case 'child_changed':
+            dispatch(taskChanged(taskOrTaskId));
+            return;
+
+          case 'child_removed':
+            dispatch(taskRemoved(taskOrTaskId));
+            return;
+
+          default:
+            throw new Error('unknown event emitted by listenToTasks');
+        }
+      }
     );
     dispatch({
       type: actionTypes.LISTEN_TO_TASKS,
       ref,
-      listener,
     });
   }
 
-export interface IReceiveTasksAction {
-  type: string;
-  snapshot: ITasksState;
-}
+const taskAdded = (task) => ({
+  type: actionTypes.TASK_ADDED,
+  task,
+});
 
-const receiveTasks = (snapshot: ITasksState): IReceiveTasksAction => ({
-  type: actionTypes.RECEIVE_TASKS,
-  snapshot,
+const taskChanged = (task) => ({
+  type: actionTypes.TASK_CHANGED,
+  task,
+});
+
+const taskRemoved = (taskId) => ({
+  type: actionTypes.TASK_REMOVED,
+  taskId,
 });
 
 export const stopListeningToTasks = () =>
   (dispatch: Redux.Dispatch, getState: IGetAppState) => {
-    const { tasksRef, tasksListener } = getState().tasks;
-    if (tasksRef && tasksListener) {
-      db.stopListeningToTasks(tasksRef, tasksListener);
+    const { tasksRef } = getState().tasks;
+    if (tasksRef) {
+      db.stopListeningToTasks(tasksRef);
       dispatch({ type: actionTypes.STOP_LISTENING_TO_TASKS });
     }
   }
@@ -45,7 +66,9 @@ export const saveTask = (task: m.ITask) => {
   return (dispatch: Redux.Dispatch, getState: IGetAppState): Promise<m.ITask> => {
     // Task will be assigned an id by db.saveTask.
     db.saveTask(getState().auth.user.uid, task)
-      .catch(error => dispatch(saveTaskError(error)));
+      .catch(error => {
+        dispatch(saveTaskError(error));
+      });
 
     return Promise.resolve(task);
   }

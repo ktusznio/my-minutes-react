@@ -1,4 +1,5 @@
-import { IReceiveTasksAction } from '../actions/tasks';
+import { omit } from 'lodash';
+
 import * as actionTypes from '../actionTypes';
 import * as db from '../firebase/database';
 import { buildTask, ITask, TaskId } from '../models';
@@ -6,7 +7,6 @@ import { buildTask, ITask, TaskId } from '../models';
 export interface ITasksState {
   tasks: ITasksStateTasks;
   tasksRef: firebase.database.Reference;
-  tasksListener: (snapshot: firebase.database.DataSnapshot) => void;
 }
 
 interface ITasksStateTasks {
@@ -22,21 +22,37 @@ export default function tasks(
     const listenToTasksAction: db.IListenToRefAction = action;
     return Object.assign({}, tasksState, {
       tasksRef: listenToTasksAction.ref,
-      tasksListener: listenToTasksAction.listener,
     });
   }
 
   case actionTypes.STOP_LISTENING_TO_TASKS: {
     return Object.assign({}, tasksState, {
       tasksRef: null,
-      tasksListener: null,
     });
   }
 
-  case actionTypes.RECEIVE_TASKS: {
-    const receiveTasksAction: IReceiveTasksAction = action;
+  case actionTypes.TASK_ADDED: {
+    const task = action.task;
     return Object.assign({}, tasksState, {
-      tasks: receiveTasksAction.snapshot || {},
+      tasks: Object.assign({}, tasksState.tasks, {
+        [task.id]: task,
+      }),
+    });
+  }
+
+  case actionTypes.TASK_CHANGED: {
+    const task = action.task;
+    return Object.assign({}, tasksState, {
+      tasks: Object.assign({}, tasksState.tasks, {
+        [task.id]: task,
+      }),
+    });
+  }
+
+  case actionTypes.TASK_REMOVED: {
+    const taskId = action.taskId;
+    return Object.assign({}, tasksState, {
+      tasks: omit(tasksState.tasks, taskId),
     });
   }
 

@@ -3,7 +3,6 @@ import * as moment from 'moment';
 import * as m from '../models';
 import { IViewTask, IViewTaskHistory } from '../selectors';
 
-
 export const getTaskTime = (task: IViewTask): number => {
   if (!task.activeSession) {
     return task.durationOfAllSessions;
