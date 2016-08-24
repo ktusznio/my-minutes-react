@@ -5,7 +5,6 @@ import { render } from 'react-dom';
 import { browserHistory } from 'react-router';
 import { syncHistoryWithStore } from 'react-router-redux';
 import * as injectTapEventPlugin from 'react-tap-event-plugin';
-import 'whatwg-fetch';
 
 import config from './config';
 import { createRouter } from './router';

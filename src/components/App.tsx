@@ -3,10 +3,11 @@ import { connect } from 'react-redux';
 import lightBaseTheme from 'material-ui/styles/baseThemes/lightBaseTheme';
 import { MuiThemeProvider, getMuiTheme } from 'material-ui/styles';
 
-import { IAppState } from '../reducer';
-import { startListeningToTasks, stopListeningToTasks } from '../actions/tasks';
 import { startListeningToSessions, stopListeningToSessions } from '../actions/sessions';
+import { startListeningToTasks, stopListeningToTasks } from '../actions/tasks';
 import { IUser } from '../models';
+import { IAppState } from '../reducer';
+import { logException } from '../utils/error';
 
 interface IAppProps {
   user: IUser;
@@ -44,11 +45,15 @@ class App extends React.Component<IAppProps, {}> {
   }
 
   render() {
-    return (
-      <MuiThemeProvider muiTheme={getMuiTheme(lightBaseTheme)}>
-        {React.cloneElement(this.props.children as any, this.props)}
-      </MuiThemeProvider>
-    );
+    try {
+      return (
+        <MuiThemeProvider muiTheme={getMuiTheme(lightBaseTheme)}>
+          {React.cloneElement(this.props.children as any, this.props)}
+        </MuiThemeProvider>
+      );
+    } catch (e) {
+      logException(e);
+    }
   }
 }
 

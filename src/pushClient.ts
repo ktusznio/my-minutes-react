@@ -2,6 +2,7 @@ import * as Promise from 'bluebird';
 
 import config from './config';
 import * as m from './models';
+import { sendFetch } from './utils/fetch';
 
 let endpoint: string;
 let userPublicKey: string = '';
@@ -26,7 +27,7 @@ const initialize = (registration) => {
   });
 };
 
-const schedulePush = (taskId: m.TaskId, payload: m.IPushPayload, delay: number): Promise<Response> => {
+const schedulePush = (taskId: m.TaskId, payload: m.IPushPayload, delay: number): Promise<Response | void> => {
   if (!endpoint) {
     return Promise.reject('No subscription endpoint present.');
   }
@@ -36,7 +37,7 @@ const schedulePush = (taskId: m.TaskId, payload: m.IPushPayload, delay: number):
 
   const pushUrl = `${config.pushServer.url}/push`;
 
-  return fetch(pushUrl, {
+  return sendFetch(pushUrl, {
     method: 'POST',
     headers: {
       'Accept': 'application/json',
@@ -50,18 +51,18 @@ const schedulePush = (taskId: m.TaskId, payload: m.IPushPayload, delay: number):
       payload: JSON.stringify(payload),
       startedAt: Date.now(),
       taskId,
-    }),
+    })
   });
 };
 
-const cancelPush = (taskId: m.TaskId): Promise<Response> => {
+const cancelPush = (taskId: m.TaskId): Promise<Response | void> => {
   if (!config.pushServer.url) {
     return Promise.reject('No push server configured.');
   }
 
   const cancelUrl = `${config.pushServer.url}/cancel`;
 
-  return fetch(cancelUrl, {
+  return sendFetch(cancelUrl, {
     method: 'POST',
     headers: {
       'Accept': 'application/json',
