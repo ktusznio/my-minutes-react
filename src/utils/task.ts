@@ -19,7 +19,7 @@ export const getGoalRemainder = (task: IViewTask): number => {
 
 export const buildTaskHistory = (task: m.ITask, sessionsByDate = {}, today: moment.Moment = moment()): IViewTaskHistory => {
   // Build the current week.
-  let date = moment(today).startOf('isoWeek');
+  let date = moment(today).startOf('week');
   let history = {};
   for (var i = 0; i < 7; i++) {
     const dateString = date.format('YYYY-MM-DD');
@@ -38,6 +38,11 @@ export const getGoalStatusForDate = (task: m.ITask, date: moment.Moment, session
 
   if (date.isAfter(now, 'day')) {
     return m.GoalStatus.FUTURE;
+  }
+
+  const dayOfWeek = date.day();
+  if (!task.goal.repeats[dayOfWeek]) {
+    return m.GoalStatus.NO_GOAL;
   }
 
   const sessionsById = sessionsByDate[date.format('YYYY-MM-DD')] || {};

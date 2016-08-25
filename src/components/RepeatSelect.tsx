@@ -19,7 +19,7 @@ const RepeatSelectItem = (props: IRepeatSelectItemProps) =>
     {props.text}
   </div>
 
-const WEEKDAYS = "MTWTFSS".split('');
+const WEEKDAYS = "SMTWTFS".split('');
 
 interface IGoalRepeatSelectProps {
   repeats: Array<boolean>;

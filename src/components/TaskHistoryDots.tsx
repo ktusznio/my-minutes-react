@@ -10,6 +10,51 @@ interface ITaskHistoryDots {
   task: IViewTask;
 }
 
+const buildDotStylesForTask = (task: IViewTask) => {
+  const dotStyles = buildBaseDotStyles();
+  const day = moment().startOf('week');
+
+  return dotStyles.map(dotStyle => {
+    const goalStatus = task.history[day.format('YYYY-MM-DD')];
+    const statusStyle = style[`dot:goal-status-${goalStatus}`];
+
+    console.log('dot', day.day(), `dot:goal-status-${goalStatus}`);
+
+    day.add(1, 'day');
+
+    return Object.assign({}, dotStyle, statusStyle);
+  });
+}
+
+const buildBaseDotStyles = () => {
+  return [
+    Object.assign({}, style.dot, style.dot['dot:first-child']),
+    Object.assign({}, style.dot),
+    Object.assign({}, style.dot),
+    Object.assign({}, style.dot),
+    Object.assign({}, style.dot),
+    Object.assign({}, style.dot),
+    Object.assign({}, style.dot, style.dot['dot:last-child']),
+  ];
+}
+
+const TaskHistoryDots = (props: ITaskHistoryDots) => {
+  const { task } = props;
+  const dotStyles = buildDotStylesForTask(task);
+
+  return (
+    <div style={style.root}>
+      <div style={dotStyles[0]}>S</div>
+      <div style={dotStyles[1]}>M</div>
+      <div style={dotStyles[2]}>T</div>
+      <div style={dotStyles[3]}>W</div>
+      <div style={dotStyles[4]}>T</div>
+      <div style={dotStyles[5]}>F</div>
+      <div style={dotStyles[6]}>S</div>
+    </div>
+  );
+}
+
 const style = {
   root: {
     display: 'flex',
@@ -49,50 +94,5 @@ const style = {
     background: c.greyTransparent,
   },
 };
-
-const buildDotStylesForTask = (task: IViewTask) => {
-  const dotStyles = buildBaseDotStyles();
-  const day = moment().startOf('isoWeek');
-
-  return dotStyles.map(dotStyle => {
-    const goalStatus = task.history[day.format('YYYY-MM-DD')];
-    const statusStyle = style[`dot:goal-status-${goalStatus}`];
-
-    day.add(1, 'day');
-
-    return Object.assign(dotStyle, statusStyle);
-  });
-}
-
-
-const buildBaseDotStyles = () => {
-  return [
-    Object.assign({}, style.dot, style.dot['dot:first-child']),
-    Object.assign({}, style.dot),
-    Object.assign({}, style.dot),
-    Object.assign({}, style.dot),
-    Object.assign({}, style.dot),
-    Object.assign({}, style.dot),
-    Object.assign({}, style.dot, style.dot['dot:last-child']),
-  ];
-}
-
-const TaskHistoryDots = (props: ITaskHistoryDots) => {
-  const { task } = props;
-
-  const dotStyles = buildDotStylesForTask(task);
-
-  return (
-    <div style={style.root}>
-      <div style={dotStyles[0]}>M</div>
-      <div style={dotStyles[1]}>T</div>
-      <div style={dotStyles[2]}>W</div>
-      <div style={dotStyles[3]}>T</div>
-      <div style={dotStyles[4]}>F</div>
-      <div style={dotStyles[5]}>S</div>
-      <div style={dotStyles[6]}>S</div>
-    </div>
-  );
-}
 
 export default TaskHistoryDots;

@@ -16,7 +16,6 @@ export interface IViewTaskHistory {
 }
 
 export type IViewTask = m.ITask & {
-  // TODO refactor into 'today' property?
   activeSession: m.ISession;
   durationOfAllSessions: number;
   msLeftForGoal: number;
