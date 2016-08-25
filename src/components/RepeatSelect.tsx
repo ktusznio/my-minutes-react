@@ -27,12 +27,18 @@ interface IGoalRepeatSelectProps {
 }
 
 class RepeatSelect extends React.Component<IGoalRepeatSelectProps, IGoalRepeatSelectProps> {
-  constructor(props) {
+  constructor(props: IGoalRepeatSelectProps) {
     super(props);
-    this.state = {
-      repeats: props.repeats,
-    };
+    this.state = this.buildStateFromProps(props);
   }
+
+  componentWillReceiveProps(nextProps: IGoalRepeatSelectProps) {
+    this.setState(this.buildStateFromProps(nextProps));
+  }
+
+  buildStateFromProps = (props: IGoalRepeatSelectProps) => ({
+    repeats: props.repeats,
+  })
 
   handleItemTouchTap = (index) => {
     if (this.props.disabled) {

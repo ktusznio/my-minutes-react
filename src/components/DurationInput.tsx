@@ -31,14 +31,27 @@ export default class DurationInput extends React.Component<IDurationInputProps, 
   constructor(props: IDurationInputProps) {
     super(props);
 
+    this.state = {
+      hhmm: this.getHhmmFromProps(props),
+      errorText: '',
+    };
+  }
+
+  componentWillReceiveProps(nextProps: IDurationInputProps) {
+    this.setState(this.buildStateFromProps(nextProps));
+  }
+
+  buildStateFromProps = (props: IDurationInputProps) => ({
+    hhmm: this.getHhmmFromProps(props),
+    errorText: '',
+  })
+
+  getHhmmFromProps(props: IDurationInputProps) {
     const duration = props.defaultDuration;
     let hhmm = format.duration(duration, format.DURATION_HHMM);
     hhmm = padStart(hhmm, MAX_INPUT_LENGTH, '0');
 
-    this.state = {
-      hhmm,
-      errorText: '',
-    };
+    return hhmm;
   }
 
   getMilliseconds(): number {

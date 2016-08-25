@@ -3,6 +3,7 @@ import { connect } from 'react-redux';
 import { Dialog, FlatButton, TextField } from 'material-ui';
 import { browserHistory } from 'react-router';
 import NavigationArrowBack from 'material-ui/svg-icons/navigation/arrow-back';
+import { cloneDeep } from 'lodash';
 
 import { saveTask, deleteTask } from '../actions/tasks';
 import * as m from '../models';
@@ -26,8 +27,7 @@ export interface ITaskScreenProps {
 
 interface ITaskScreenState {
   isDeleteTaskDialogOpen?: boolean;
-  goalType?: m.GoalType,
-  taskName?: string;
+  taskDraft?: IViewTask;
 }
 
 const mapStateToProps = (state: IAppState, props: ITaskScreenProps) => ({
@@ -60,15 +60,27 @@ export class TaskScreen extends React.Component<ITaskScreenProps, ITaskScreenSta
 
   constructor(props: ITaskScreenProps) {
     super(props);
-    this.state = {
+    this.state = Object.assign(this.buildStateFromProps(props), {
       isDeleteTaskDialogOpen: false,
-      goalType: this.props.task.goal.type,
-      taskName: this.props.task.name,
-    };
+    });
   }
+
+  componentWillReceiveProps(nextProps: ITaskScreenProps) {
+    this.setState(this.buildStateFromProps(nextProps));
+  }
+
+  hasReceivedFetchedTask = (): boolean => !!this.props.task.id
+
+  buildStateFromProps = (props: ITaskScreenProps) => ({
+    taskDraft: cloneDeep(props.task),
+  })
 
   handleBack = (e: React.TouchEvent) => {
     e.preventDefault();
+
+    if (!this.hasReceivedFetchedTask) {
+      return;
+    }
 
     let duration = this.refs.duration.getMilliseconds();
     if (duration > m.GOAL_MAX_DURATION) {
@@ -76,9 +88,9 @@ export class TaskScreen extends React.Component<ITaskScreenProps, ITaskScreenSta
     }
 
     const task: m.ITask = Object.assign({}, this.props.task, {
-      name: this.state.taskName || this.props.task.name,
+      name: this.state.taskDraft.name || this.props.task.name,
       goal: Object.assign({}, this.props.task.goal, {
-        type: this.state.goalType,
+        type: this.state.taskDraft.goal.type,
         duration,
         repeats: this.refs.repeat.getRepeats(),
       })
@@ -92,8 +104,37 @@ export class TaskScreen extends React.Component<ITaskScreenProps, ITaskScreenSta
   closeDeleteTaskDialog = () =>
     this.setState({ isDeleteTaskDialogOpen: false });
 
+  setTaskDraft(newDraft: IViewTask) {
+    this.setState({ taskDraft: newDraft });
+  }
+
+  setName(name: string) {
+    const newDraft = Object.assign({}, this.state.taskDraft, { name });
+    this.setState({ taskDraft: newDraft });
+  }
+
+  setGoalType(goalType: m.GoalType) {
+    const taskDraft = this.state.taskDraft;
+    const newDraft = Object.assign({}, taskDraft, {
+      goal: Object.assign({}, taskDraft.goal, {
+        type: m.GoalType.NONE,
+      }),
+    });
+    this.setState({ taskDraft: newDraft })
+  }
+
+  getErrorText(inputName: string, isValid: boolean): string {
+    if (!this.hasReceivedFetchedTask()) {
+      return '';
+    }
+    if (!isValid) {
+      return errorTexts[inputName];
+    }
+    return '';
+  }
+
   render() {
-    const { task } = this.props;
+    const task = this.state.taskDraft;
 
     const backIcon = (
       <NavigationBackIcon onTouchTap={this.handleBack} />
@@ -112,8 +153,6 @@ export class TaskScreen extends React.Component<ITaskScreenProps, ITaskScreenSta
       />,
     ];
 
-    const sectionMarginBottom = '25px';
-
     return (
       <Screen>
         <Navigation
@@ -121,62 +160,62 @@ export class TaskScreen extends React.Component<ITaskScreenProps, ITaskScreenSta
           title={task.name}
         />
         <ScreenContent>
-          <div style={{ marginBottom: sectionMarginBottom }}>
+          <div style={style.formRow}>
             <Label text="Task name" />
             <TextField
               ref="taskName"
               name="taskName"
-              value={this.state.taskName}
+              value={task.name}
               fullWidth={true}
-              errorText={!this.state.taskName ? 'Please, give me a name!' : ''}
-              onChange={e => this.setState({ taskName: (e.target as any).value })}
+              errorText={this.getErrorText('taskName', !!task.name)}
+              onChange={e => this.setName((e.target as any).value)}
             />
           </div>
-          <div style={{ marginBottom: sectionMarginBottom }}>
-            <Label text="Goal" style={{ display: 'block', marginBottom: '4px' }} />
+          <div style={style.formRow}>
+            <Label text="Goal" style={style.formLabel} />
             <Row>
               <FlatButton
-                style={{ flex: 1 }}
+                style={style.goalTypeButton}
                 ref="noGoalButton"
                 label="None"
-                primary={this.state.goalType === m.GoalType.NONE}
-                onTouchTap={() => { this.setState({ goalType: m.GoalType.NONE })}}
+                primary={task.goal.type === m.GoalType.NONE}
+                onTouchTap={() => this.setGoalType(m.GoalType.NONE)}
               />
               <FlatButton
-                style={{ flex: 1 }}
+                style={style.goalTypeButton}
                 ref="atMostButton"
                 label="At Least"
-                primary={this.state.goalType === m.GoalType.AT_LEAST}
-                onTouchTap={() => { this.setState({ goalType: m.GoalType.AT_LEAST })}}
+                primary={this.state.taskDraft.goal.type === m.GoalType.AT_LEAST}
+                onTouchTap={() => this.setGoalType(m.GoalType.AT_LEAST)}
               />
               <FlatButton
-                style={{ flex: 1 }}
+                style={style.goalTypeButton}
                 ref="atMostButton"
                 label="At Most"
-                primary={this.state.goalType === m.GoalType.AT_MOST}
-                onTouchTap={() => { this.setState({ goalType: m.GoalType.AT_MOST })}}
+                primary={this.state.taskDraft.goal.type === m.GoalType.AT_MOST}
+                onTouchTap={() => this.setGoalType(m.GoalType.AT_MOST)}
               />
             </Row>
           </div>
-          <div style={{ marginBottom: sectionMarginBottom }}>
-            <Label text="Duration" style={{ display: 'block', marginBottom: '4px' }} />
+          <div style={style.formRow}>
+            <Label text="Duration" style={style.formLabel} />
             <DurationInput
               ref="duration"
               defaultDuration={task.goal.duration}
-              disabled={this.state.goalType === m.GoalType.NONE}
+              disabled={task.goal.type === m.GoalType.NONE}
             />
           </div>
-          <div style={{ marginBottom: sectionMarginBottom }}>
-            <Label text="Repeats" style={{ display: 'block', marginBottom: '8px' }} />
+          <div style={style.formRow}>
+            <Label text="Repeats" style={Object.assign({}, style.formLabel, { marginBottom: '8px' })} />
             <RepeatSelect
               ref="repeat"
               repeats={task.goal.repeats}
-              disabled={this.state.goalType === m.GoalType.NONE}
+              disabled={task.goal.type === m.GoalType.NONE}
             />
           </div>
-          <div style={{ margin: `0 auto ${sectionMarginBottom} auto` }}>
+          <div style={Object.assign({}, style.formRow, { margin: `0 auto ${style.formRow.marginBottom} auto` })}>
             <FlatButton
-              style={{ flex: '1' }}
+              style={style.deleteTaskButton}
               label="Delete Task"
               secondary={true}
               onTouchTap={this.openDeleteTaskDialog}
@@ -195,6 +234,26 @@ export class TaskScreen extends React.Component<ITaskScreenProps, ITaskScreenSta
     );
   }
 }
+
+const style = {
+  formRow: {
+    marginBottom: '25px',
+  },
+  formLabel: {
+    display: 'block',
+    marginBottom: '4px',
+  },
+  goalTypeButton: {
+    flex: 1,
+  },
+  deleteTaskButton: {
+    flex: 1,
+  },
+};
+
+const errorTexts = {
+  taskName: 'Please, give me a name!',
+};
 
 export default connect(
   mapStateToProps,
