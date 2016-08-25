@@ -14,11 +14,13 @@ const buildDotStylesForTask = (task: IViewTask) => {
   const dotStyles = buildBaseDotStyles();
   const day = moment().startOf('week');
 
-  return dotStyles.map(dotStyle => {
-    const goalStatus = task.history[day.format('YYYY-MM-DD')];
-    const statusStyle = style[`dot:goal-status-${goalStatus}`];
+  const now = moment();
 
-    console.log('dot', day.day(), `dot:goal-status-${goalStatus}`);
+  return dotStyles.map(dotStyle => {
+    const goalStatus = now.isSame(day, 'day')
+      ? taskUtils.getGoalStatusToday(task)
+      : task.history[day.format('YYYY-MM-DD')];
+    const statusStyle = style[`dot:goal-status-${goalStatus}`];
 
     day.add(1, 'day');
 

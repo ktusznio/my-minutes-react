@@ -31,6 +31,30 @@ export const buildTaskHistory = (task: m.ITask, sessionsByDate = {}, today: mome
   return history;
 };
 
+export const getGoalStatusToday = (task: IViewTask) => {
+  if (task.goal.type === m.GoalType.NONE) {
+    return m.GoalStatus.NO_GOAL;
+  }
+
+  const now = moment();
+
+  const dayOfWeek = now.day();
+  if (!task.goal.repeats[dayOfWeek]) {
+    return m.GoalStatus.NO_GOAL;
+  }
+
+  const taskTime = getTaskTime(task);
+  const msLeftForGoal = getMillisecondsLeftForGoal(task.goal, taskTime);
+
+  switch (task.goal.type) {
+  case m.GoalType.AT_LEAST:
+    return msLeftForGoal <= 0 ? m.GoalStatus.PASS : m.GoalStatus.PENDING;
+
+  case m.GoalType.AT_MOST:
+    return msLeftForGoal >= 0 ? m.GoalStatus.PASS : m.GoalStatus.FAIL;
+  }
+}
+
 export const getGoalStatusForDate = (task: m.ITask, date: moment.Moment, sessionsByDate = {}, now = moment()) => {
   if (task.goal.type === m.GoalType.NONE) {
     return m.GoalStatus.NO_GOAL;

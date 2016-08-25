@@ -8,7 +8,7 @@ import { IViewTask } from '../selectors';
 import { IAppState } from '../reducer';
 import * as routes from '../utils/routes';
 import * as format from '../utils/format';
-import RunningDuration from './RunningDuration';
+import { RunningTaskDuration, RunningGoalDuration } from './RunningDuration';
 import StartTaskButton from './StartTaskButton';
 import TaskHistoryDots from './TaskHistoryDots';
 import theme from './theme';
@@ -52,7 +52,7 @@ const TaskListItem = (props: ITaskListItemProps) => {
       <Link style={style.leftColumn} to={routes.task(task.id)}>
         <div style={style.taskName}>{task.name}</div>
         <TaskHistoryDots task={task} />
-        <RunningDuration task={task} />
+        <RunningTaskDuration task={task} />
       </Link>
       <div style={style.rightColumn}>
         <StartTaskButton
@@ -60,7 +60,7 @@ const TaskListItem = (props: ITaskListItemProps) => {
           onStartTask={handleStartTask}
         />
         <div style={{ marginTop: '4px' }}>
-          <RunningDuration task={task} renderGoal={true} />
+          <RunningGoalDuration task={task} />
         </div>
       </div>
     </div>
