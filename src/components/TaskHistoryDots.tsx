@@ -5,8 +5,9 @@ import * as m from '../models';
 import { IViewTask } from '../selectors';
 import * as taskUtils from '../utils/task';
 import * as c from './theme/colors';
+import Interval from './Interval';
 
-interface ITaskHistoryDots {
+interface ITaskHistoryDotsProps {
   task: IViewTask;
 }
 
@@ -40,21 +41,23 @@ const buildBaseDotStyles = () => {
   ];
 }
 
-const TaskHistoryDots = (props: ITaskHistoryDots) => {
-  const { task } = props;
-  const dotStyles = buildDotStylesForTask(task);
+class TaskHistoryDots extends React.Component<ITaskHistoryDotsProps, {}> {
+  render() {
+    const { task } = this.props;
+    const dotStyles = buildDotStylesForTask(task);
 
-  return (
-    <div style={style.root}>
-      <div style={dotStyles[0]}>S</div>
-      <div style={dotStyles[1]}>M</div>
-      <div style={dotStyles[2]}>T</div>
-      <div style={dotStyles[3]}>W</div>
-      <div style={dotStyles[4]}>T</div>
-      <div style={dotStyles[5]}>F</div>
-      <div style={dotStyles[6]}>S</div>
-    </div>
-  );
+    return (
+      <div style={style.root}>
+        <div style={dotStyles[0]}>S</div>
+        <div style={dotStyles[1]}>M</div>
+        <div style={dotStyles[2]}>T</div>
+        <div style={dotStyles[3]}>W</div>
+        <div style={dotStyles[4]}>T</div>
+        <div style={dotStyles[5]}>F</div>
+        <div style={dotStyles[6]}>S</div>
+      </div>
+    );
+  }
 }
 
 const style = {
@@ -97,4 +100,4 @@ const style = {
   },
 };
 
-export default TaskHistoryDots;
+export default Interval(TaskHistoryDots);

@@ -17,7 +17,7 @@ export interface IViewTaskHistory {
 
 export type IViewTask = m.ITask & {
   activeSession: m.ISession;
-  durationOfAllSessions: number;
+  durationOfCompleteSessions: number;
   msLeftForGoal: number;
 
   history: IViewTaskHistory;
@@ -26,7 +26,7 @@ export type IViewTask = m.ITask & {
 export const viewTaskToTask = (_task: m.ITask | (m.ITask & IViewTask)): m.ITask => {
   const task = cloneDeep(_task);
   delete (<m.ITask & IViewTask>task).activeSession;
-  delete (<m.ITask & IViewTask>task).durationOfAllSessions;
+  delete (<m.ITask & IViewTask>task).durationOfCompleteSessions;
   delete (<m.ITask & IViewTask>task).history;
   delete (<m.ITask & IViewTask>task).msLeftForGoal;
   return task;
@@ -53,13 +53,13 @@ const buildViewTask = (
   const sessionsToday = Object.keys(sessionsTodayById).map(id => sessionsTodayById[id]);
 
   const activeSession = getActiveSession(sessionsToday);
-  const durationOfAllSessions = taskUtils.sumSessionDurations(sessionsToday);
+  const durationOfCompleteSessions = taskUtils.sumSessionDurations(sessionsToday, true);
   const history = taskUtils.buildTaskHistory(task, sessionsByDate);
-  const msLeftForGoal = taskUtils.getMillisecondsLeftForGoal(task.goal, durationOfAllSessions);
+  const msLeftForGoal = taskUtils.getMillisecondsLeftForGoal(task.goal, durationOfCompleteSessions);
 
   return Object.assign({}, task, {
     activeSession,
-    durationOfAllSessions,
+    durationOfCompleteSessions,
     history,
     msLeftForGoal,
   });

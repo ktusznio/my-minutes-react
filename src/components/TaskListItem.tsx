@@ -17,6 +17,31 @@ export interface ITaskListItemProps {
   task: IViewTask;
 }
 
+const handleStartTask = (task: m.ITask) =>
+  browserHistory.push(routes.runningTask(task.id))
+
+const TaskListItem = (props: ITaskListItemProps) => {
+  const { task } = props;
+  return (
+    <div style={style.root}>
+      <Link style={style.leftColumn} to={routes.task(task.id)}>
+        <div style={style.taskName}>{task.name}</div>
+        <TaskHistoryDots active={!!task.activeSession} task={task} />
+        <RunningTaskDuration active={!!task.activeSession} task={task} />
+      </Link>
+      <div style={style.rightColumn}>
+        <StartTaskButton
+          task={task}
+          onStartTask={handleStartTask}
+        />
+        <div style={{ marginTop: '4px' }}>
+          <RunningGoalDuration active={!!task.activeSession} task={task} />
+        </div>
+      </div>
+    </div>
+  );
+}
+
 const style = {
   root: {
     display: 'flex',
@@ -42,29 +67,5 @@ const style = {
   }
 };
 
-const handleStartTask = (task: m.ITask) =>
-  browserHistory.push(routes.runningTask(task.id))
-
-const TaskListItem = (props: ITaskListItemProps) => {
-  const { task } = props;
-  return (
-    <div style={style.root}>
-      <Link style={style.leftColumn} to={routes.task(task.id)}>
-        <div style={style.taskName}>{task.name}</div>
-        <TaskHistoryDots task={task} />
-        <RunningTaskDuration task={task} />
-      </Link>
-      <div style={style.rightColumn}>
-        <StartTaskButton
-          task={task}
-          onStartTask={handleStartTask}
-        />
-        <div style={{ marginTop: '4px' }}>
-          <RunningGoalDuration task={task} />
-        </div>
-      </div>
-    </div>
-  );
-}
 
 export default TaskListItem;

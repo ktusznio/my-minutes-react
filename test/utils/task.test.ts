@@ -17,7 +17,7 @@ const task: IViewTask = {
   currentSessionPath: '',
 
   activeSession: null,
-  durationOfAllSessions: 0,
+  durationOfCompleteSessions: 0,
   history: null,
   msLeftForGoal: 1 * 60 * 1000,
 };

@@ -5,9 +5,9 @@ import { IViewTask, IViewTaskHistory } from '../selectors';
 
 export const getTaskTime = (task: IViewTask): number => {
   if (!task.activeSession) {
-    return task.durationOfAllSessions;
+    return task.durationOfCompleteSessions;
   }
-  return getSessionDuration(task.activeSession) + task.durationOfAllSessions;
+  return getSessionDuration(task.activeSession) + task.durationOfCompleteSessions;
 };
 
 export const getGoalRemainder = (task: IViewTask): number => {
@@ -70,10 +70,11 @@ export const getGoalStatusForDate = (task: m.ITask, date: moment.Moment, session
   }
 
   const sessionsById = sessionsByDate[date.format('YYYY-MM-DD')] || {};
-  const durationOfAllSessions = sumSessionDurations(
-    Object.keys(sessionsById).map(id => sessionsById[id])
+  const durationOfCompleteSessions = sumSessionDurations(
+    Object.keys(sessionsById).map(id => sessionsById[id]),
+    true
   );
-  const msLeftForGoal = getMillisecondsLeftForGoal(task.goal, durationOfAllSessions);
+  const msLeftForGoal = getMillisecondsLeftForGoal(task.goal, durationOfCompleteSessions);
 
   switch (task.goal.type) {
   case m.GoalType.AT_LEAST:
@@ -94,10 +95,14 @@ export const getMillisecondsLeftForGoal = (goal: m.IGoal, durationOfSessions: nu
   return goal.duration - durationOfSessions;
 }
 
-export const sumSessionDurations = (sessions: m.ISession[] = []): number =>
+export const sumSessionDurations = (sessions: m.ISession[] = [], completeSessionsOnly: boolean = false): number =>
   sessions.reduce(
-    (sum, session) => sum + getSessionDuration(session)
+    (sum, session) => sum + getSessionDuration(session, completeSessionsOnly)
   , 0);
 
-const getSessionDuration = (session: m.ISession): number =>
-  (session.stoppedAt || Date.now()) - session.startedAt;
+const getSessionDuration = (session: m.ISession, completeSessionOnly: boolean = false): number => {
+  if (completeSessionOnly && !session.stoppedAt) {
+    return 0;
+  }
+  return (session.stoppedAt || Date.now()) - session.startedAt;
+}

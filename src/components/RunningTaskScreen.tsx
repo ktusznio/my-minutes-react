@@ -21,10 +21,6 @@ export interface IRunningTaskScreenProps {
   params: RouteParams;
 }
 
-interface IRunningTaskScreenState {
-  interval?: any;
-}
-
 const mapStateToProps = (state: IAppState, props: IRunningTaskScreenProps) => ({
   task: taskSelector(state, props.params.taskId),
 });
@@ -34,42 +30,7 @@ const mapDispatchToProps = (dispatch: Redux.Dispatch) => ({
   stopTask: (task: IViewTask) => dispatch(stopTask(task)),
 });
 
-class RunningTaskScreen extends React.Component<IRunningTaskScreenProps, IRunningTaskScreenState> {
-  constructor(props) {
-    super(props);
-    this.state = {
-      interval: this.createInterval(this.props),
-    };
-  }
-
-  componentWillReceiveProps(nextProps: IRunningTaskScreenProps) {
-    if (!this.state.interval && nextProps.task.activeSession) {
-      const interval = this.createInterval(nextProps);
-      this.setState({ interval });
-    }
-
-    if (!nextProps.task.activeSession) {
-      this.clearInterval();
-    }
-  }
-
-  componentWillUnmount() {
-    this.clearInterval();
-  }
-
-  createInterval(props: IRunningTaskScreenProps): number {
-    if ((!this.state || !this.state.interval) && props.task.activeSession) {
-      return setInterval(this.forceUpdate.bind(this), 50);
-    }
-  }
-
-  clearInterval() {
-    if (this.state.interval) {
-      clearInterval(this.state.interval);
-      this.setState({ interval: null });
-    }
-  }
-
+class RunningTaskScreen extends React.Component<IRunningTaskScreenProps, {}> {
   render() {
     const { task } = this.props;
     return (
@@ -80,12 +41,12 @@ class RunningTaskScreen extends React.Component<IRunningTaskScreenProps, IRunnin
         />
         <ScreenContent style={{ height: '100%' }}>
           <Column style={{ flex: 1 }}>
-            <RunningTaskDuration style={style.task} task={task} />
-            <RunningGoalDuration style={style.goal} task={task} />
+            <RunningTaskDuration style={style.task} active={!!task.activeSession} task={task} />
+            <RunningGoalDuration active={!!task.activeSession} style={style.goal} task={task} />
           </Column>
           <div style={{ flex: 1, margin: '40px auto 0' }}>
             <StartTaskButton task={task} />
-            <TaskHistoryDots task={task} />
+            <TaskHistoryDots active={!!task.activeSession} task={task} />
           </div>
         </ScreenContent>
       </Screen>
