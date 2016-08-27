@@ -19,7 +19,7 @@ export const RunningTaskDuration = Interval(
 
       return (
         <span style={this.props.style}>
-          {format.duration(taskTime, format.DURATION_H_M_S)}
+          {format.timeTracked(taskTime)}
         </span>
       );
     }
@@ -40,14 +40,14 @@ export const RunningGoalDuration = Interval(
       let message;
       if (goal.type === m.GoalType.AT_LEAST) {
         if (goalRemainder > 0) {
-          message = format.duration(goalRemainder, format.DURATION_H_M) + ' to go!'
+          message = format.timeRemaining(goalRemainder) + ' to go!'
         } else {
           color = c.green;
           message = 'All done!';
         }
       } else {
         if (goalRemainder > 0) {
-          message = format.duration(goalRemainder, format.DURATION_H_M) + ' left!';
+          message = format.timeRemaining(goalRemainder) + ' left!';
         } else {
           color = c.red;
           message = "Time's up!";

@@ -48,7 +48,7 @@ export default class DurationInput extends React.Component<IDurationInputProps, 
 
   getHhmmFromProps(props: IDurationInputProps) {
     const duration = props.defaultDuration;
-    let hhmm = format.duration(duration, format.DURATION_HHMM);
+    let hhmm = format.timeHiddenInput(duration);
     hhmm = padStart(hhmm, MAX_INPUT_LENGTH, '0');
 
     return hhmm;
@@ -102,7 +102,7 @@ export default class DurationInput extends React.Component<IDurationInputProps, 
         disabled={this.props.disabled}
         hintText={this.props.hint}
         fullWidth={true}
-        value={format.duration(this.getMilliseconds(), format.DURATION_H_M)}
+        value={format.timeInput(this.getMilliseconds())}
         onKeyDown={this.handleKeyDown}
       />
     );
