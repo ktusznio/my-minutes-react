@@ -13,7 +13,6 @@ npm install -g ts-node
 1. Install dependencies: `npm install`
 2. Install typings: `typings install`
 3. Start dev server: `npm start`
-4. Start push server: `npm run-script start:push`
 4. Open <localhost:8080>
 
 ## Deploying
