@@ -1,26 +1,42 @@
 importScripts('/cache-polyfill.js');
 
+var URLS_TO_CACHE = [
+  '/',
+  '/index.html',
+  '/bundle.js',
+  '/favicon.ico'
+];
+
 self.addEventListener('install', function(e) {
   var cachesPromise = caches.open('my-minutes').then(function(cache) {
-    return cache.addAll([
-      '/',
-      '/index.html',
-      '/bundle.js',
-      '/favicon.ico'
-      ]);
+    return cache.addAll(URLS_TO_CACHE);
   });
 
   e.waitUntil(cachesPromise);
 });
 
 self.addEventListener('fetch', function(event) {
- console.log(event.request.url);
+  console.log(event.request.url);
 
- var cacheMatch = caches.match(event.request).then(function(response) {
-   return response || fetch(event.request);
- });
+  if (event.request.method !== 'GET') {
+    return;
+  }
 
- event.respondWith(cacheMatch);
+  var urlIsCached = false;
+  for (var i = 0; !urlIsCached && i < URLS_TO_CACHE.length; i++) {
+    if (event.request.url.indexOf(URLS_TO_CACHE[i]) !== -1) {
+      urlIsCached = true;
+    }
+  }
+  if (!urlIsCached) {
+    return;
+  }
+
+  var cacheMatch = caches.match(event.request).then(function(response) {
+    return response || fetch(event.request);
+  });
+
+  event.respondWith(cacheMatch);
 });
 
 self.addEventListener('push', function(event) {
