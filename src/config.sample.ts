@@ -7,7 +7,7 @@ const config = {
       storageBucket: "my-minutes-beta-cea4c.appspot.com",
     },
     pushServer: {
-      url: null, // TODO
+      url: 'https://my-minutes-push-beta.herokuapp.com',
     },
     sentry: {
       dsn: 'https://9d05ae52b7ef497e8ac6f3293d7d88ee@app.getsentry.com/92072',
