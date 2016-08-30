@@ -1,4 +1,5 @@
 src/config.ts
-push-server/push-server.config.js
+public/bundle.js
+public/bundle.js.map
 /node_modules/
 /typings/
