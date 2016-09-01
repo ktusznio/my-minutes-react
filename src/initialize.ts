@@ -37,13 +37,13 @@ if ('serviceWorker' in navigator) {
   // It won't be able to control pages unless it's located at the same level or higher than them.
   // *Don't* register service worker file in, e.g., a scripts/ sub-directory!
   // See https://github.com/slightlyoff/ServiceWorker/issues/468
-  (<any> navigator).serviceWorker.register('/sw-main.js').then(function(reg) {
-    console.log("[sw-main.js] registered");
+  (<any> navigator).serviceWorker.register('/sw-main.js').then(registration => {
+    console.log('[sw-register] registered');
     // updatefound is fired if service-worker.js changes.
-    reg.onupdatefound = function() {
-      // The updatefound event implies that reg.installing is set; see
+    registration.onupdatefound = function() {
+      // The updatefound event implies that registration.installing is set; see
       // https://slightlyoff.github.io/ServiceWorker/spec/service_worker/index.html#service-worker-container-updatefound-event
-      var installingWorker = reg.installing;
+      var installingWorker = registration.installing;
 
       installingWorker.onstatechange = function() {
         switch (installingWorker.state) {
@@ -53,21 +53,21 @@ if ('serviceWorker' in navigator) {
               // have been added to the cache.
               // It's the perfect time to display a "New content is available; please refresh."
               // message in the page's interface.
-              console.log('[sw-main.js] New or updated content is available.');
+              console.log('[sw-register] New or updated content is available.');
             } else {
               // At this point, everything has been precached.
               // It's the perfect time to display a "Content is cached for offline use." message.
-              console.log('[sw-main.js] Content is now available offline!');
+              console.log('[sw-register] Content is now available offline!');
             }
             break;
 
           case 'redundant':
-            console.error('[sw-main.js] The installing service worker became redundant.');
+            console.error('[sw-register] The installing service worker became redundant.');
             break;
         }
       };
     };
   }).catch(function(e) {
-    console.error('[sw-main.js] Error during service worker registration:', e);
+    console.error('[sw-register] Error during service worker registration:', e);
   });
 }

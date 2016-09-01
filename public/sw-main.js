@@ -1,4 +1,6 @@
-//importScripts('/cache-polyfill.js');
+var version = 1;
 
-importScripts('/sw-precache.js');
-importScripts('/sw-push.js');
+importScripts(
+  '/sw-precache.js',
+  '/sw-push.js'
+);
