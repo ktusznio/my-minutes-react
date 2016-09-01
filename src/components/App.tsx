@@ -1,13 +1,13 @@
+import { MuiThemeProvider } from 'material-ui/styles';
 import * as React from 'react';
 import { connect } from 'react-redux';
-import lightBaseTheme from 'material-ui/styles/baseThemes/lightBaseTheme';
-import { MuiThemeProvider, getMuiTheme } from 'material-ui/styles';
 
 import { startListeningToSessions, stopListeningToSessions } from '../actions/sessions';
 import { startListeningToTasks, stopListeningToTasks } from '../actions/tasks';
 import { IUser } from '../models';
 import { IAppState } from '../reducer';
 import { logException } from '../utils/error';
+import { muiTheme } from './theme';
 
 interface IAppProps {
   user: IUser;
@@ -47,7 +47,7 @@ class App extends React.Component<IAppProps, {}> {
   render() {
     try {
       return (
-        <MuiThemeProvider muiTheme={getMuiTheme(lightBaseTheme)}>
+        <MuiThemeProvider muiTheme={muiTheme}>
           {React.cloneElement(this.props.children as any, this.props)}
         </MuiThemeProvider>
       );

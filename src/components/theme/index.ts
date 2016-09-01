@@ -1,6 +1,8 @@
-import * as c from './colors';
+import { getMuiTheme } from 'material-ui/styles';
+import lightBaseTheme from 'material-ui/styles/baseThemes/lightBaseTheme';
 
 import { IRepeatSelectItemProps } from '../RepeatSelect';
+import * as c from './colors';
 
 const theme = {
   RepeatSelectItem: (props: IRepeatSelectItemProps) => ({
@@ -22,3 +24,9 @@ const theme = {
 };
 
 export default theme;
+
+export const muiTheme = getMuiTheme(Object.assign({}, lightBaseTheme, {
+  raisedButton: {
+    disabledTouchRipple: true,
+  },
+}));
