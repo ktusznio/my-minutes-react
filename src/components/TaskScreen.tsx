@@ -113,11 +113,11 @@ export class TaskScreen extends React.Component<ITaskScreenProps, ITaskScreenSta
     this.setState({ taskDraft: newDraft });
   }
 
-  setGoalType(goalType: m.GoalType) {
+  setGoalType(type: m.GoalType) {
     const taskDraft = this.state.taskDraft;
     const newDraft = Object.assign({}, taskDraft, {
       goal: Object.assign({}, taskDraft.goal, {
-        type: m.GoalType.NONE,
+        type,
       }),
     });
     this.setState({ taskDraft: newDraft })
