@@ -22,6 +22,6 @@
   "name": "My Minutes",
   "orientation": "portrait",
   "short_name": "My Minutes",
-  "start_url": "/index.html",
+  "start_url": "/",
   "theme_color": "#FFFFFF"
 }
