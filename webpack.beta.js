@@ -1,6 +1,8 @@
 var path = require('path');
 var webpack = require('webpack');
 
+var swPrecacheWebpackPlugin = require('./sw-precache-webpack-plugin');
+
 module.exports = {
   context: __dirname,
   devtool: 'source-map',
@@ -28,7 +30,8 @@ module.exports = {
       compressor: {
         warnings: false
       }
-    })
+    }),
+    swPrecacheWebpackPlugin,
   ],
   module: {
     loaders: [
