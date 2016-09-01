@@ -15,7 +15,7 @@ module.exports = {
     root: __dirname,
   },
   output: {
-    path: path.join(__dirname, 'build'),
+    path: path.join(__dirname, 'public'),
     filename: 'bundle.js',
     publicPath: '/',
   },
@@ -46,7 +46,7 @@ module.exports = {
       {
         test: /\.js$/,
         loader: 'source-map-loader',
-        include: path.join(__dirname, 'build'),
+        include: path.join(__dirname, 'public'),
       },
     ],
   }
