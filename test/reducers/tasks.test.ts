@@ -6,10 +6,9 @@ import { startListeningToTasks } from '../../src/actions/tasks';
 
 const user = { uid: 'test-uid' };
 
-test('listening to tasks sets ref and listener', t => {
+test('listening to tasks sets ref', t => {
   const unsubscribe = store.subscribe(() => {
     t.truthy(store.getState().tasks.tasksRef);
-    t.truthy(store.getState().tasks.tasksListener);
     unsubscribe();
   });
 

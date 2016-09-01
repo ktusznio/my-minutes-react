@@ -1,8 +1,11 @@
-import * as Raven from 'raven-js';
+var Raven;
+if (process.env.NODE_ENV === 'beta') {
+  Raven = require('raven-js');
+}
 
 export const logException = (e, context = {}) => {
-  Raven.captureException(e, {
-    extra: context
+  Raven && Raven.captureException(e, {
+    extra: context,
   });
 
   /*eslint no-console:0*/

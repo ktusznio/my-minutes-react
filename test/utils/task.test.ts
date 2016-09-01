@@ -50,13 +50,13 @@ test('buildTaskHistory', t => {
     today,
   );
   const expected: IViewTaskHistory = {
+    '2016-08-14': m.GoalStatus.FAIL,
     '2016-08-15': m.GoalStatus.FAIL,
     '2016-08-16': m.GoalStatus.FAIL,
     '2016-08-17': m.GoalStatus.PASS,
     '2016-08-18': m.GoalStatus.FAIL,
     '2016-08-19': m.GoalStatus.PENDING,
     '2016-08-20': m.GoalStatus.FUTURE,
-    '2016-08-21': m.GoalStatus.FUTURE,
   };
 
   t.deepEqual(
