@@ -3,7 +3,6 @@ import { browserHistory } from 'react-router';
 import { connect } from 'react-redux';
 import {
   IconButton,
-  RaisedButton,
 } from 'material-ui';
 import AvPlayCircleOutline from 'material-ui/svg-icons/av/play-circle-outline';
 import AvPauseCircleOutline from 'material-ui/svg-icons/av/pause-circle-outline';
@@ -13,6 +12,7 @@ import * as m from '../models';
 import { IViewTask } from '../selectors';
 import * as routes from '../utils/routes';
 import * as c from './theme/colors';
+import RaisedButton from './RaisedButton';
 
 interface IStartTaskButtonProps {
   onStartTask?: (task: IViewTask) => void;
@@ -31,6 +31,9 @@ const mapDispatchToProps = (dispatch: Redux.Dispatch) => ({
 });
 
 const style = {
+  button: {
+    minWidth: '105px',
+  },
   playPauseIcon: {
     display: 'inline-block',
     fill: c.white,
@@ -72,9 +75,8 @@ const StartTaskButton = (props: IStartTaskButtonProps) => {
   if (activeSession) {
     return (
       <RaisedButton
-        style={{ minWidth: '105px' }}
-        primary={true}
-        onTouchTap={() => handleStopTask(props)}>
+        onTouchTap={() => handleStopTask(props)}
+        style={style.button}>
         <div style={{color: c.white}}>
           <AvPauseCircleOutline style={style.playPauseIcon} />
           <span style={style.text}>Pause</span>
@@ -84,9 +86,8 @@ const StartTaskButton = (props: IStartTaskButtonProps) => {
   } else {
     return (
       <RaisedButton
-        style={{ minWidth: '105px' }}
-        primary={true}
-        onTouchTap={() => handleStartTask(props)}>
+        onTouchTap={() => handleStartTask(props)}
+        style={style.button}>
         <div style={{color: c.white}}>
           <AvPlayCircleOutline style={style.playPauseIcon} />
           <span style={style.text}>Start</span>

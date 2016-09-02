@@ -26,7 +26,5 @@ const theme = {
 export default theme;
 
 export const muiTheme = getMuiTheme(Object.assign({}, lightBaseTheme, {
-  raisedButton: {
-    disabledTouchRipple: true,
-  },
+
 }));
