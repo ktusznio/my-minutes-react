@@ -7,6 +7,7 @@ import MoreVertIcon from 'material-ui/svg-icons/navigation/more-vert';
 import { IAppState } from '../reducer';
 import { logout, ILogout } from '../actions/auth';
 import * as routes from '../utils/routes';
+import * as c from './theme/colors';
 
 interface INavigationProps {
   title: string;
@@ -27,14 +28,6 @@ const mapDispatchToProps = (dispatch: Redux.Dispatch) => ({
   logout: () => dispatch(logout()),
 });
 
-const style = {
-  position: 'fixed',
-  top: 0,
-  left: 0,
-  right: 0,
-  height: '64px',
-};
-
 class Navigation extends React.Component<IConnectedNavigationProps, {}> {
   static defaultProps: IConnectedNavigationProps = {
     title: "My Minutes",
@@ -49,8 +42,12 @@ class Navigation extends React.Component<IConnectedNavigationProps, {}> {
         iconElementRight={this.renderRightMenu()}
         iconElementLeft={this.props.leftIcon}
         showMenuIconButton={!!this.props.leftIcon}
-        title={this.props.title}
-        style={style}
+        style={style.appBar}
+        title={
+          <Link to={routes.tasks()} style={style.appBarLink}>
+            {this.props.title}
+          </Link>
+        }
       />
     );
   }
@@ -78,7 +75,7 @@ class Navigation extends React.Component<IConnectedNavigationProps, {}> {
       menuItems.push(
         <MenuItem
           key={0}
-          onTouchTap={this.props.logout}
+          onTouchTap={() => this.props.logout()}
           primaryText="Log out" />
       );
     }
@@ -86,6 +83,20 @@ class Navigation extends React.Component<IConnectedNavigationProps, {}> {
     return menuItems;
   }
 }
+
+const style = {
+  appBar: {
+    position: 'fixed',
+    top: 0,
+    left: 0,
+    right: 0,
+    height: '64px',
+  },
+  appBarLink: {
+    color: c.white,
+    textDecoration: 'none',
+  },
+};
 
 export default connect<{}, {}, INavigationProps>(
   mapStateToProps,

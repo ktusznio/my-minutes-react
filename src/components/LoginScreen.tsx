@@ -1,48 +1,34 @@
-import { RaisedButton } from 'material-ui';
 import * as React from 'react';
 import { connect } from 'react-redux';
 import { browserHistory } from 'react-router';
 
+import { signInWithFacebook } from '../actions/auth';
 import auth, { signInWithRedirect, facebookAuthProvider } from '../firebase/auth';
 import { IAppState } from '../reducer';
 import { IAuthState } from '../reducers/auth';
+import * as routes from '../utils/routes';
 import FacebookIcon from './FacebookIcon';
 import Navigation from './Navigation';
+import RaisedButton from './RaisedButton';
 import { Screen, ScreenContent } from './Screen';
 
 interface ILoginScreenProps {
   auth: IAuthState;
+  signInWithFacebook: () => void;
 }
 
-interface IRouterContext {
-  router: any;
-}
-
-const mapStateToProps = (state: IAppState): ILoginScreenProps => ({
+const mapStateToProps = (state: IAppState) => ({
   auth: state.auth,
+});
+
+const mapDispatchToProps = (dispatch: Redux.Dispatch) => ({
+  signInWithFacebook: () => dispatch(signInWithFacebook()),
 })
 
 class LoginScreen extends React.Component<ILoginScreenProps, {}> {
-  static contextTypes = {
-    router: React.PropTypes.func.isRequired,
-  };
-
-  context: IRouterContext;
-
-  handleFacebookLoginTap = () => {
-    signInWithRedirect(facebookAuthProvider);
-  };
-
-  componentWillMount() {
-    // Check for a successful login through the redirect flow and navigate to
-    // the tasks screen.
-    // For the logout flow, avoid the redirect by checking for a logged-in user.
-    if (!this.props.auth.user) {
-      auth.getRedirectResult().then(result => {
-        if (result.user) {
-          browserHistory.replace('/');
-        }
-      });
+  componentWillReceiveProps(nextProps: ILoginScreenProps) {
+    if (!this.props.auth.user && nextProps.auth.user) {
+      browserHistory.replace(routes.tasks());
     }
   }
 
@@ -54,7 +40,7 @@ class LoginScreen extends React.Component<ILoginScreenProps, {}> {
           <RaisedButton
            label="Login with Facebook"
            icon={<FacebookIcon />}
-           onTouchTap={this.handleFacebookLoginTap}
+           onTouchTap={this.props.signInWithFacebook}
            primary={true}
          />
         </ScreenContent>
@@ -64,5 +50,6 @@ class LoginScreen extends React.Component<ILoginScreenProps, {}> {
 }
 
 export default connect(
-  mapStateToProps
+  mapStateToProps,
+  mapDispatchToProps
 )(LoginScreen);

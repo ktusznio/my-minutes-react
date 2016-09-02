@@ -1,8 +1,9 @@
 import { browserHistory } from 'react-router';
 
 import * as actionTypes from '../actionTypes';
-import auth from '../firebase/auth';
+import auth, { signInWithRedirect, facebookAuthProvider } from '../firebase/auth';
 import { IUser } from '../models';
+import { logException } from '../utils/error';
 
 export interface IAuthAction {
   type: string;
@@ -10,41 +11,28 @@ export interface IAuthAction {
   user: IUser;
 }
 
-export const startListeningToAuth = () =>
-  (dispatch: Redux.Dispatch) => {
-    auth.onAuthStateChanged((user: firebase.User) => {
-      if (user) {
-        dispatch(loginSuccess(user))
-      } else {
-        dispatch(logout());
-      }
-    });
-  }
+export const startListeningToAuth = () => (dispatch: Redux.Dispatch) => {
+  dispatch({ type: actionTypes.ATTEMPT_LOGIN });
+  auth.onAuthStateChanged((user: firebase.User) => {
+    dispatch(user ? loginSuccess(user) : logout());
+  });
+};
 
-export const loginSuccess = (user: firebase.User) => {
-  return {
-    type: actionTypes.LOGIN_SUCCESS,
-    user,
-  };
+export const signInWithFacebook = () => (dispatch: Redux.Dispatch) => {
+  dispatch({ type: actionTypes.ATTEMPT_LOGIN });
+  signInWithRedirect(facebookAuthProvider);
 }
 
-interface ILogoutAction {
-  type: string;
-}
+export const loginSuccess = (user: firebase.User) => ({
+  type: actionTypes.LOGIN_SUCCESS,
+  user,
+});
 
 export interface ILogout {
-  (): ILogoutAction;
+  (): void;
 }
 
-export const logout = () =>
-  (dispatch: Redux.Dispatch): ILogoutAction => {
-    auth.signOut().then(() => {
-      browserHistory.push('/login');
-    }, (error) => {
-      console.error('error logging out', error)
-    });
-
-    return {
-      type: actionTypes.LOGOUT,
-    };
-  }
+export const logout = () => (dispatch: Redux.Dispatch) => {
+  auth.signOut().catch(logException);
+  dispatch({ type: actionTypes.LOGOUT });
+};

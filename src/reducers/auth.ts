@@ -1,11 +1,11 @@
-import { ATTEMPT_LOGIN, LOGIN_SUCCESS, LOGOUT } from '../actionTypes';
+import * as m from '../models';
 import { IAuthAction } from '../actions/auth';
-import { IGoal, IUser } from '../models';
+import * as actionTypes from '../actionTypes';
 
 export interface IAuthState {
   [key: string]: any;
   status: string;
-  user: IUser;
+  user: m.IUser;
 }
 
 export default function auth(authState: IAuthState = {
@@ -13,21 +13,21 @@ export default function auth(authState: IAuthState = {
   user: null
 }, action: IAuthAction): IAuthState {
   switch(action.type) {
-  case ATTEMPT_LOGIN:
+  case actionTypes.ATTEMPT_LOGIN:
     return {
-      status: ATTEMPT_LOGIN,
+      status: actionTypes.ATTEMPT_LOGIN,
       user: null,
     };
 
-  case LOGIN_SUCCESS:
+  case actionTypes.LOGIN_SUCCESS:
     return {
-      status: LOGIN_SUCCESS,
+      status: actionTypes.LOGIN_SUCCESS,
       user: action.user,
     }
 
-  case LOGOUT:
+  case actionTypes.LOGOUT:
     return {
-      status: LOGOUT,
+      status: actionTypes.LOGOUT,
       user: null,
     }
 
