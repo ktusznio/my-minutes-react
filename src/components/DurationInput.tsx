@@ -65,21 +65,22 @@ export default class DurationInput extends React.Component<IDurationInputProps, 
   handleKeyDown = (e) => {
     e.preventDefault();
 
+    const parsedInt = parseInt(e.key, 10);
+
     let hhmm;
     switch (true) {
-    // Backspace.
-    case e.keyCode === 8:
-      hhmm = '0' + this.state.hhmm.substr(0, this.state.hhmm.length - 1);
-      break;
-
     // Numerics (0-9).
-    case e.keyCode >= 48 && e.keyCode <= 57:
-      const char = String.fromCharCode(e.keyCode);
-      hhmm = this.state.hhmm + char;
+    case !isNaN(parsedInt):
+      hhmm = this.state.hhmm + parsedInt;
 
       if (hhmm.length > MAX_INPUT_LENGTH) {
         hhmm = hhmm.substr(1);
       }
+      break;
+
+    // Backspace.
+    case e.key === 'Backspace':
+      hhmm = '0' + this.state.hhmm.substr(0, this.state.hhmm.length - 1);
       break;
 
     default:
@@ -98,6 +99,7 @@ export default class DurationInput extends React.Component<IDurationInputProps, 
     return (
       <TextField
         ref="input"
+        type="tel"
         errorText={this.state.errorText}
         disabled={this.props.disabled}
         hintText={this.props.hint}
