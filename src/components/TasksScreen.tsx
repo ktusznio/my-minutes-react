@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { connect } from 'react-redux';
 import { browserHistory } from 'react-router';
-import { Dialog, FlatButton, FloatingActionButton, TextField } from 'material-ui';
+import { FloatingActionButton } from 'material-ui';
 import ContentAdd from 'material-ui/svg-icons/content/add';
 
 import { saveTask } from '../actions/tasks';
@@ -11,6 +11,7 @@ import { IAppState } from '../reducer';
 import { getTasks } from '../reducers/tasks';
 import { tasksSelector, viewTaskToTask, IViewTask } from '../selectors';
 import * as routes from '../utils/routes';
+import AddTaskDialog from './AddTaskDialog';
 import Navigation from './Navigation';
 import { Screen, ScreenContent } from './Screen';
 import TaskList from './TaskList';
@@ -39,11 +40,6 @@ const mapDispatchToProps = (dispatch: Redux.Dispatch, props: ITasksScreenProps) 
 });
 
 class TasksScreen extends React.Component<ITasksScreenProps, ITasksScreenState> {
-  refs: {
-    [name: string]: any;
-    taskName: TextField;
-  }
-
   constructor(props) {
     super(props);
     this.state = {
@@ -57,28 +53,13 @@ class TasksScreen extends React.Component<ITasksScreenProps, ITasksScreenState> 
   closeAddTaskDialog = () =>
     this.setState({ isAddTaskDialogOpen: false })
 
-  handleAddTaskDialogSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    const name = this.refs.taskName.getValue();
+  handleAddTaskDialogSubmit = (name: string) => {
     const task = m.buildTask({ name });
     this.props.onAddTask(task);
     this.closeAddTaskDialog();
   };
 
   render() {
-    const addTaskDialogActions = [
-      <FlatButton
-        label="Cancel"
-        onTouchTap={this.closeAddTaskDialog}
-      />,
-      <FlatButton
-        label="Add Task"
-        primary={true}
-        keyboardFocused={false}
-        onTouchTap={this.handleAddTaskDialogSubmit}
-      />,
-    ];
-
     return (
       <Screen>
         <Navigation title="My Minutes" />
@@ -92,16 +73,11 @@ class TasksScreen extends React.Component<ITasksScreenProps, ITasksScreenState> 
           </FloatingActionButton>
         </div>
 
-        <Dialog
-          title="Add a task"
-          actions={addTaskDialogActions}
-          open={this.state.isAddTaskDialogOpen}
-          onRequestClose={this.closeAddTaskDialog}>
-          <TextField
-            ref="taskName"
-            hintText="Task name"
-          />
-        </Dialog>
+        <AddTaskDialog
+          isOpen={this.state.isAddTaskDialogOpen}
+          onRequestClose={this.closeAddTaskDialog}
+          onSubmit={this.handleAddTaskDialogSubmit}
+        />
       </Screen>
     );
   }
