@@ -84,7 +84,7 @@ class Navigation extends React.Component<IConnectedNavigationProps, {}> {
   }
 }
 
-const style = {
+export const style = {
   appBar: {
     position: 'fixed',
     top: 0,

@@ -1,7 +1,9 @@
 import * as moment from 'moment';
 
+import * as c from '../components/theme/colors';
 import * as m from '../models';
 import { IViewTask, IViewTaskHistory } from '../selectors';
+import * as format from './format';
 
 export const getTaskTime = (task: IViewTask): number => {
   if (!task.activeSession) {
@@ -15,6 +17,41 @@ export const getGoalRemainder = (task: IViewTask): number => {
     return task.msLeftForGoal;
   }
   return task.msLeftForGoal - getSessionDuration(task.activeSession);
+}
+
+export const getGoalStatusColor = (task: IViewTask): string => {
+  switch (true) {
+  case task.goal.type === m.GoalType.AT_LEAST && task.msLeftForGoal <= 0:
+    return c.green;
+
+  case task.goal.type === m.GoalType.AT_MOST && task.msLeftForGoal <= 0:
+    return c.red;
+
+  default:
+    return c.black;
+  }
+}
+
+export const getGoalMessage = (task: IViewTask) => {
+  if (task.goal.type === m.GoalType.NONE || task.goal.duration === 0) {
+    return;
+  }
+
+  const goalRemainder = getGoalRemainder(task);
+
+  if (task.goal.type === m.GoalType.AT_LEAST) {
+    if (goalRemainder > 0) {
+      return format.timeRemaining(goalRemainder) + ' to go!'
+    } else {
+      return 'All done!';
+    }
+  } else {
+    if (goalRemainder > 0) {
+      return format.timeRemaining(goalRemainder) + ' left!';
+    } else {
+      return 'Time\'s up!';
+    }
+  }
 }
 
 export const buildTaskHistory = (task: m.ITask, sessionsByDate = {}, today: moment.Moment = moment()): IViewTaskHistory => {

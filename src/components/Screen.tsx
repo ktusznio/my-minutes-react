@@ -1,5 +1,7 @@
 import * as React from 'react';
 
+import { style as navigationStyle } from './Navigation';
+
 const styles = {
   screen: {
     height: '100%',
@@ -7,8 +9,8 @@ const styles = {
   screenContent: {
     display: 'flex',
     flexDirection: 'column',
-    height: '100%',
-    margin: '80px 16px 0',
+    height: `calc(100vh - ${navigationStyle.appBar.height})`,
+    margin: `${navigationStyle.appBar.height} 16px 0`,
   },
 };
 
@@ -18,6 +20,6 @@ export const Screen = (props) =>
   </div>
 
 export const ScreenContent = (props) =>
-  <div style={styles.screenContent}>
+  <div style={Object.assign({}, styles.screenContent, props.style)}>
     {props.children}
   </div>

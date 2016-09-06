@@ -36,7 +36,7 @@ class LoginScreen extends React.Component<ILoginScreenProps, {}> {
     return (
       <Screen>
         <Navigation title="My Minutes" />
-        <ScreenContent>
+        <ScreenContent style={style.screenContent}>
           <RaisedButton
            label="Login with Facebook"
            icon={<FacebookIcon />}
@@ -48,6 +48,16 @@ class LoginScreen extends React.Component<ILoginScreenProps, {}> {
     );
   }
 }
+
+const style = {
+  screenContent: {
+    display: 'flex',
+    justifyContent: 'space-around',
+    alignItems: 'center',
+    marginLeft: 0,
+    marginRight: 0,
+  },
+};
 
 export default connect(
   mapStateToProps,

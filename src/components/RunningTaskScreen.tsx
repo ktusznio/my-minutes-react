@@ -6,8 +6,8 @@ import * as m from '../models';
 import { IAppState } from '../reducer';
 import { RouteParams } from '../router';
 import { taskSelector, IViewTask } from '../selectors';
+import * as c from './theme/colors';
 import { Column } from './Flex';
-import { buildGoalIcon } from './GoalIcon';
 import Navigation from './Navigation';
 import NavigationBackIcon from './NavigationBackIcon';
 import { RunningTaskDuration, RunningGoalDuration } from './RunningDuration';
@@ -40,18 +40,15 @@ class RunningTaskScreen extends React.Component<IRunningTaskScreenProps, {}> {
           leftIcon={<NavigationBackIcon />}
           title={task.name}
         />
-        <ScreenContent style={{ height: '100%' }}>
-          <Column style={{ flex: 1, alignItems: 'center' }}>
-            <RunningTaskDuration style={style.task} active={!!task.activeSession} task={task} />
-            <div>
-              {buildGoalIcon({ goalType: task.goal.type })}
-              <RunningGoalDuration active={!!task.activeSession} style={style.goal} task={task} />
-            </div>
+        <ScreenContent style={style.screenContent}>
+          <Column style={style.section}>
+            <RunningTaskDuration active={!!task.activeSession} style={style.taskDuration} task={task} />
+            <RunningGoalDuration active={!!task.activeSession} style={style.goalDuration} task={task} />
           </Column>
-          <div style={{ flex: 1, margin: '40px auto 0' }}>
-            <StartTaskButton task={task} />
+          <Column style={style.section}>
+            <StartTaskButton task={task} style={style.startTaskButton} />
             <TaskHistoryDots active={!!task.activeSession} task={task} />
-          </div>
+          </Column>
         </ScreenContent>
       </Screen>
     );
@@ -59,14 +56,29 @@ class RunningTaskScreen extends React.Component<IRunningTaskScreenProps, {}> {
 };
 
 const style = {
-  task: {
+  screenContent: {
+    display: 'flex',
+    justifyContent: 'space-around',
+    alignItems: 'center',
+    marginLeft: 0,
+    marginRight: 0,
+  },
+  section: {
+    alignItems: 'center',
+    flex: 1,
+    justifyContent: 'center',
+  },
+  taskDuration: {
     fontSize: '22px',
     fontWeight: 'bold',
-    margin: '40px auto 0',
+    marginBottom: '20px',
   },
-  goal: {
+  goalDuration: {
+    color: c.white,
     fontSize: '16px',
-    margin: '10px auto 0',
+  },
+  startTaskButton: {
+    marginBottom: '20px',
   },
 };
 

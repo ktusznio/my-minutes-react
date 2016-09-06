@@ -63,7 +63,7 @@ class TaskHistoryDots extends React.Component<ITaskHistoryDotsProps, {}> {
 const style = {
   root: {
     display: 'flex',
-    padding: '10px 0',
+    padding: '18px 0',
   },
   dot: {
     alignItems: 'center',

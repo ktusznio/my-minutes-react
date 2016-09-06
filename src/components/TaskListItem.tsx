@@ -8,7 +8,6 @@ import { IViewTask } from '../selectors';
 import { IAppState } from '../reducer';
 import * as routes from '../utils/routes';
 import * as format from '../utils/format';
-import { buildGoalIcon } from './GoalIcon';
 import { RunningTaskDuration, RunningGoalDuration } from './RunningDuration';
 import StartTaskButton from './StartTaskButton';
 import TaskHistoryDots from './TaskHistoryDots';
@@ -24,22 +23,22 @@ const handleStartTask = (task: m.ITask) =>
 const TaskListItem = (props: ITaskListItemProps) => {
   const { task } = props;
   return (
-    <div style={style.root}>
-      <Link style={style.leftColumn} to={routes.task(task.id)}>
-        <div style={style.taskName}>{task.name}</div>
-        <TaskHistoryDots active={!!task.activeSession} task={task} />
-        <RunningTaskDuration active={!!task.activeSession} task={task} />
-      </Link>
-      <div style={style.rightColumn}>
-        <StartTaskButton
-          task={task}
-          onStartTask={handleStartTask}
-        />
-        <div style={{ marginTop: '4px' }}>
-          {buildGoalIcon({ goalType: task.goal.type })}
-          <RunningGoalDuration active={!!task.activeSession} task={task} />
+    <div>
+      <div style={style.root}>
+        <Link style={style.leftColumn} to={routes.task(task.id)}>
+          <div style={style.taskName}>{task.name}</div>
+          <TaskHistoryDots active={!!task.activeSession} task={task} />
+          <RunningTaskDuration active={!!task.activeSession} task={task} style={style.duration} />
+        </Link>
+        <div style={style.rightColumn}>
+          <StartTaskButton
+            task={task}
+            onStartTask={handleStartTask}
+          />
+          <RunningGoalDuration active={!!task.activeSession} task={task} style={style.duration} />
         </div>
       </div>
+      <hr style={style.hr} />
     </div>
   );
 }
@@ -47,8 +46,8 @@ const TaskListItem = (props: ITaskListItemProps) => {
 const style = {
   root: {
     display: 'flex',
-    margin: '0 16px',
-    height: '80px',
+    margin: '16px 0',
+    height: '120px',
     alignItems: 'center',
     lineHeight: '1.5em',
     fontSize: '14px',
@@ -61,12 +60,28 @@ const style = {
     textDecoration: 'none',
   },
   rightColumn: {
-    textAlign: 'center',
-    minWidth: '105px',
+    alignItems: 'center',
+    display: 'flex',
+    flexDirection: 'column',
+    height: '100%',
+    justifyContent: 'space-around',
+    minWidth: '120px',
+  },
+  hr: {
+    border: 'none',
+    background: `-webkit-gradient(radial, 50% 50%, 0, 50% 50%, 350, from(${c.grey}), to(${c.white}))`,
+    color: c.white,
+    display: 'block',
+    height: '1px',
+    margin: 0,
+    width: '100%',
   },
   taskName: {
-    fontSize: '16px',
-  }
+    fontSize: '18px',
+  },
+  duration: {
+    fontSize: '12px',
+  },
 };
 
 

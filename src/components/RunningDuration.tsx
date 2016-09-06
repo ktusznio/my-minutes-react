@@ -4,6 +4,7 @@ import * as m from '../models';
 import { IViewTask } from '../selectors';
 import * as format from '../utils/format';
 import * as taskUtils from '../utils/task';
+import { buildGoalIcon } from './GoalIcon';
 import Interval from './Interval';
 import * as c from './theme/colors';
 
@@ -29,36 +30,32 @@ export const RunningTaskDuration = Interval(
 export const RunningGoalDuration = Interval(
   class extends React.Component<IRunningDurationProps, {}> {
     render() {
-      const goal = this.props.task.goal;
-      if (!goal || goal.type === m.GoalType.NONE) {
+      const task = this.props.task;
+      if (!task.goal || task.goal.type === m.GoalType.NONE || task.goal.duration === 0) {
         return null;
       }
 
-      const goalRemainder = taskUtils.getGoalRemainder(this.props.task);
-
-      let color = c.black;
-      let message;
-      if (goal.type === m.GoalType.AT_LEAST) {
-        if (goalRemainder > 0) {
-          message = format.timeRemaining(goalRemainder) + ' to go!'
-        } else {
-          color = c.green;
-          message = 'All done!';
-        }
-      } else {
-        if (goalRemainder > 0) {
-          message = format.timeRemaining(goalRemainder) + ' left!';
-        } else {
-          color = c.red;
-          message = "Time's up!";
-        }
-      }
+      const color = taskUtils.getGoalStatusColor(task);
+      const message = taskUtils.getGoalMessage(task);
+      const goalIcon = buildGoalIcon({ task });
 
       return (
-        <span style={Object.assign({}, this.props.style, { color })}>
-          {message}
-        </span>
+        <div style={style.RunningGoalDuration.root}>
+          {goalIcon}
+          <span style={Object.assign({}, this.props.style, { color })}>
+            {message}
+          </span>
+        </div>
       );
     }
   }
 );
+
+const style = {
+  RunningGoalDuration: {
+    root: {
+      alignItems: 'center',
+      display: 'flex',
+    },
+  },
+}

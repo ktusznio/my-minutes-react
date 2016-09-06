@@ -154,6 +154,10 @@ export class TaskScreen extends React.Component<ITaskScreenProps, ITaskScreenSta
       />,
     ];
 
+    const goalTypeNoneSelected = task.goal.type === m.GoalType.NONE;
+    const goalTypeAtLeastSelected = task.goal.type === m.GoalType.AT_LEAST;
+    const goalTypeAtMostSelected = task.goal.type === m.GoalType.AT_MOST;
+
     return (
       <Screen>
         <Navigation
@@ -178,25 +182,25 @@ export class TaskScreen extends React.Component<ITaskScreenProps, ITaskScreenSta
               <FlatButton
                 style={style.goalTypeButton}
                 ref="noGoalButton"
-                icon={buildGoalIcon({ goalType: m.GoalType.NONE })}
+                icon={buildGoalIcon({ goalType: m.GoalType.NONE, isSelected: goalTypeNoneSelected })}
                 label="None"
-                primary={this.state.taskDraft.goal.type === m.GoalType.NONE}
+                primary={goalTypeNoneSelected}
                 onTouchTap={() => this.setGoalType(m.GoalType.NONE)}
               />
               <FlatButton
                 style={style.goalTypeButton}
                 ref="atMostButton"
-                icon={buildGoalIcon({ goalType: m.GoalType.AT_LEAST })}
+                icon={buildGoalIcon({ goalType: m.GoalType.AT_LEAST, isSelected: goalTypeAtLeastSelected })}
                 label="At Least"
-                primary={this.state.taskDraft.goal.type === m.GoalType.AT_LEAST}
+                primary={goalTypeAtLeastSelected}
                 onTouchTap={() => this.setGoalType(m.GoalType.AT_LEAST)}
               />
               <FlatButton
                 style={style.goalTypeButton}
                 ref="atMostButton"
-                icon={buildGoalIcon({ goalType: m.GoalType.AT_MOST })}
+                icon={buildGoalIcon({ goalType: m.GoalType.AT_MOST, isSelected: goalTypeAtMostSelected })}
                 label="At Most"
-                primary={this.state.taskDraft.goal.type === m.GoalType.AT_MOST}
+                primary={goalTypeAtMostSelected}
                 onTouchTap={() => this.setGoalType(m.GoalType.AT_MOST)}
               />
             </Row>
@@ -210,14 +214,14 @@ export class TaskScreen extends React.Component<ITaskScreenProps, ITaskScreenSta
             />
           </div>
           <div style={style.formRow}>
-            <Label text="Repeats" style={Object.assign({}, style.formLabel, { marginBottom: '8px' })} />
+            <Label text="Repeat On" style={Object.assign({}, style.formLabel, { marginBottom: '8px' })} />
             <RepeatSelect
               ref="repeat"
               repeats={task.goal.repeats}
               disabled={task.goal.type === m.GoalType.NONE}
             />
           </div>
-          <div style={Object.assign({}, style.formRow, { margin: `0 auto ${style.formRow.marginBottom} auto` })}>
+          <div style={style.deleteTaskFormRow}>
             <FlatButton
               style={style.deleteTaskButton}
               label="Delete Task"
@@ -241,7 +245,10 @@ export class TaskScreen extends React.Component<ITaskScreenProps, ITaskScreenSta
 
 const style = {
   formRow: {
-    marginBottom: '25px',
+    margin: '18px 0',
+  },
+  deleteTaskFormRow: {
+    margin: '18px auto',
   },
   formLabel: {
     display: 'block',

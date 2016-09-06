@@ -63,6 +63,7 @@ class TasksScreen extends React.Component<ITasksScreenProps, ITasksScreenState> 
     return (
       <Screen>
         <Navigation title="My Minutes" />
+
         <ScreenContent>
           <TaskList tasks={this.props.tasks} />
         </ScreenContent>
