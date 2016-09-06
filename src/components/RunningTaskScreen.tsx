@@ -7,6 +7,7 @@ import { IAppState } from '../reducer';
 import { RouteParams } from '../router';
 import { taskSelector, IViewTask } from '../selectors';
 import { Column } from './Flex';
+import { buildGoalIcon } from './GoalIcon';
 import Navigation from './Navigation';
 import NavigationBackIcon from './NavigationBackIcon';
 import { RunningTaskDuration, RunningGoalDuration } from './RunningDuration';
@@ -40,9 +41,12 @@ class RunningTaskScreen extends React.Component<IRunningTaskScreenProps, {}> {
           title={task.name}
         />
         <ScreenContent style={{ height: '100%' }}>
-          <Column style={{ flex: 1 }}>
+          <Column style={{ flex: 1, alignItems: 'center' }}>
             <RunningTaskDuration style={style.task} active={!!task.activeSession} task={task} />
-            <RunningGoalDuration active={!!task.activeSession} style={style.goal} task={task} />
+            <div>
+              {buildGoalIcon({ goalType: task.goal.type })}
+              <RunningGoalDuration active={!!task.activeSession} style={style.goal} task={task} />
+            </div>
           </Column>
           <div style={{ flex: 1, margin: '40px auto 0' }}>
             <StartTaskButton task={task} />

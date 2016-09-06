@@ -11,11 +11,12 @@ import { RouteParams } from '../router';
 import { IAppState } from '../reducer';
 import { taskSelector, viewTaskToTask, IViewTask } from '../selectors';
 import DurationInput from './DurationInput';
-import RepeatSelect from './RepeatSelect';
 import { Row } from './Flex';
+import { buildGoalIcon } from './GoalIcon';
 import Label from './Label';
 import Navigation from './Navigation';
 import NavigationBackIcon from './NavigationBackIcon';
+import RepeatSelect from './RepeatSelect';
 import { Screen, ScreenContent } from './Screen';
 
 export interface ITaskScreenProps {
@@ -177,13 +178,15 @@ export class TaskScreen extends React.Component<ITaskScreenProps, ITaskScreenSta
               <FlatButton
                 style={style.goalTypeButton}
                 ref="noGoalButton"
+                icon={buildGoalIcon({ goalType: m.GoalType.NONE })}
                 label="None"
-                primary={task.goal.type === m.GoalType.NONE}
+                primary={this.state.taskDraft.goal.type === m.GoalType.NONE}
                 onTouchTap={() => this.setGoalType(m.GoalType.NONE)}
               />
               <FlatButton
                 style={style.goalTypeButton}
                 ref="atMostButton"
+                icon={buildGoalIcon({ goalType: m.GoalType.AT_LEAST })}
                 label="At Least"
                 primary={this.state.taskDraft.goal.type === m.GoalType.AT_LEAST}
                 onTouchTap={() => this.setGoalType(m.GoalType.AT_LEAST)}
@@ -191,6 +194,7 @@ export class TaskScreen extends React.Component<ITaskScreenProps, ITaskScreenSta
               <FlatButton
                 style={style.goalTypeButton}
                 ref="atMostButton"
+                icon={buildGoalIcon({ goalType: m.GoalType.AT_MOST })}
                 label="At Most"
                 primary={this.state.taskDraft.goal.type === m.GoalType.AT_MOST}
                 onTouchTap={() => this.setGoalType(m.GoalType.AT_MOST)}

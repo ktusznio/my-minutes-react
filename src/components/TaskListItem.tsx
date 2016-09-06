@@ -8,6 +8,7 @@ import { IViewTask } from '../selectors';
 import { IAppState } from '../reducer';
 import * as routes from '../utils/routes';
 import * as format from '../utils/format';
+import { buildGoalIcon } from './GoalIcon';
 import { RunningTaskDuration, RunningGoalDuration } from './RunningDuration';
 import StartTaskButton from './StartTaskButton';
 import TaskHistoryDots from './TaskHistoryDots';
@@ -35,6 +36,7 @@ const TaskListItem = (props: ITaskListItemProps) => {
           onStartTask={handleStartTask}
         />
         <div style={{ marginTop: '4px' }}>
+          {buildGoalIcon({ goalType: task.goal.type })}
           <RunningGoalDuration active={!!task.activeSession} task={task} />
         </div>
       </div>
