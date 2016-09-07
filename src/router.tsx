@@ -38,6 +38,7 @@ const UserIsAuthenticated = UserAuthWrapper({
     if (state.auth.status === actionTypes.LOGOUT) {
       return routes.login();
     }
+    return routes.tasks();
   },
   wrapperDisplayName: 'UserIsAuthenticated',
 });
