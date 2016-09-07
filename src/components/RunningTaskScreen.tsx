@@ -4,7 +4,7 @@ import { connect } from 'react-redux';
 import { startTask, stopTask } from '../actions/tasks';
 import * as m from '../models';
 import { IAppState } from '../reducer';
-import { RouteParams } from '../router';
+import { IRouteParams } from '../router';
 import { taskSelector, IViewTask } from '../selectors';
 import * as c from './theme/colors';
 import { Column } from './Flex';
@@ -19,7 +19,7 @@ export interface IRunningTaskScreenProps {
   task: IViewTask;
   startTask: ((task: IViewTask) => void);
   stopTask: ((task: IViewTask) => void);
-  params: RouteParams;
+  params: IRouteParams;
 }
 
 const mapStateToProps = (state: IAppState, props: IRunningTaskScreenProps) => ({

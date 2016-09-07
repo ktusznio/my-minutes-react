@@ -9,7 +9,9 @@ export interface IAuthState {
 }
 
 export default function auth(authState: IAuthState = {
-  status: null,
+  // Initial status is ATTEMPT_LOGIN to prevent flash of login button when
+  // authentication is checked on app start.
+  status: actionTypes.ATTEMPT_LOGIN,
   user: null
 }, action: IAuthAction): IAuthState {
   switch(action.type) {

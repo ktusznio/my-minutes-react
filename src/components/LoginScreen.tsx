@@ -3,9 +3,11 @@ import { connect } from 'react-redux';
 import { browserHistory } from 'react-router';
 
 import { signInWithFacebook } from '../actions/auth';
+import * as actionTypes from '../actionTypes';
 import auth, { signInWithRedirect, facebookAuthProvider } from '../firebase/auth';
 import { IAppState } from '../reducer';
 import { IAuthState } from '../reducers/auth';
+import { IRouteParams } from '../router';
 import * as routes from '../utils/routes';
 import FacebookIcon from './FacebookIcon';
 import Navigation from './Navigation';
@@ -15,6 +17,8 @@ import { Screen, ScreenContent } from './Screen';
 interface ILoginScreenProps {
   auth: IAuthState;
   signInWithFacebook: () => void;
+  params: IRouteParams;
+  location: any;
 }
 
 const mapStateToProps = (state: IAppState) => ({
@@ -28,7 +32,8 @@ const mapDispatchToProps = (dispatch: Redux.Dispatch) => ({
 class LoginScreen extends React.Component<ILoginScreenProps, {}> {
   componentWillReceiveProps(nextProps: ILoginScreenProps) {
     if (!this.props.auth.user && nextProps.auth.user) {
-      browserHistory.replace(routes.tasks());
+      const redirectTo = nextProps.location.query.redirect || routes.tasks();
+      browserHistory.replace(redirectTo);
     }
   }
 
@@ -37,16 +42,27 @@ class LoginScreen extends React.Component<ILoginScreenProps, {}> {
       <Screen>
         <Navigation title="My Minutes" />
         <ScreenContent style={style.screenContent}>
-          <RaisedButton
-           label="Login with Facebook"
-           icon={<FacebookIcon />}
-           onTouchTap={this.props.signInWithFacebook}
-           primary={true}
-         />
+          {this.renderBody()}
         </ScreenContent>
       </Screen>
     );
   }
+
+  renderBody() {
+    if (this.props.auth.status === actionTypes.ATTEMPT_LOGIN) {
+      return <div>Logging in...</div>;
+    } else {
+      return (
+        <RaisedButton
+         label="Login with Facebook"
+         icon={<FacebookIcon />}
+         onTouchTap={this.props.signInWithFacebook}
+         primary={true}
+       />
+     );
+    }
+  }
+
 }
 
 const style = {

@@ -7,7 +7,7 @@ import { cloneDeep } from 'lodash';
 
 import { saveTask, deleteTask } from '../actions/tasks';
 import * as m from '../models';
-import { RouteParams } from '../router';
+import { IRouteParams } from '../router';
 import { IAppState } from '../reducer';
 import { taskSelector, viewTaskToTask, IViewTask } from '../selectors';
 import DurationInput from './DurationInput';
@@ -23,7 +23,7 @@ export interface ITaskScreenProps {
   task: IViewTask;
   onDeleteTask: (task: m.ITask) => void;
   onSubmit: ((task: m.ITask) => void);
-  params: RouteParams;
+  params: IRouteParams;
 }
 
 interface ITaskScreenState {

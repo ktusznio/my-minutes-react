@@ -14,32 +14,14 @@ import TaskScreen from './components/TaskScreen';
 import { IAppState } from './reducer';
 import * as routes from './utils/routes';
 
-export interface RouteParams {
+export interface IRouteParams {
   taskId: string;
+  redirect: string;
 }
 
-const loginInProgressIndicator = (props) =>
-  <div>
-    <div style={{ position: 'fixed', top: 0 }}>
-      <p>Logging in...</p>
-      <CircularProgress />
-    </div>
-    {props.children}
-  </div>
-
 const UserIsAuthenticated = UserAuthWrapper({
-  allowRedirectBack: false,
   authSelector: (state: IAppState) => state.auth.user,
-  authenticatingSelector: (state: IAppState) => {
-    return state.auth.status === actionTypes.ATTEMPT_LOGIN;
-  },
-  LoadingComponent: loginInProgressIndicator,
-  failureRedirectPath: (state: IAppState) => {
-    if (state.auth.status === actionTypes.LOGOUT) {
-      return routes.login();
-    }
-    return routes.tasks();
-  },
+  failureRedirectPath: routes.login(),
   wrapperDisplayName: 'UserIsAuthenticated',
 });
 
