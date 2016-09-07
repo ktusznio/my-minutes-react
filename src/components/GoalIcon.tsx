@@ -19,7 +19,7 @@ export const buildGoalIcon = (props: IGoalIconProps) => {
   const task = props.task;
   const goalType = props.goalType || (task && task.goal.type);
 
-  if (goalType === m.GoalType.NONE || task.goal.duration === 0) {
+  if (goalType === m.GoalType.NONE || (task && task.goal.duration === 0)) {
     return null;
   }
 
