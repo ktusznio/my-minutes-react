@@ -5,20 +5,36 @@ import { render } from 'react-dom';
 import { browserHistory } from 'react-router';
 import { syncHistoryWithStore } from 'react-router-redux';
 import * as injectTapEventPlugin from 'react-tap-event-plugin';
+injectTapEventPlugin();
 
 import config from './config';
 import { createRouter } from './router';
 import store from './store';
 import pushClient from './pushClient';
 
-injectTapEventPlugin();
+// Initialize Facebook.
+(<any>window).fbAsyncInit = function() {
+  (<any>window).FB.init({
+    appId: config.facebookAppId,
+    xfbml: true,
+    version: 'v2.7',
+  });
+};
 
-// Initialize sentry.
+(function(d, s, id) {
+   var js, fjs = d.getElementsByTagName(s)[0];
+   if (d.getElementById(id)) {return;}
+   js = d.createElement(s); js.id = id;
+   js.src = "//connect.facebook.net/en_US/sdk.js";
+   fjs.parentNode.insertBefore(js, fjs);
+ }(document, 'script', 'facebook-jssdk'));
+
+// Initialize Sentry.
 if (config.sentry.dsn) {
   Raven.config(config.sentry.dsn).install();
 }
 
-// Initialize firebase.
+// Initialize Firebase.
 import './firebase';
 
 // Start the app by rendering the router into the page.

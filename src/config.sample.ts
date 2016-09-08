@@ -1,10 +1,11 @@
 const config = {
   beta: {
+    facebookAppId: '<found in facebook developer site>',
     firebase: {
-      apiKey: "<found in firebase>",
-      authDomain: "my-minutes-beta-cea4c.firebaseapp.com",
-      databaseURL: "https://my-minutes-beta-cea4c.firebaseio.com",
-      storageBucket: "my-minutes-beta-cea4c.appspot.com",
+      apiKey: '<found in firebase>',
+      authDomain: 'my-minutes-beta-cea4c.firebaseapp.com',
+      databaseURL: 'https://my-minutes-beta-cea4c.firebaseio.com',
+      storageBucket: 'my-minutes-beta-cea4c.appspot.com',
     },
     pushServer: {
       url: 'https://my-minutes-push-beta.herokuapp.com',
@@ -14,11 +15,12 @@ const config = {
     },
   },
   development: {
+    facebookAppId: '<found in facebook developer site>',
     firebase: {
-      apiKey: "<found in firebase>",
-      authDomain: "my-minutes-development.firebaseapp.com",
-      databaseURL: "https://my-minutes-development.firebaseio.com",
-      storageBucket: "my-minutes-development.appspot.com",
+      apiKey: '<found in firebase>',
+      authDomain: 'my-minutes-development.firebaseapp.com',
+      databaseURL: 'https://my-minutes-development.firebaseio.com',
+      storageBucket: 'my-minutes-development.appspot.com',
     },
     pushServer: {
       url: 'http://localhost:3000',
