@@ -39,6 +39,9 @@ if ('serviceWorker' in navigator) {
   // See https://github.com/slightlyoff/ServiceWorker/issues/468
   (<any> navigator).serviceWorker.register('/sw-main.js').then(registration => {
     console.log('[sw-register] registered');
+
+    pushClient.initialize(registration);
+
     // updatefound is fired if service-worker.js changes.
     registration.onupdatefound = function() {
       // The updatefound event implies that registration.installing is set; see

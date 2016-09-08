@@ -2,13 +2,18 @@ import * as Promise from 'bluebird';
 
 import config from './config';
 import * as m from './models';
+import { logException } from './utils/error';
 import { sendFetch } from './utils/fetch';
 
 let endpoint: string;
 let userPublicKey: string = '';
 let userAuth: string = '';
 
+const ERR_NO_PUSH_SERVER_URL = 'Missing push server url';
+const ERR_NO_SUBSCRIPTION_ENDPOINT = 'Missing subscription endpoint';
+
 const initialize = (registration) => {
+  // Request push notification permission.
   registration.pushManager.getSubscription().then(subscription => {
     if (subscription) {
       return subscription;
@@ -24,15 +29,15 @@ const initialize = (registration) => {
       const rawAuthSecret = subscription.getKey('auth');
       userAuth = btoa(String.fromCharCode.apply(null, new Uint8Array(rawAuthSecret)));
     }
-  });
+  }).catch(error => logException(error));
 };
 
 const schedulePush = (taskId: m.TaskId, payload: m.IPushPayload, delay: number): Promise<Response | void> => {
   if (!endpoint) {
-    return Promise.reject('No subscription endpoint present.');
+    return Promise.reject(new Error(ERR_NO_SUBSCRIPTION_ENDPOINT));
   }
   if (!config.pushServer.url) {
-    return Promise.reject('No push server configured.');
+    return Promise.reject(new Error(ERR_NO_PUSH_SERVER_URL));
   }
 
   const pushUrl = `${config.pushServer.url}/push`;
@@ -57,7 +62,7 @@ const schedulePush = (taskId: m.TaskId, payload: m.IPushPayload, delay: number):
 
 const cancelPush = (taskId: m.TaskId): Promise<Response | void> => {
   if (!config.pushServer.url) {
-    return Promise.reject('No push server configured.');
+    return Promise.reject(new Error(ERR_NO_PUSH_SERVER_URL));
   }
 
   const cancelUrl = `${config.pushServer.url}/cancel`;
