@@ -3,6 +3,7 @@ import { cloneDeep } from 'lodash';
 // Push payload.
 
 export interface IPushPayload {
+  onNotificationClickUrl: string;
   title: string;
   body: string;
 }

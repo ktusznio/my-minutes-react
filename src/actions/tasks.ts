@@ -7,7 +7,9 @@ import { IAppState, IGetAppState } from '../reducer';
 import { ITasksState } from '../reducers/tasks';
 import { IViewTask } from '../selectors';
 import pushClient from '../pushClient';
+import * as routes from '../utils/routes';
 import * as taskUtils from '../utils/task';
+import * as urlUtils from '../utils/url';
 
 export const startListeningToTasks = (user) =>
   (dispatch: Redux.Dispatch) => {
@@ -108,6 +110,7 @@ export const startTask = (task: IViewTask) =>
 
       if (delay > 0) {
         pushClient.schedulePush(task.id, {
+          onNotificationClickUrl: urlUtils.currentBaseUrl() + routes.runningTask(task.id),
           title: task.name,
           body: `You hit your goal!`,
         }, delay);
