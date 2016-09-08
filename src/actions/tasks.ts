@@ -108,8 +108,8 @@ export const startTask = (task: IViewTask) =>
 
       if (delay > 0) {
         pushClient.schedulePush(task.id, {
-          title: 'My Minutes',
-          body: `You\'ve hit your "${task.name}" goal!`,
+          title: task.name,
+          body: `You hit your goal!`,
         }, delay);
       }
     }
