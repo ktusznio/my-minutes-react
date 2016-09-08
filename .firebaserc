@@ -2,6 +2,6 @@
   "projects": {
     "development": "my-minutes-development",
     "default": "my-minutes-development",
-    "beta": "my-minutes-beta-cea4c"
+    "beta": "my-minutes-beta-2"
   }
 }
