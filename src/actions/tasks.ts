@@ -13,27 +13,25 @@ import * as urlUtils from '../utils/url';
 
 export const startListeningToTasks = (user) =>
   (dispatch: Redux.Dispatch) => {
-    const ref = db.listenToTasks(
-      user.uid,
-      (event: string, taskOrTaskId) => {
-        switch (event) {
-          case 'child_added':
-            dispatch(taskAdded(taskOrTaskId));
-            return;
+    const ref = db.listenToTasks(user.uid, (event: string, taskOrTaskId) => {
+      switch (event) {
+      case 'child_added':
+        dispatch(taskAdded(taskOrTaskId));
+        return;
 
-          case 'child_changed':
-            dispatch(taskChanged(taskOrTaskId));
-            return;
+      case 'child_changed':
+        dispatch(taskChanged(taskOrTaskId));
+        return;
 
-          case 'child_removed':
-            dispatch(taskRemoved(taskOrTaskId));
-            return;
+      case 'child_removed':
+        dispatch(taskRemoved(taskOrTaskId));
+        return;
 
-          default:
-            throw new Error('unknown event emitted by listenToTasks');
-        }
+      default:
+        throw new Error('unknown event emitted by listenToTasks');
       }
-    );
+    });
+
     dispatch({
       type: actionTypes.LISTEN_TO_TASKS,
       ref,

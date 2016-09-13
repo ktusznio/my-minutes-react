@@ -6,23 +6,21 @@ import { ISessionsState } from '../reducers/sessions';
 
 export const startListeningToSessions = (user) =>
   (dispatch: Redux.Dispatch, getState: IGetAppState) => {
-    const ref = db.listenToSessions(
-      user.uid,
-      (event: string, taskId: m.TaskId, sessionByDateOrSessionId) => {
-        switch (event) {
-          case 'child_added':
-            dispatch(sessionAdded(taskId, sessionByDateOrSessionId));
-            return;
+    const ref = db.listenToSessions(user.uid, (event: string, taskId: m.TaskId, sessionByDateOrSessionId) => {
+      switch (event) {
+      case 'child_added':
+        dispatch(sessionAdded(taskId, sessionByDateOrSessionId));
+        return;
 
-          case 'child_changed':
-            dispatch(sessionChanged(taskId, sessionByDateOrSessionId));
-            return;
+      case 'child_changed':
+        dispatch(sessionChanged(taskId, sessionByDateOrSessionId));
+        return;
 
-          default:
-            throw new Error('unknown event emitted by listenToTasks');
-        }
+      default:
+        throw new Error('unknown event emitted by listenToTasks');
       }
-    );
+    });
+
     dispatch({
       type: actionTypes.LISTEN_TO_SESSIONS,
       ref,

@@ -4,7 +4,6 @@ import { browserHistory } from 'react-router';
 
 import { signInWithFacebook } from '../actions/auth';
 import * as actionTypes from '../actionTypes';
-import auth, { signInWithRedirect, facebookAuthProvider } from '../firebase/auth';
 import { IAppState } from '../reducer';
 import { IAuthState } from '../reducers/auth';
 import { IRouteParams } from '../router';

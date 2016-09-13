@@ -7,6 +7,7 @@ import { syncHistoryWithStore } from 'react-router-redux';
 import * as injectTapEventPlugin from 'react-tap-event-plugin';
 injectTapEventPlugin();
 
+import * as connectionActions from './actions/connection';
 import config from './config';
 import { createRouter } from './router';
 import store from './store';
@@ -34,18 +35,14 @@ if (config.sentry.dsn) {
   Raven.config(config.sentry.dsn).install();
 }
 
-// Initialize Firebase.
-import './firebase';
-
-// Start the app by rendering the router into the page.
+// Render the router into the page.
 const history = syncHistoryWithStore(browserHistory, store);
 const router = createRouter(store, history);
 render(router, document.getElementById('root'));
 
-// Listen for authentication.
-import * as authActions from './actions/auth';
+// Kick off the app by listening for an internet connection.
 setTimeout(() => {
-  store.dispatch(authActions.startListeningToAuth());
+  store.dispatch(connectionActions.startListeningToConnection(store));
 })
 
 if ('serviceWorker' in navigator) {

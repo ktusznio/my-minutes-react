@@ -7,9 +7,11 @@ import { startListeningToTasks, stopListeningToTasks } from '../actions/tasks';
 import { IUser } from '../models';
 import { IAppState } from '../reducer';
 import { logException } from '../utils/error';
+import NoConnectionScreen from './NoConnectionScreen';
 import { muiTheme } from './theme';
 
 interface IAppProps {
+  isOnline: boolean;
   user: IUser;
 
   startListeningToTasks: (user: IUser) => void;
@@ -19,7 +21,12 @@ interface IAppProps {
   stopListeningToSessions: () => void;
 }
 
+interface _IAppState {
+  wasEverOnline: boolean;
+}
+
 const mapStateToProps = (state: IAppState) => ({
+  isOnline: state.connection.isOnline,
   user: state.auth.user,
 });
 
@@ -31,9 +38,20 @@ const mapDispatchToProps = (dispatch: Redux.Dispatch, state: IAppState) => ({
   stopListeningToSessions: () => dispatch(stopListeningToSessions()),
 });
 
-class App extends React.Component<IAppProps, {}> {
+class App extends React.Component<IAppProps, _IAppState> {
+  constructor(props) {
+    super(props);
+    this.state = {
+      wasEverOnline: this.props.isOnline,
+    };
+  }
+
   componentWillReceiveProps(nextProps: IAppProps) {
-    if (nextProps.user && nextProps.user != this.props.user) {
+    if (nextProps.isOnline) {
+      this.setState({ wasEverOnline: true });
+    }
+
+    if ((this.state.wasEverOnline || nextProps.isOnline) && nextProps.user && nextProps.user != this.props.user) {
       nextProps.startListeningToTasks(nextProps.user);
       nextProps.startListeningToSessions(nextProps.user);
     }
@@ -48,11 +66,19 @@ class App extends React.Component<IAppProps, {}> {
     try {
       return (
         <MuiThemeProvider muiTheme={muiTheme}>
-          {React.cloneElement(this.props.children as any, this.props)}
+          {this.renderBody()}
         </MuiThemeProvider>
       );
     } catch (e) {
       logException(e);
+    }
+  }
+
+  renderBody() {
+    if (this.state.wasEverOnline) {
+      return React.cloneElement(this.props.children as any, this.props);
+    } else {
+      return <NoConnectionScreen />
     }
   }
 }

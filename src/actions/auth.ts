@@ -1,7 +1,7 @@
 import { browserHistory } from 'react-router';
 
 import * as actionTypes from '../actionTypes';
-import auth, { signInWithRedirect, facebookAuthProvider } from '../firebase/auth';
+import firebase from '../firebase/firebase';
 import { IUser } from '../models';
 import { logException } from '../utils/error';
 
@@ -13,14 +13,14 @@ export interface IAuthAction {
 
 export const startListeningToAuth = () => (dispatch: Redux.Dispatch) => {
   dispatch({ type: actionTypes.ATTEMPT_LOGIN });
-  auth.onAuthStateChanged((user: firebase.User) => {
+  firebase.auth.onAuthStateChanged((user: firebase.User) => {
     dispatch(user ? loginSuccess(user) : logout());
   });
 };
 
 export const signInWithFacebook = () => (dispatch: Redux.Dispatch) => {
   dispatch({ type: actionTypes.ATTEMPT_LOGIN });
-  signInWithRedirect(facebookAuthProvider);
+  firebase.signInWithRedirect();
 }
 
 export const loginSuccess = (user: firebase.User) => ({
@@ -33,6 +33,6 @@ export interface ILogout {
 }
 
 export const logout = () => (dispatch: Redux.Dispatch) => {
-  auth.signOut().catch(logException);
+  firebase.auth.signOut().catch(logException);
   dispatch({ type: actionTypes.LOGOUT });
 };
