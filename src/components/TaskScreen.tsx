@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { connect } from 'react-redux';
-import { Dialog, FlatButton, TextField } from 'material-ui';
+import { Dialog, FlatButton, TextField, Toggle } from 'material-ui';
 import { browserHistory } from 'react-router';
 import NavigationArrowBack from 'material-ui/svg-icons/navigation/arrow-back';
 import { cloneDeep } from 'lodash';
@@ -29,7 +29,10 @@ export interface ITaskScreenProps {
 interface ITaskScreenState {
   isDeleteTaskDialogOpen?: boolean;
   taskDraft?: IViewTask;
+  lastEnabledGoalType?: m.GoalType;
 }
+
+const DEFAULT_GOAL_TYPE = m.GoalType.AT_LEAST;
 
 const mapStateToProps = (state: IAppState, props: ITaskScreenProps) => ({
   task: taskSelector(state, props.params.taskId),
@@ -72,8 +75,9 @@ export class TaskScreen extends React.Component<ITaskScreenProps, ITaskScreenSta
 
   hasReceivedFetchedTask = (): boolean => !!this.props.task.id
 
-  buildStateFromProps = (props: ITaskScreenProps) => ({
+  buildStateFromProps = (props: ITaskScreenProps): ITaskScreenState => ({
     taskDraft: cloneDeep(props.task),
+    lastEnabledGoalType: props.task.goal.type,
   })
 
   handleBack = (e: React.TouchEvent) => {
@@ -105,6 +109,22 @@ export class TaskScreen extends React.Component<ITaskScreenProps, ITaskScreenSta
   closeDeleteTaskDialog = () =>
     this.setState({ isDeleteTaskDialogOpen: false });
 
+  handleGoalToggle = (e, toggle: boolean) => {
+    this.setGoalType(this.getNextGoalType(toggle));
+  };
+
+  getNextGoalType(toggle: boolean) {
+    if (!toggle) {
+      return m.GoalType.NONE;
+    }
+
+    if (this.state.lastEnabledGoalType === m.GoalType.NONE) {
+      return DEFAULT_GOAL_TYPE;
+    }
+
+    return this.state.lastEnabledGoalType;
+  }
+
   setTaskDraft(newDraft: IViewTask) {
     this.setState({ taskDraft: newDraft });
   }
@@ -121,7 +141,10 @@ export class TaskScreen extends React.Component<ITaskScreenProps, ITaskScreenSta
         type,
       }),
     });
-    this.setState({ taskDraft: newDraft })
+    this.setState({
+      lastEnabledGoalType: type === m.GoalType.NONE ? this.state.lastEnabledGoalType : type,
+      taskDraft: newDraft,
+    });
   }
 
   getErrorText(inputName: string, isValid: boolean): string {
@@ -158,6 +181,10 @@ export class TaskScreen extends React.Component<ITaskScreenProps, ITaskScreenSta
     const goalTypeAtLeastSelected = task.goal.type === m.GoalType.AT_LEAST;
     const goalTypeAtMostSelected = task.goal.type === m.GoalType.AT_MOST;
 
+    const goalSectionStyle = Object.assign({}, style.formRow, {
+      display: goalTypeNoneSelected ? 'none' : '',
+    });
+
     return (
       <Screen>
         <Navigation
@@ -177,16 +204,15 @@ export class TaskScreen extends React.Component<ITaskScreenProps, ITaskScreenSta
             />
           </div>
           <div style={style.formRow}>
-            <Label text="Goal" style={style.formLabel} />
+            <Toggle
+              ref="goalToggle"
+              label="Goal"
+              toggled={goalTypeAtLeastSelected || goalTypeAtMostSelected}
+              onToggle={this.handleGoalToggle}
+            />
+          </div>
+          <div style={goalSectionStyle}>
             <Row>
-              <FlatButton
-                style={style.goalTypeButton}
-                ref="noGoalButton"
-                icon={buildGoalIcon({ goalType: m.GoalType.NONE, isSelected: goalTypeNoneSelected })}
-                label="None"
-                primary={goalTypeNoneSelected}
-                onTouchTap={() => this.setGoalType(m.GoalType.NONE)}
-              />
               <FlatButton
                 style={style.goalTypeButton}
                 ref="atMostButton"
@@ -205,7 +231,7 @@ export class TaskScreen extends React.Component<ITaskScreenProps, ITaskScreenSta
               />
             </Row>
           </div>
-          <div style={style.formRow}>
+          <div style={goalSectionStyle}>
             <Label text="Duration" style={style.formLabel} />
             <DurationInput
               ref="duration"
@@ -213,7 +239,7 @@ export class TaskScreen extends React.Component<ITaskScreenProps, ITaskScreenSta
               disabled={task.goal.type === m.GoalType.NONE}
             />
           </div>
-          <div style={style.formRow}>
+          <div style={goalSectionStyle}>
             <Label text="Repeat On" style={Object.assign({}, style.formLabel, { marginBottom: '8px' })} />
             <RepeatSelect
               ref="repeat"
