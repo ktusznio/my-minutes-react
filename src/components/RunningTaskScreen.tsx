@@ -13,7 +13,6 @@ import NavigationBackIcon from './NavigationBackIcon';
 import { RunningTaskDuration, RunningGoalDuration } from './RunningDuration';
 import { Screen, ScreenContent } from './Screen';
 import StartTaskButton from './StartTaskButton';
-import TaskHistoryDots from './TaskHistoryDots';
 
 export interface IRunningTaskScreenProps {
   task: IViewTask;
@@ -47,7 +46,6 @@ class RunningTaskScreen extends React.Component<IRunningTaskScreenProps, {}> {
           </Column>
           <Column style={style.section}>
             <StartTaskButton task={task} style={style.startTaskButton} />
-            <TaskHistoryDots active={!!task.activeSession} task={task} />
           </Column>
         </ScreenContent>
       </Screen>
