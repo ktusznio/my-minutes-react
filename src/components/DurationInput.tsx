@@ -65,7 +65,17 @@ export default class DurationInput extends React.Component<IDurationInputProps, 
   handleKeyDown = (e) => {
     e.preventDefault();
 
-    const parsedInt = parseInt(e.key, 10);
+    let parsedInt;
+    // e.key is 'Unidentified' in Safari.
+    if (e.key === 'Unidentified') {
+      // Ignore non-numeric keypresses.
+      if (e.keyCode < 48 || e.keyCode > 57) {
+        return;
+      }
+      parsedInt = e.keyCode - 48;
+    } else {
+      parsedInt = parseInt(e.key, 10);
+    }
 
     let hhmm;
     switch (true) {
