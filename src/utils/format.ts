@@ -19,14 +19,6 @@ export function timeRemaining(ms: number): string {
   }
 }
 
-export function timeInput(ms: number): string {
-  let result = moment.duration(ms).format(FORMAT_INPUT);
-  if (result.length < FORMAT_INPUT.length - 4) {
-    result = '00h : ' + result;
-  }
-  return result;
-}
-
 export function timeHiddenInput(ms: number): string {
   return moment.duration(ms).format(FORMAT_HIDDEN_INPUT);
 }

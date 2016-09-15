@@ -24,7 +24,7 @@ export default class DurationInput extends React.Component<IDurationInputProps, 
   }
 
   static defaultProps = {
-    hint: 'hh:mm',
+    hint: 'hh : mm',
     disabled: false,
   };
 
@@ -60,6 +60,17 @@ export default class DurationInput extends React.Component<IDurationInputProps, 
     const minutes = parseInt(input.substr(2), 10);
 
     return 1000 * ((hours * 60 * 60) + (minutes * 60));
+  }
+
+  formatHhmm(): string {
+    if (this.state.hhmm === '0000') {
+      return '';
+    }
+
+    const hh = this.state.hhmm.substr(0, 2);
+    const mm = this.state.hhmm.substr(2);
+
+    return `${hh} : ${mm}`;
   }
 
   handleKeyDown = (e) => {
@@ -114,7 +125,7 @@ export default class DurationInput extends React.Component<IDurationInputProps, 
         disabled={this.props.disabled}
         hintText={this.props.hint}
         fullWidth={true}
-        value={format.timeInput(this.getMilliseconds())}
+        value={this.formatHhmm()}
         onKeyDown={this.handleKeyDown}
       />
     );
