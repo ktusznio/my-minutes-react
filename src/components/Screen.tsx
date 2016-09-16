@@ -5,6 +5,7 @@ import { style as navigationStyle } from './Navigation';
 const styles = {
   screen: {
     height: '100%',
+    position: 'relative',
   },
   screenContent: {
     display: 'flex',

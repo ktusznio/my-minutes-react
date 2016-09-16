@@ -61,8 +61,8 @@ class TasksScreen extends React.Component<ITasksScreenProps, ITasksScreenState> 
 
   render() {
     return (
-      <Screen style={style.screen}>
-        <Navigation title="My Minutes" />
+      <Screen>
+        <Navigation />
 
         <ScreenContent>
           <TaskList tasks={this.props.tasks} />
@@ -85,9 +85,6 @@ class TasksScreen extends React.Component<ITasksScreenProps, ITasksScreenState> 
 }
 
 const style = {
-  screen: {
-    position: 'relative',
-  },
   addTaskActionButtonContainer: {
     position: 'absolute',
     right: '4%',
