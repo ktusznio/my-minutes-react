@@ -1,6 +1,7 @@
 import * as React from 'react';
 import { connect } from 'react-redux';
-import { Dialog, FlatButton, TextField, Toggle } from 'material-ui';
+import { Dialog, FlatButton, IconButton, TextField, Toggle } from 'material-ui';
+import NavigationClose from 'material-ui/svg-icons/navigation/close';
 import { browserHistory } from 'react-router';
 import NavigationArrowBack from 'material-ui/svg-icons/navigation/arrow-back';
 import { cloneDeep } from 'lodash';
@@ -15,12 +16,13 @@ import { Row } from './Flex';
 import { buildGoalIcon } from './GoalIcon';
 import Label from './Label';
 import Navigation from './Navigation';
-import NavigationBackIcon from './NavigationBackIcon';
 import RepeatSelect from './RepeatSelect';
 import { Screen, ScreenContent } from './Screen';
+import * as c from './theme/colors';
 
 export interface ITaskScreenProps {
   task: IViewTask;
+  onCancel: () => void;
   onDeleteTask: (task: m.ITask) => void;
   onSubmit: ((task: m.ITask) => void);
   params: IRouteParams;
@@ -39,6 +41,9 @@ const mapStateToProps = (state: IAppState, props: ITaskScreenProps) => ({
 });
 
 const mapDispatchToProps = (dispatch) => ({
+  onCancel: () => {
+    browserHistory.goBack();
+  },
   onDeleteTask: (task: m.ITask) => {
     dispatch(deleteTask(task)).catch(
       e => console.error('error deleting task', e, task)
@@ -80,7 +85,7 @@ export class TaskScreen extends React.Component<ITaskScreenProps, ITaskScreenSta
     lastEnabledGoalType: props.task.goal.type,
   })
 
-  handleBack = (e: React.TouchEvent) => {
+  handleSave = (e: React.TouchEvent) => {
     e.preventDefault();
 
     if (!this.hasReceivedFetchedTask) {
@@ -160,10 +165,6 @@ export class TaskScreen extends React.Component<ITaskScreenProps, ITaskScreenSta
   render() {
     const task = this.state.taskDraft;
 
-    const backIcon = (
-      <NavigationBackIcon onTouchTap={this.handleBack} />
-    );
-
     const deleteTaskDialogActions = [
       <FlatButton
         label="Cancel"
@@ -185,10 +186,24 @@ export class TaskScreen extends React.Component<ITaskScreenProps, ITaskScreenSta
       display: goalTypeNoneSelected ? 'none' : '',
     });
 
+    const leftNavigationIcon = (
+      <IconButton onTouchTap={this.props.onCancel}>
+        <NavigationClose color={c.white} />
+      </IconButton>
+    );
+
+    const rightNavigationIcon = (
+      <FlatButton
+        label="Save"
+        onTouchTap={this.handleSave}
+      />
+    );
+
     return (
       <Screen>
         <Navigation
-          leftIcon={backIcon}
+          leftIcon={leftNavigationIcon}
+          rightIcon={rightNavigationIcon}
           title={task.name}
         />
         <ScreenContent>

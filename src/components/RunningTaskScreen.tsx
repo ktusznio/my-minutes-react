@@ -37,6 +37,7 @@ class RunningTaskScreen extends React.Component<IRunningTaskScreenProps, {}> {
       <Screen>
         <Navigation
           leftIcon={<NavigationBackIcon />}
+          rightIcon={null}
           title={task.name}
         />
         <ScreenContent style={style.screenContent}>

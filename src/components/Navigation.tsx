@@ -10,8 +10,9 @@ import * as routes from '../utils/routes';
 import * as c from './theme/colors';
 
 interface INavigationProps {
-  title: string;
+  title?: string;
   leftIcon?: JSX.Element;
+  rightIcon?: JSX.Element;
 }
 
 interface IConnectedNavigationProps extends INavigationProps {
@@ -28,26 +29,41 @@ const mapDispatchToProps = (dispatch: Redux.Dispatch) => ({
   logout: () => dispatch(logout()),
 });
 
+export const style = {
+  appBar: {
+    position: 'fixed',
+    top: 0,
+    left: 0,
+    right: 0,
+    height: '64px',
+    maxWidth: '768px',
+    margin: '0 auto',
+  },
+  appBarLink: {
+    color: c.white,
+    textDecoration: 'none',
+  },
+};
+
+
 class Navigation extends React.Component<IConnectedNavigationProps, {}> {
   static defaultProps: IConnectedNavigationProps = {
-    title: "My Minutes",
     logout: null,
     user: null,
     leftIcon: null,
+    rightIcon: null,
+    title: 'My Minutes',
   };
 
   render() {
+    const iconElementRight = this.props.rightIcon === undefined ? this.renderRightMenu() : this.props.rightIcon;
     return (
       <AppBar
-        iconElementRight={this.renderRightMenu()}
         iconElementLeft={this.props.leftIcon}
+        iconElementRight={iconElementRight}
         showMenuIconButton={!!this.props.leftIcon}
         style={style.appBar}
-        title={
-          <Link to={routes.tasks()} style={style.appBarLink}>
-            {this.props.title}
-          </Link>
-        }
+        title={this.props.title}
       />
     );
   }
@@ -83,22 +99,6 @@ class Navigation extends React.Component<IConnectedNavigationProps, {}> {
     return menuItems;
   }
 }
-
-export const style = {
-  appBar: {
-    position: 'fixed',
-    top: 0,
-    left: 0,
-    right: 0,
-    height: '64px',
-    maxWidth: '768px',
-    margin: '0 auto',
-  },
-  appBarLink: {
-    color: c.white,
-    textDecoration: 'none',
-  },
-};
 
 export default connect<{}, {}, INavigationProps>(
   mapStateToProps,
