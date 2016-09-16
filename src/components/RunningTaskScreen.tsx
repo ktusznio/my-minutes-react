@@ -8,6 +8,7 @@ import { IRouteParams } from '../router';
 import { taskSelector, IViewTask } from '../selectors';
 import * as c from './theme/colors';
 import { Column } from './Flex';
+import MotivationalQuote from './MotivationalQuote';
 import Navigation from './Navigation';
 import NavigationBackIcon from './NavigationBackIcon';
 import { RunningTaskDuration, RunningGoalDuration } from './RunningDuration';
@@ -48,6 +49,9 @@ class RunningTaskScreen extends React.Component<IRunningTaskScreenProps, {}> {
           <Column style={style.section}>
             <StartTaskButton task={task} style={style.startTaskButton} />
           </Column>
+          <Column style={style.section}>
+            <MotivationalQuote style={style.quote} />
+          </Column>
         </ScreenContent>
       </Screen>
     );
@@ -78,6 +82,12 @@ const style = {
   },
   startTaskButton: {
     marginBottom: '20px',
+  },
+  quote: {
+    fontStyle: 'italic',
+    lineHeight: '1.5em',
+    padding: '0 16px',
+    textAlign: 'center',
   },
 };
 
