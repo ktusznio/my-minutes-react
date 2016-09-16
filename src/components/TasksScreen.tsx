@@ -61,14 +61,14 @@ class TasksScreen extends React.Component<ITasksScreenProps, ITasksScreenState> 
 
   render() {
     return (
-      <Screen>
+      <Screen style={style.screen}>
         <Navigation title="My Minutes" />
 
         <ScreenContent>
           <TaskList tasks={this.props.tasks} />
         </ScreenContent>
 
-        <div style={{ position: 'fixed', right: '4%', bottom: '2.5%' }}>
+        <div style={style.addTaskActionButtonContainer}>
           <FloatingActionButton onTouchTap={this.openAddTaskDialog}>
             <ContentAdd />
           </FloatingActionButton>
@@ -83,6 +83,17 @@ class TasksScreen extends React.Component<ITasksScreenProps, ITasksScreenState> 
     );
   }
 }
+
+const style = {
+  screen: {
+    position: 'relative',
+  },
+  addTaskActionButtonContainer: {
+    position: 'absolute',
+    right: '4%',
+    bottom: '2.5%',
+  },
+};
 
 export default connect(
   mapStateToProps,

@@ -91,6 +91,8 @@ export const style = {
     left: 0,
     right: 0,
     height: '64px',
+    maxWidth: '768px',
+    margin: '0 auto',
   },
   appBarLink: {
     color: c.white,
