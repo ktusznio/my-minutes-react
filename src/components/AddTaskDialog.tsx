@@ -7,15 +7,32 @@ interface IAddTaskDialogProps {
   onSubmit: (taskName: string) => void;
 }
 
-export default class AddTaskDialog extends React.Component<IAddTaskDialogProps, {}> {
+interface IAddTaskDialogState {
+  errorText: string;
+}
+
+const ERROR_BLANK_NAME = 'A task name is required.';
+
+export default class AddTaskDialog extends React.Component<IAddTaskDialogProps, IAddTaskDialogState> {
   refs: {
     [name: string]: any;
     taskName: TextField;
   }
 
+  constructor(props) {
+    super(props);
+    this.state = {
+      errorText: '',
+    };
+  }
+
   handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     const name = this.refs.taskName.getValue();
+    if (!name) {
+      this.setState({ errorText: ERROR_BLANK_NAME });
+      return;
+    }
     this.props.onSubmit(name);
   }
 
@@ -43,6 +60,7 @@ export default class AddTaskDialog extends React.Component<IAddTaskDialogProps, 
           <TextField
             ref="taskName"
             hintText="Task name"
+            errorText={this.state.errorText}
           />
         </form>
       </Dialog>
