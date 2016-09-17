@@ -31,7 +31,8 @@ export const RunningGoalDuration = Interval(
   class extends React.Component<IRunningDurationProps, {}> {
     render() {
       const task = this.props.task;
-      if (!task.goal || task.goal.type === m.GoalType.NONE || task.goal.duration === 0) {
+      const now = new Date();
+      if (!task.goal || task.goal.type === m.GoalType.NONE || task.goal.duration === 0 || !task.goal.repeats[now.getDay()]) {
         return null;
       }
 
