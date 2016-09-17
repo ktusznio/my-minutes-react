@@ -84,12 +84,13 @@ interface IGoalProps {
   repeats?: Array<boolean>;
 }
 
-export const GOAL_REPEATS_DEFAULT = [false, false, false, false, false, false, false];
-export const GOAL_MAX_DURATION = 24 * 60 * 60 * 1000;
+export const GOAL_DURATION_DEFAULT = 30 * 60 * 1000; // 30 mins.
+export const GOAL_MAX_DURATION = 24 * 60 * 60 * 1000; // 24 hours.
+export const GOAL_REPEATS_DEFAULT = [true, true, true, true, true, true, true];
 
 export const buildGoal = (props: IGoalProps = {}): IGoal =>
   Object.assign({
-    duration: 0,
-    type: GoalType.NONE,
+    duration: GOAL_DURATION_DEFAULT,
+    type: GoalType.AT_LEAST,
     repeats: GOAL_REPEATS_DEFAULT,
   }, props)
