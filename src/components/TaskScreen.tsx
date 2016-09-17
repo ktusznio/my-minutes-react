@@ -222,6 +222,7 @@ export class TaskScreen extends React.Component<ITaskScreenProps, ITaskScreenSta
             <Toggle
               ref="goalToggle"
               label="Goal"
+              labelStyle={style.goalToggleLabel}
               toggled={goalTypeAtLeastSelected || goalTypeAtMostSelected}
               onToggle={this.handleGoalToggle}
             />
@@ -255,7 +256,7 @@ export class TaskScreen extends React.Component<ITaskScreenProps, ITaskScreenSta
             />
           </div>
           <div style={goalSectionStyle}>
-            <Label text="Repeat On" style={Object.assign({}, style.formLabel, { marginBottom: '8px' })} />
+            <Label text="Repeats On" style={Object.assign({}, style.formLabel, { marginBottom: '18px' })} />
             <RepeatSelect
               ref="repeat"
               repeats={task.goal.repeats}
@@ -294,6 +295,10 @@ const style = {
   formLabel: {
     display: 'block',
     marginBottom: '4px',
+  },
+  goalToggleLabel: {
+    fontSize: '14px',
+    color: c.whiteTransparent,
   },
   goalTypeButton: {
     flex: 1,
