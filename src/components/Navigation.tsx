@@ -13,11 +13,8 @@ interface INavigationProps {
   title?: string;
   leftIcon?: JSX.Element;
   rightIcon?: JSX.Element;
-}
-
-interface IConnectedNavigationProps extends INavigationProps {
-  logout: ILogout;
-  user: firebase.User;
+  logout?: ILogout;
+  user?: firebase.User;
 }
 
 const mapStateToProps = (state: IAppState, props) => ({
@@ -46,17 +43,13 @@ export const style = {
 };
 
 
-class Navigation extends React.Component<IConnectedNavigationProps, {}> {
-  static defaultProps: IConnectedNavigationProps = {
-    logout: null,
-    user: null,
-    leftIcon: null,
-    rightIcon: null,
+class Navigation extends React.Component<INavigationProps, {}> {
+  static defaultProps: INavigationProps = {
     title: 'My Minutes',
   };
 
   render() {
-    const iconElementRight = this.props.rightIcon === undefined ? this.renderRightMenu() : this.props.rightIcon;
+    const iconElementRight = this.props.rightIcon || this.renderRightMenu();
     return (
       <AppBar
         iconElementLeft={this.props.leftIcon}

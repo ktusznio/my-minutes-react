@@ -1,21 +1,36 @@
 import * as React from 'react';
 import { connect } from 'react-redux';
 import { browserHistory } from 'react-router';
+import ActionPermIdentity from 'material-ui/svg-icons/action/perm-identity';
 
-import { signInWithFacebook } from '../actions/auth';
+import * as authActions from '../actions/auth';
 import * as actionTypes from '../actionTypes';
+import firebase, { ProviderId, IOtherProviderExistsCallback } from '../firebase/firebase';
 import { IAppState } from '../reducer';
 import { IAuthState } from '../reducers/auth';
 import { IRouteParams } from '../router';
 import * as routes from '../utils/routes';
-import FacebookIcon from './FacebookIcon';
-import Navigation from './Navigation';
+import { Column } from './Flex';
+import * as SvgIcons from './SvgIcons';
+import Navigation, { style as navigationStyle } from './Navigation';
 import RaisedButton from './RaisedButton';
 import { Screen, ScreenContent } from './Screen';
+import * as c from './theme/colors';
+
+const providerNames = {
+  'facebook.com': 'Facebook',
+  'google.com': 'Google',
+  'twitter.com': 'Twitter',
+};
 
 interface ILoginScreenProps {
   auth: IAuthState;
-  signInWithFacebook: () => void;
+  signInWithProvider: (
+    provider: ProviderId,
+    otherProviderExistsCallback: IOtherProviderExistsCallback,
+  ) => void;
+  otherProviderExists: (existingProviderId: ProviderId) => void;
+  cancelLogin: () => void;
   params: IRouteParams;
   location: any;
 }
@@ -25,8 +40,23 @@ const mapStateToProps = (state: IAppState) => ({
 });
 
 const mapDispatchToProps = (dispatch: Redux.Dispatch) => ({
-  signInWithFacebook: () => dispatch(signInWithFacebook()),
-})
+  signInWithProvider: (
+    providerId: ProviderId,
+    otherProviderExistsCallback: IOtherProviderExistsCallback
+  ) => {
+    dispatch(
+      authActions.signInWithProvider(providerId, otherProviderExistsCallback)
+    );
+  },
+
+  otherProviderExists: (existingProviderId: ProviderId) => {
+    dispatch(authActions.accountExists(existingProviderId));
+  },
+
+  cancelLogin: () => {
+    dispatch(authActions.cancelLogin());
+  },
+});
 
 class LoginScreen extends React.Component<ILoginScreenProps, {}> {
   componentWillReceiveProps(nextProps: ILoginScreenProps) {
@@ -34,6 +64,10 @@ class LoginScreen extends React.Component<ILoginScreenProps, {}> {
       const redirectTo = nextProps.location.query.redirect || routes.tasks();
       browserHistory.replace(redirectTo);
     }
+  }
+
+  handleLoginTap = (providerId: ProviderId) => {
+    this.props.signInWithProvider(providerId, this.props.otherProviderExists);
   }
 
   render() {
@@ -49,29 +83,104 @@ class LoginScreen extends React.Component<ILoginScreenProps, {}> {
 
   renderBody() {
     if (this.props.auth.status === actionTypes.ATTEMPT_LOGIN) {
-      return <div>Logging in...</div>;
+      return this.renderLoggingIn();
+    } else if (this.props.auth.status === actionTypes.ACCOUNT_EXISTS) {
+      return this.renderAccountExists();
     } else {
       return (
-        <RaisedButton
-         label="Login with Facebook"
-         icon={<FacebookIcon />}
-         onTouchTap={this.props.signInWithFacebook}
-         primary={true}
-       />
+        <Column>
+          <h3 style={style.heading}>Hey there!</h3>
+          <p style={style.paragraph}>Log in to start setting goals for your time!</p>
+          <RaisedButton
+           label="Log in with Facebook"
+           icon={<SvgIcons.Facebook />}
+           onTouchTap={() => this.handleLoginTap('facebook.com')}
+           primary={true}
+           style={style.button}
+         />
+          <RaisedButton
+           label="Log in with Google"
+           icon={<SvgIcons.Google />}
+           onTouchTap={() => this.handleLoginTap('google.com')}
+           primary={true}
+           style={style.button}
+         />
+          <RaisedButton
+           label="Log in with Twitter"
+           icon={<SvgIcons.Twitter />}
+           onTouchTap={() => this.handleLoginTap('twitter.com')}
+           primary={true}
+           style={style.button}
+         />
+        </Column>
      );
     }
   }
 
+  renderLoggingIn() {
+    return (
+      <Column style={style.loggingInContainer}>
+        <ActionPermIdentity style={style.loggingInIcon} />
+        <h3>Logging in...</h3>
+      </Column>
+    );
+  }
+
+  renderAccountExists() {
+    const { requestedProviderId, existingProviderId } = this.props.auth;
+    const requestedProvider = providerNames[requestedProviderId];
+    const existingProvider = providerNames[existingProviderId];
+
+    return (
+      <Column>
+        <h3 style={style.heading}>You already have an account</h3>
+        <p style={style.paragraph}>
+          You've previously logged in with {existingProvider}.
+          Log in with {existingProvider} to link your {requestedProvider} account?
+        </p>
+        <RaisedButton
+         label={`Log in with ${existingProvider}`}
+         icon={SvgIcons.renderAuthProviderIcon(existingProviderId)}
+         onTouchTap={() => this.handleLoginTap(existingProviderId)}
+         primary={true}
+         style={style.button}
+       />
+        <RaisedButton
+         label="Cancel"
+         onTouchTap={this.props.cancelLogin}
+         style={style.button}
+       />
+      </Column>
+   );
+  }
 }
 
 const style = {
   screenContent: {
-    display: 'flex',
-    justifyContent: 'space-around',
     alignItems: 'center',
-    marginLeft: 0,
-    marginRight: 0,
+    display: 'flex',
+    height: `calc(100vh - ${navigationStyle.appBar.height} - 32px)`,
+    justifyContent: 'center',
+    paddingTop: '32px',
   },
+  heading: {
+    margin: '0 0 16px',
+  },
+  paragraph: {
+    margin: '0 0 48px',
+  },
+  button: {
+    marginBottom: '20px',
+  },
+  loggingInContainer: {
+    alignItems: 'center',
+    height: '100%',
+    justifyContent: 'center',
+  },
+  loggingInIcon: {
+    height: 56,
+    width: 56,
+  }
 };
 
 export default connect(

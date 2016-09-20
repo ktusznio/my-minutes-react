@@ -35,6 +35,10 @@ export default function sessions(
     });
   }
 
+  case actionTypes.LOGOUT: {
+    return buildSessionsState();
+  }
+
   case actionTypes.SESSION_ADDED: {
     const { taskId, sessionsByDate } = action;
     return Object.assign({}, sessionsState, {

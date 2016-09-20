@@ -1,14 +1,15 @@
 import { browserHistory } from 'react-router';
 
 import * as actionTypes from '../actionTypes';
-import firebase from '../firebase/firebase';
+import firebase, { ProviderId, IOtherProviderExistsCallback } from '../firebase/firebase';
 import { IUser } from '../models';
 import { logException } from '../utils/error';
 
 export interface IAuthAction {
+  existingProviderId?: ProviderId;
+  requestedProviderId?: ProviderId;
   type: string;
-  status: string;
-  user: IUser;
+  user?: IUser;
 }
 
 export const startListeningToAuth = () => (dispatch: Redux.Dispatch) => {
@@ -18,15 +19,29 @@ export const startListeningToAuth = () => (dispatch: Redux.Dispatch) => {
   });
 };
 
-export const signInWithFacebook = () => (dispatch: Redux.Dispatch) => {
-  dispatch({ type: actionTypes.ATTEMPT_LOGIN });
-  firebase.signInWithRedirect();
+export const signInWithProvider = (
+  requestedProviderId: ProviderId,
+  otherProviderExistsCallback: IOtherProviderExistsCallback,
+) => (dispatch: Redux.Dispatch) => {
+  dispatch({ type: actionTypes.ATTEMPT_LOGIN, requestedProviderId });
+  firebase.signInWithProvider(requestedProviderId, otherProviderExistsCallback);
+  // TODO handle uncaught login errors and display something to the user.
 }
+
+export const accountExists = (existingProviderId: ProviderId): IAuthAction => ({
+  type: actionTypes.ACCOUNT_EXISTS,
+  existingProviderId,
+});
 
 export const loginSuccess = (user: firebase.User) => ({
   type: actionTypes.LOGIN_SUCCESS,
   user,
 });
+
+export const cancelLogin = () => {
+  firebase.cancelLoginAttempt();
+  return logout();
+}
 
 export interface ILogout {
   (): void;

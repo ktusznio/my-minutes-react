@@ -31,6 +31,10 @@ export default function tasks(
     });
   }
 
+  case actionTypes.LOGOUT: {
+    return buildTasksState();
+  }
+
   case actionTypes.TASK_ADDED: {
     const task = action.task;
     return Object.assign({}, tasksState, {

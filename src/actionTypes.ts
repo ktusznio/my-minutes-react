@@ -3,6 +3,7 @@ export const CONNECTION_CHANGED = CONNECTION + '/changed';
 
 const AUTH = 'auth';
 export const ATTEMPT_LOGIN = AUTH + '/attempt-login';
+export const ACCOUNT_EXISTS = AUTH + '/account-exists';
 export const LOGIN_SUCCESS = AUTH + '/login-success';
 export const LOGOUT = AUTH + '/logout';
 
