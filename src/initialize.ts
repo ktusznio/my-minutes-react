@@ -8,6 +8,7 @@ import * as injectTapEventPlugin from 'react-tap-event-plugin';
 injectTapEventPlugin();
 
 import * as connectionActions from './actions/connection';
+import * as snackbarActions from './actions/snackbar';
 import config from './config';
 import { createRouter } from './router';
 import store from './store';
@@ -46,16 +47,16 @@ setTimeout(() => {
 })
 
 if ('serviceWorker' in navigator) {
-  // Your service-worker.js *must* be located at the top-level directory relative to your site.
+  // Service worker file must be located at the top-level directory relative to the site.
   // It won't be able to control pages unless it's located at the same level or higher than them.
   // *Don't* register service worker file in, e.g., a scripts/ sub-directory!
   // See https://github.com/slightlyoff/ServiceWorker/issues/468
   (<any> navigator).serviceWorker.register('/sw-main.js').then(registration => {
-    console.log('[sw-register] registered');
+    console.log('[sw] registered');
 
     pushClient.initialize(registration);
 
-    // updatefound is fired if service-worker.js changes.
+    // updatefound is fired if the service worker has changed.
     registration.onupdatefound = function() {
       // The updatefound event implies that registration.installing is set; see
       // https://slightlyoff.github.io/ServiceWorker/spec/service_worker/index.html#service-worker-container-updatefound-event
@@ -69,21 +70,22 @@ if ('serviceWorker' in navigator) {
               // have been added to the cache.
               // It's the perfect time to display a "New content is available; please refresh."
               // message in the page's interface.
-              console.log('[sw-register] New or updated content is available.');
+              console.log('[sw] New or updated content is available.');
+              store.dispatch(snackbarActions.postAppUpdateAvailable());
             } else {
               // At this point, everything has been precached.
               // It's the perfect time to display a "Content is cached for offline use." message.
-              console.log('[sw-register] Content is now available offline!');
+              console.log('[sw] Content is now available offline!');
             }
             break;
 
           case 'redundant':
-            console.error('[sw-register] The installing service worker became redundant.');
+            console.error('[sw] The installing service worker became redundant.');
             break;
         }
       };
     };
   }).catch(function(e) {
-    console.error('[sw-register] Error during service worker registration:', e);
+    console.error('[sw] Error during service worker registration:', e);
   });
 }

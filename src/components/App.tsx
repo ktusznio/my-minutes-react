@@ -1,12 +1,16 @@
+import FlatButton from 'material-ui/FlatButton';
+import Snackbar from 'material-ui/Snackbar';
 import { MuiThemeProvider } from 'material-ui/styles';
 import * as React from 'react';
 import { connect } from 'react-redux';
 
 import { startListeningToSessions, stopListeningToSessions } from '../actions/sessions';
 import { startListeningToTasks, stopListeningToTasks } from '../actions/tasks';
+import * as actionTypes from '../actionTypes';
 import { IUser } from '../models';
 import { IAppState } from '../reducer';
 import { logException } from '../utils/error';
+import { Row } from './Flex';
 import NoConnectionScreen from './NoConnectionScreen';
 import { muiTheme } from './theme';
 
@@ -19,14 +23,22 @@ interface IAppProps {
 
   startListeningToSessions: (user: IUser) => void;
   stopListeningToSessions: () => void;
+
+  isSnackbarOpen: boolean;
+  snackbarMessage: string;
 }
 
 interface _IAppState {
-  wasEverOnline: boolean;
+  isSnackbarOpen?: boolean;
+  wasEverOnline?: boolean;
 }
+
+const SNACKBAR_AUTO_HIDE_DURATION = 4000;
 
 const mapStateToProps = (state: IAppState) => ({
   isOnline: state.connection.isOnline,
+  isSnackbarOpen: state.snackbar.isOpen,
+  snackbarMessage: state.snackbar.message,
   user: state.auth.user,
 });
 
@@ -42,6 +54,7 @@ class App extends React.Component<IAppProps, _IAppState> {
   constructor(props) {
     super(props);
     this.state = {
+      isSnackbarOpen: this.props.isSnackbarOpen,
       wasEverOnline: this.props.isOnline,
     };
   }
@@ -55,6 +68,8 @@ class App extends React.Component<IAppProps, _IAppState> {
       nextProps.startListeningToTasks(nextProps.user);
       nextProps.startListeningToSessions(nextProps.user);
     }
+
+    this.setState({ isSnackbarOpen: nextProps.isSnackbarOpen });
   }
 
   componentWillUnmount() {
@@ -66,7 +81,10 @@ class App extends React.Component<IAppProps, _IAppState> {
     try {
       return (
         <MuiThemeProvider muiTheme={muiTheme}>
-          {this.renderBody()}
+          <div>
+            {this.renderBody()}
+            {this.renderSnackbar()}
+          </div>
         </MuiThemeProvider>
       );
     } catch (e) {
@@ -80,6 +98,28 @@ class App extends React.Component<IAppProps, _IAppState> {
     } else {
       return <NoConnectionScreen />
     }
+  }
+
+  renderSnackbar() {
+    let action, onActionTouchTap;
+    let message = this.props.snackbarMessage;
+
+    if (this.props.snackbarMessage === actionTypes.POST_SNACKBAR_APP_UPDATE_AVAILABLE) {
+      action = 'Restart Now';
+      message = 'A new version of My Minutes is available.';
+      onActionTouchTap = () => window.location.reload()
+    }
+
+    return (
+      <Snackbar
+        action={action}
+        autoHideDuration={SNACKBAR_AUTO_HIDE_DURATION}
+        message={message}
+        open={this.state.isSnackbarOpen}
+        onActionTouchTap={onActionTouchTap}
+        onRequestClose={() => this.setState({ isSnackbarOpen: false })}
+      />
+    )
   }
 }
 
