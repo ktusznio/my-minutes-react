@@ -97,6 +97,10 @@ export const getGoalStatusForDate = (task: m.ITask, date: moment.Moment, session
     return m.GoalStatus.NO_GOAL;
   }
 
+  if (date.isBefore(task.createdAt, 'day')) {
+    return m.GoalStatus.NO_GOAL;
+  }
+
   if (date.isAfter(now, 'day')) {
     return m.GoalStatus.FUTURE;
   }

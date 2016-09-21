@@ -1,3 +1,4 @@
+import * as firebase from 'firebase';
 import { cloneDeep } from 'lodash';
 
 // Push payload.
@@ -33,6 +34,7 @@ export const enum TaskState {
 
 export interface ITask {
   id: TaskId;
+  createdAt: number;
   name: string;
   state: TaskState;
   goal: IGoal;
@@ -41,6 +43,8 @@ export interface ITask {
 
 export const buildTask = (props: ITaskProps = {}): ITask => ({
   id: undefined,
+  // Firebase replaces this placeholder with the server's current time.
+  createdAt: (<any>firebase.database).ServerValue.TIMESTAMP,
   name: props.name || '',
   state: TaskState.STOPPED,
   goal: buildGoal(props.goal),

@@ -7,6 +7,7 @@ import * as taskUtils from '../../src/utils/task';
 
 const task: IViewTask = {
   id: 'test-task',
+  createdAt: Date.now(),
   name: 'Test',
   state: m.TaskState.STOPPED,
   goal: {
