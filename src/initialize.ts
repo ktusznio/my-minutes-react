@@ -14,6 +14,9 @@ import { createRouter } from './router';
 import store from './store';
 import pushClient from './pushClient';
 
+declare var __VERSION__: any;
+console.log('app version', __VERSION__);
+
 // Initialize Facebook.
 (<any>window).fbAsyncInit = function() {
   (<any>window).FB.init({

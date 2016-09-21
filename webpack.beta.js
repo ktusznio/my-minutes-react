@@ -1,6 +1,7 @@
 var path = require('path');
 var webpack = require('webpack');
 
+var packageJson = require('./package.json');
 var swPrecacheWebpackPlugin = require('./sw-precache-webpack-plugin');
 
 module.exports = {
@@ -25,6 +26,7 @@ module.exports = {
       'process.env': {
         'NODE_ENV': JSON.stringify('beta'),
       },
+      __VERSION__: JSON.stringify(packageJson.version),
     }),
     new webpack.optimize.UglifyJsPlugin({
       compressor: {
