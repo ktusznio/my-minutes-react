@@ -3,7 +3,7 @@ import { browserHistory } from 'react-router';
 import * as actionTypes from '../actionTypes';
 import firebase, { ProviderId, IOtherProviderExistsCallback } from '../firebase/firebase';
 import { IUser } from '../models';
-import { logException } from '../utils/error';
+import sentryClient from '../sentryClient';
 
 export interface IAuthAction {
   existingProviderId?: ProviderId;
@@ -33,10 +33,17 @@ export const accountExists = (existingProviderId: ProviderId): IAuthAction => ({
   existingProviderId,
 });
 
-export const loginSuccess = (user: firebase.User) => ({
-  type: actionTypes.LOGIN_SUCCESS,
-  user,
-});
+export const loginSuccess = (user: firebase.User) => (dispatch: Redux.Dispatch) => {
+  sentryClient.setUserContext({
+    email: user.email,
+    id: user.uid,
+  });
+
+  dispatch({
+    type: actionTypes.LOGIN_SUCCESS,
+    user,
+  });
+}
 
 export const cancelLogin = () => {
   firebase.cancelLoginAttempt();
@@ -48,6 +55,8 @@ export interface ILogout {
 }
 
 export const logout = () => (dispatch: Redux.Dispatch) => {
-  firebase.auth.signOut().catch(logException);
+  firebase.auth.signOut();
+  sentryClient.setUserContext();
+
   dispatch({ type: actionTypes.LOGOUT });
 };

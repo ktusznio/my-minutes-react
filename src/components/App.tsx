@@ -9,7 +9,6 @@ import { startListeningToTasks, stopListeningToTasks } from '../actions/tasks';
 import * as actionTypes from '../actionTypes';
 import { IUser } from '../models';
 import { IAppState } from '../reducer';
-import { logException } from '../utils/error';
 import { Row } from './Flex';
 import NoConnectionScreen from './NoConnectionScreen';
 import { muiTheme } from './theme';
@@ -78,18 +77,14 @@ class App extends React.Component<IAppProps, _IAppState> {
   }
 
   render() {
-    try {
-      return (
-        <MuiThemeProvider muiTheme={muiTheme}>
-          <div>
-            {this.renderBody()}
-            {this.renderSnackbar()}
-          </div>
-        </MuiThemeProvider>
-      );
-    } catch (e) {
-      logException(e);
-    }
+    return (
+      <MuiThemeProvider muiTheme={muiTheme}>
+        <div>
+          {this.renderBody()}
+          {this.renderSnackbar()}
+        </div>
+      </MuiThemeProvider>
+    );
   }
 
   renderBody() {

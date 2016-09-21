@@ -1,5 +1,4 @@
 import 'moment-duration-format';
-import * as Raven from 'raven-js';
 import * as React from 'react';
 import { render } from 'react-dom';
 import { browserHistory } from 'react-router';
@@ -10,9 +9,10 @@ injectTapEventPlugin();
 import * as connectionActions from './actions/connection';
 import * as snackbarActions from './actions/snackbar';
 import config from './config';
-import { createRouter } from './router';
-import store from './store';
 import pushClient from './pushClient';
+import { createRouter } from './router';
+import sentryClient from './sentryClient';
+import store from './store';
 
 declare var __VERSION__: any;
 console.log('app version', __VERSION__);
@@ -34,10 +34,7 @@ console.log('app version', __VERSION__);
    fjs.parentNode.insertBefore(js, fjs);
  }(document, 'script', 'facebook-jssdk'));
 
-// Initialize Sentry.
-if (config.sentry.dsn) {
-  Raven.config(config.sentry.dsn).install();
-}
+sentryClient.initialize();
 
 // Render the router into the page.
 const history = syncHistoryWithStore(browserHistory, store);
@@ -55,8 +52,6 @@ if ('serviceWorker' in navigator) {
   // *Don't* register service worker file in, e.g., a scripts/ sub-directory!
   // See https://github.com/slightlyoff/ServiceWorker/issues/468
   (<any> navigator).serviceWorker.register('/sw-main.js').then(registration => {
-    console.log('[sw] registered');
-
     pushClient.initialize(registration);
 
     // updatefound is fired if the service worker has changed.

@@ -2,11 +2,11 @@ import { createStore, compose, applyMiddleware } from 'redux';
 import thunk from 'redux-thunk';
 
 import reducer from './reducer';
-import { exceptionReporter } from './utils/error';
+import { breadcrumbBuilder } from './sentryClient';
 
 const store = createStore(
   reducer,
-  applyMiddleware(thunk, exceptionReporter)
+  applyMiddleware(thunk, breadcrumbBuilder)
 );
 
 export default store;

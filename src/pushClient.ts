@@ -2,7 +2,7 @@ import * as Promise from 'bluebird';
 
 import config from './config';
 import * as m from './models';
-import { logException } from './utils/error';
+import sentryClient from './sentryClient';
 import { sendFetch } from './utils/fetch';
 
 let endpoint: string;
@@ -29,7 +29,7 @@ const initialize = (registration) => {
       const rawAuthSecret = subscription.getKey('auth');
       userAuth = btoa(String.fromCharCode.apply(null, new Uint8Array(rawAuthSecret)));
     }
-  }).catch(error => logException(error));
+  });
 };
 
 const schedulePush = (taskId: m.TaskId, payload: m.IPushPayload, delay: number): Promise<Response | void> => {

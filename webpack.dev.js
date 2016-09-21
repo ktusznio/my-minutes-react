@@ -6,6 +6,10 @@ var webpack = require('webpack');
 var packageJson = require('./package.json');
 var swPrecacheWebpackPlugin = require('./sw-precache-webpack-plugin');
 
+var commitHash = require('child_process')
+  .execSync('git rev-parse --short HEAD')
+  .toString();
+
 module.exports = {
   context: __dirname,
   devtool: 'eval',
@@ -31,6 +35,7 @@ module.exports = {
       'process.env': {
         'NODE_ENV': JSON.stringify('development'),
       },
+      __COMMIT_HASH__: JSON.stringify(commitHash),
       __VERSION__: JSON.stringify(packageJson.version),
     }),
     swPrecacheWebpackPlugin,

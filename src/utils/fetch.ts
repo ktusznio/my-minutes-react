@@ -1,6 +1,6 @@
 import 'whatwg-fetch';
 
-import { logException } from './error';
+import sentryClient from '../sentryClient';
 
 export const sendFetch = (url, options = {}): Promise<Response | void> =>
   fetch(url, options).then(response => {
@@ -10,6 +10,4 @@ export const sendFetch = (url, options = {}): Promise<Response | void> =>
 
     // Server responded with 4xx or 5xx.
     throw new Error(response.status + ' : ' + response.statusText);
-  }).catch(e =>
-    logException(e)
-  );
+  });
