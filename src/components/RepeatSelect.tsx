@@ -1,9 +1,8 @@
 import * as React from 'react';
 
-import { IGoal } from '../models';
+import { IGoal, GOAL_REPEATS_DEFAULT } from '../models';
 import { Row } from './Flex';
-import theme from './theme';
-import { GOAL_REPEATS_DEFAULT } from '../models';
+import * as c from './theme/colors';
 
 export interface IRepeatSelectItemProps {
   onTouchTap: (e: React.TouchEvent) => void,
@@ -14,8 +13,8 @@ export interface IRepeatSelectItemProps {
 
 const RepeatSelectItem = (props: IRepeatSelectItemProps) =>
   <div
-    onTouchTap={props.onTouchTap}
-    style={theme.RepeatSelectItem(props)}>
+    onTouchTap={(e) => { e.preventDefault(); props.onTouchTap(e); }}
+    style={style.repeatSelectItem(props)}>
     {props.text}
   </div>
 
@@ -75,5 +74,20 @@ class RepeatSelect extends React.Component<IGoalRepeatSelectProps, IGoalRepeatSe
     );
   }
 }
+
+const style = {
+  repeatSelectItem: (props: IRepeatSelectItemProps) => ({
+    alignItems: 'center',
+    backgroundColor: !props.disabled && props.isSelected ? c.cyan : c.transparent,
+    border: `2px solid ${props.disabled ? c.whiteTransparent : c.cyan}`,
+    borderRadius: '100%',
+    color: !props.disabled && props.isSelected ? c.white : c.whiteTransparent,
+    cursor: 'pointer',
+    display: 'flex',
+    height: '36px',
+    justifyContent: 'center',
+    width: '36px',
+  }),
+};
 
 export default RepeatSelect;

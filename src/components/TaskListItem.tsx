@@ -11,7 +11,6 @@ import * as format from '../utils/format';
 import { RunningTaskDuration, RunningGoalDuration } from './RunningDuration';
 import StartTaskButton from './StartTaskButton';
 import TaskHistoryDots from './TaskHistoryDots';
-import theme from './theme';
 
 export interface ITaskListItemProps {
   task: IViewTask;
