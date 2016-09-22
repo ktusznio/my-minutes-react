@@ -61,9 +61,16 @@ export default class AddTaskDialog extends React.Component<IAddTaskDialogProps, 
             ref="taskName"
             hintText="Task name"
             errorText={this.state.errorText}
+            style={style.textField}
           />
         </form>
       </Dialog>
     );
   }
 }
+
+const style = {
+  textField: {
+    maxWidth: '100%',
+  },
+};
