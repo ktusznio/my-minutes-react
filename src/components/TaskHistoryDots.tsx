@@ -14,7 +14,6 @@ interface ITaskHistoryDotsProps {
 const buildDotStylesForTask = (task: IViewTask) => {
   const dotStyles = buildBaseDotStyles();
   const day = moment().startOf('week');
-
   const now = moment();
 
   return dotStyles.map(dotStyle => {

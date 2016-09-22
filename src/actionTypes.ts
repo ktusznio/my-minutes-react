@@ -28,5 +28,6 @@ export const SESSION_CHANGED = SESSIONS + '/changed';
 export const SESSION_REMOVED = SESSIONS + '/removed';
 
 const SNACKBAR = 'snackbar';
+export const DISMISS_SNACKBAR_MESSAGE = SNACKBAR + '/dismiss-message';
 export const POST_SNACKBAR_MESSAGE = SNACKBAR + '/post-message';
 export const POST_SNACKBAR_APP_UPDATE_AVAILABLE = SNACKBAR + '/app-update-available';

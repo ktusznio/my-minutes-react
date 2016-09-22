@@ -1,13 +1,10 @@
+import * as Promise from 'bluebird';
 import * as firebase from 'firebase';
 
 import config from '../config';
 
 // These correspond to PROVIDER_IDs (eg. firebase.auth.FacebookAuthProvider.PROVIDER_ID).
 export type ProviderId = 'facebook.com' | 'google.com' | 'twitter.com';
-
-export interface IOtherProviderExistsCallback {
-  (otherProviderId: ProviderId): void;
-}
 
 interface IFirebaseProviderCredential {
   accessToken: string;
@@ -53,36 +50,45 @@ class Firebase {
     };
   }
 
-  signInWithProvider(
-    providerId: ProviderId,
-    otherProviderExistsCallback: IOtherProviderExistsCallback,
-  ): firebase.Promise<any> {
-    if (window.localStorage.hasOwnProperty(PENDING_CREDENTIAL_KEY)) {
-      return this.signInWithPendingCredential(providerId);
-    }
-
-    const provider = this.getProvider(providerId);
-    const authPromise = this.auth.signInWithPopup(provider);
-
-    authPromise.catch((error: IFirebaseAuthenticationError) => {
-      if (error.code === FIREBASE_ERROR_ACCOUNT_EXISTS) {
-        // User's email already exists. Store credential for linking.
-        const pendingCredential = error.credential;
-        console.log('storing pending credential', pendingCredential);
-        window.localStorage.setItem(
-          PENDING_CREDENTIAL_KEY,
-          JSON.stringify(pendingCredential)
+  signInWithProvider(providerId: ProviderId): Promise<{}> {
+    // Wrap the firebase call in a promise to handle firebase errors here
+    // rather than in calling code.
+    return new Promise((resolve, reject) => {
+      if (window.localStorage.hasOwnProperty(PENDING_CREDENTIAL_KEY)) {
+        this.signInWithPendingCredential(providerId).then(
+          () => resolve(),
+          (error: IFirebaseAuthenticationError) => reject(new FirebaseUncaughtError(error.code)),
         );
-
-        // Get registered providers for this email.
-        this.auth.fetchProvidersForEmail(error.email).then(providerIds => {
-          // Recommend the first existing provider.
-          otherProviderExistsCallback(providerIds[0]);
-        });
+        return;
       }
-    });
 
-    return authPromise;
+      const provider = this.getProvider(providerId);
+
+      this.auth.signInWithPopup(provider).then(
+        () => resolve(),
+        (error: IFirebaseAuthenticationError) => {
+          switch (error.code) {
+          case FIREBASE_ERROR_ACCOUNT_EXISTS:
+            // User's email already exists. Store credential for linking.
+            const pendingCredential = error.credential;
+            window.localStorage.setItem(
+              PENDING_CREDENTIAL_KEY,
+              JSON.stringify(pendingCredential)
+            );
+
+            // Get registered providers for this email.
+            this.auth.fetchProvidersForEmail(error.email).then(providerIds => {
+              // Recommend the first existing provider.
+              reject(new FirebaseAccountExistsError(providerIds[0]));
+            });
+            break;
+
+          default:
+            reject(new FirebaseUncaughtError(error.code));
+          }
+        }
+      );
+    });
   }
 
   cancelLoginAttempt() {
@@ -128,3 +134,22 @@ class Firebase {
 }
 
 export default new Firebase();
+
+export function FirebaseAccountExistsError(existingProviderId) {
+  this.existingProviderId = existingProviderId;
+}
+Object.setPrototypeOf(FirebaseAccountExistsError, Error);
+FirebaseAccountExistsError.prototype = Object.create(Error.prototype);
+FirebaseAccountExistsError.prototype.name = "FirebaseAccountExistsError";
+FirebaseAccountExistsError.prototype.message = "";
+FirebaseAccountExistsError.prototype.constructor = FirebaseAccountExistsError;
+
+
+export function FirebaseUncaughtError(firebaseErrorCode) {
+  this.firebaseErrorCode = firebaseErrorCode;
+}
+Object.setPrototypeOf(FirebaseUncaughtError, Error);
+FirebaseUncaughtError.prototype = Object.create(Error.prototype);
+FirebaseUncaughtError.prototype.name = "UncaughtFirebaseError";
+FirebaseUncaughtError.prototype.message = "";
+FirebaseUncaughtError.prototype.constructor = FirebaseUncaughtError;

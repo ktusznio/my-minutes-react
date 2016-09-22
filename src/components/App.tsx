@@ -5,6 +5,7 @@ import * as React from 'react';
 import { connect } from 'react-redux';
 
 import { startListeningToSessions, stopListeningToSessions } from '../actions/sessions';
+import * as snackbarActions from '../actions/snackbar';
 import { startListeningToTasks, stopListeningToTasks } from '../actions/tasks';
 import * as actionTypes from '../actionTypes';
 import { IUser } from '../models';
@@ -25,6 +26,7 @@ interface IAppProps {
 
   isSnackbarOpen: boolean;
   snackbarMessage: string;
+  onSnackbarClose: () => void;
 }
 
 interface _IAppState {
@@ -47,6 +49,8 @@ const mapDispatchToProps = (dispatch: Redux.Dispatch, state: IAppState) => ({
 
   startListeningToSessions: (user: IUser) => dispatch(startListeningToSessions(user)),
   stopListeningToSessions: () => dispatch(stopListeningToSessions()),
+
+  onSnackbarClose: () => dispatch(snackbarActions.dismissMessage()),
 });
 
 class App extends React.Component<IAppProps, _IAppState> {
@@ -112,7 +116,7 @@ class App extends React.Component<IAppProps, _IAppState> {
         message={message}
         open={this.state.isSnackbarOpen}
         onActionTouchTap={onActionTouchTap}
-        onRequestClose={() => this.setState({ isSnackbarOpen: false })}
+        onRequestClose={this.props.onSnackbarClose}
       />
     )
   }

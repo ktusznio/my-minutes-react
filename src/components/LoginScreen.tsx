@@ -5,7 +5,7 @@ import ActionPermIdentity from 'material-ui/svg-icons/action/perm-identity';
 
 import * as authActions from '../actions/auth';
 import * as actionTypes from '../actionTypes';
-import firebase, { ProviderId, IOtherProviderExistsCallback } from '../firebase/firebase';
+import firebase, { ProviderId } from '../firebase/firebase';
 import { IAppState } from '../reducer';
 import { IAuthState } from '../reducers/auth';
 import { IRouteParams } from '../router';
@@ -25,11 +25,7 @@ const providerNames = {
 
 interface ILoginScreenProps {
   auth: IAuthState;
-  signInWithProvider: (
-    provider: ProviderId,
-    otherProviderExistsCallback: IOtherProviderExistsCallback,
-  ) => void;
-  otherProviderExists: (existingProviderId: ProviderId) => void;
+  signInWithProvider: (provider: ProviderId) => void;
   cancelLogin: () => void;
   params: IRouteParams;
   location: any;
@@ -40,19 +36,9 @@ const mapStateToProps = (state: IAppState) => ({
 });
 
 const mapDispatchToProps = (dispatch: Redux.Dispatch) => ({
-  signInWithProvider: (
-    providerId: ProviderId,
-    otherProviderExistsCallback: IOtherProviderExistsCallback
-  ) => {
-    dispatch(
-      authActions.signInWithProvider(providerId, otherProviderExistsCallback)
-    );
+  signInWithProvider: (providerId: ProviderId) => {
+    dispatch(authActions.signInWithProvider(providerId));
   },
-
-  otherProviderExists: (existingProviderId: ProviderId) => {
-    dispatch(authActions.accountExists(existingProviderId));
-  },
-
   cancelLogin: () => {
     dispatch(authActions.cancelLogin());
   },
@@ -67,7 +53,7 @@ class LoginScreen extends React.Component<ILoginScreenProps, {}> {
   }
 
   handleLoginTap = (providerId: ProviderId) => {
-    this.props.signInWithProvider(providerId, this.props.otherProviderExists);
+    this.props.signInWithProvider(providerId);
   }
 
   render() {
@@ -135,8 +121,8 @@ class LoginScreen extends React.Component<ILoginScreenProps, {}> {
       <Column>
         <h3 style={style.heading}>You already have an account</h3>
         <p style={style.paragraph}>
-          You've previously logged in with {existingProvider}.
-          Log in with {existingProvider} to link your {requestedProvider} account?
+          You already used {existingProvider} to log in.
+          Log in with {existingProvider} and link your {requestedProvider} account?
         </p>
         <RaisedButton
          label={`Log in with ${existingProvider}`}

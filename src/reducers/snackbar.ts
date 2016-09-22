@@ -10,6 +10,12 @@ export default function snackbar(
   action
 ): ISnackbarState {
   switch (action.type) {
+  case actionTypes.DISMISS_SNACKBAR_MESSAGE:
+    return {
+      isOpen: false,
+      message: '',
+    };
+
   case actionTypes.POST_SNACKBAR_MESSAGE:
     return {
       isOpen: true,
