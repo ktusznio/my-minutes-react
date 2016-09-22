@@ -206,7 +206,7 @@ export class TaskScreen extends React.Component<ITaskScreenProps, ITaskScreenSta
           rightIcon={rightNavigationIcon}
           title={task.name}
         />
-        <ScreenContent>
+        <ScreenContent style={style.screenContent}>
           <div style={style.formRow}>
             <Label text="Task name" />
             <TextField
@@ -286,6 +286,11 @@ export class TaskScreen extends React.Component<ITaskScreenProps, ITaskScreenSta
 }
 
 const style = {
+  screenContent: {
+    // Hack: prevent grey overlay present when keyboard is active from obscuring
+    // the input field.
+    paddingBottom: '75vh',
+  },
   formRow: {
     margin: '18px 0',
   },
