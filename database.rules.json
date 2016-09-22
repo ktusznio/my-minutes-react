@@ -9,7 +9,7 @@
         "$taskId": {
           "id": {},
           "createdAt": {
-            ".validate": "newData.val() === now",
+            ".validate": "newData.val() <= now",
           },
         	"name": {
           	".validate": "newData.isString() && newData.val().length > 0 && newData.val().length <= 50"
