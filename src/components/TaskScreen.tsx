@@ -1,6 +1,10 @@
 import * as React from 'react';
 import { connect } from 'react-redux';
-import { Dialog, FlatButton, IconButton, TextField, Toggle } from 'material-ui';
+import Dialog from 'material-ui/Dialog';
+import FlatButton from 'material-ui/FlatButton';
+import IconButton from 'material-ui/IconButton';
+import TextField from 'material-ui/TextField';
+import Toggle from 'material-ui/Toggle';
 import NavigationClose from 'material-ui/svg-icons/navigation/close';
 import { browserHistory } from 'react-router';
 import NavigationArrowBack from 'material-ui/svg-icons/navigation/arrow-back';

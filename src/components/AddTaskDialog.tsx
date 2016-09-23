@@ -1,5 +1,7 @@
 import * as React from 'react';
-import { Dialog, FlatButton, TextField } from 'material-ui';
+import Dialog from 'material-ui/Dialog';
+import FlatButton from 'material-ui/FlatButton';
+import TextField from 'material-ui/TextField';
 
 interface IAddTaskDialogProps {
   isOpen: boolean;

@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { RaisedButton } from 'material-ui';
+import RaisedButton from 'material-ui/RaisedButton';
 
 interface IRaisedButtonProps {
   children?: any;

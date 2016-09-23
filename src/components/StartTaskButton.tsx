@@ -1,9 +1,7 @@
 import * as React from 'react';
 import { browserHistory } from 'react-router';
 import { connect } from 'react-redux';
-import {
-  IconButton,
-} from 'material-ui';
+import IconButton from 'material-ui/IconButton';
 import AvPlayCircleOutline from 'material-ui/svg-icons/av/play-circle-outline';
 import AvPauseCircleOutline from 'material-ui/svg-icons/av/pause-circle-outline';
 
