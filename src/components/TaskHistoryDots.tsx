@@ -86,7 +86,7 @@ const style = {
     background: c.grey,
   },
   [`dot:goal-status-${m.GoalStatus.PENDING}`]: {
-    background: c.cyan,
+    background: c.blue,
   },
   [`dot:goal-status-${m.GoalStatus.PASS}`]: {
     background: c.green,

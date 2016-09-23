@@ -37,9 +37,14 @@ export const buildGoalIcon = (props: IGoalIconProps) => {
   }
 }
 
+const buildStyle = (props: IGoalIconProps) => ({
+  color: getGoalIconColor(props),
+  verticalAlign: 'middle',
+});
+
 const getGoalIconColor = (props: IGoalIconProps) => {
   if (props.isSelected) {
-    return c.cyan;
+    return c.blue;
   }
 
   if (props.task) {
@@ -48,8 +53,3 @@ const getGoalIconColor = (props: IGoalIconProps) => {
 
   return c.black;
 }
-
-const buildStyle = (props: IGoalIconProps) => ({
-  color: getGoalIconColor(props),
-  verticalAlign: 'middle',
-});

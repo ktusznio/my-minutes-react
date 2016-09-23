@@ -78,8 +78,8 @@ class RepeatSelect extends React.Component<IGoalRepeatSelectProps, IGoalRepeatSe
 const style = {
   repeatSelectItem: (props: IRepeatSelectItemProps) => ({
     alignItems: 'center',
-    backgroundColor: !props.disabled && props.isSelected ? c.cyan : c.transparent,
-    border: `2px solid ${props.disabled ? c.whiteTransparent : c.cyan}`,
+    backgroundColor: !props.disabled && props.isSelected ? c.blue : c.transparent,
+    border: `2px solid ${props.disabled ? c.whiteTransparent : c.blue}`,
     borderRadius: '100%',
     color: !props.disabled && props.isSelected ? c.white : c.whiteTransparent,
     cursor: 'pointer',
