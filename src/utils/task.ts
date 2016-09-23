@@ -20,11 +20,13 @@ export const getGoalRemainder = (task: IViewTask): number => {
 }
 
 export const getGoalStatusColor = (task: IViewTask): string => {
+  const goalRemainder = getGoalRemainder(task);
+
   switch (true) {
-  case task.goal.type === m.GoalType.AT_LEAST && task.msLeftForGoal <= 0:
+  case task.goal.type === m.GoalType.AT_LEAST && goalRemainder <= 0:
     return c.green;
 
-  case task.goal.type === m.GoalType.AT_MOST && task.msLeftForGoal <= 0:
+  case task.goal.type === m.GoalType.AT_MOST && goalRemainder <= 0:
     return c.red;
 
   default:
