@@ -13,7 +13,11 @@ export function timeRemaining(ms: number): string {
   if (ms >= 60 * 60 * 1000) {
     return moment.duration(ms).format(FORMAT_HOURS_MINUTES);
   } else if (ms >= 1000) {
-    return moment.duration(ms).format(FORMAT_HOURS_MINUTES_SECONDS);
+    if (ms % (60 * 1000) === 0) {
+      return moment.duration(ms).format(FORMAT_HOURS_MINUTES);
+    } else {
+      return moment.duration(ms).format(FORMAT_HOURS_MINUTES_SECONDS);
+    }
   } else {
     return '1s';
   }
