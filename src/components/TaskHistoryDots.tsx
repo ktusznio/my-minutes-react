@@ -47,13 +47,13 @@ class TaskHistoryDots extends React.Component<ITaskHistoryDotsProps, {}> {
 
     return (
       <div style={style.root}>
-        <div style={dotStyles[0]}>S</div>
-        <div style={dotStyles[1]}>M</div>
-        <div style={dotStyles[2]}>T</div>
-        <div style={dotStyles[3]}>W</div>
-        <div style={dotStyles[4]}>T</div>
-        <div style={dotStyles[5]}>F</div>
-        <div style={dotStyles[6]}>S</div>
+        <div style={dotStyles[0]}><span style={style.dotSpan}>S</span></div>
+        <div style={dotStyles[1]}><span style={style.dotSpan}>M</span></div>
+        <div style={dotStyles[2]}><span style={style.dotSpan}>T</span></div>
+        <div style={dotStyles[3]}><span style={style.dotSpan}>W</span></div>
+        <div style={dotStyles[4]}><span style={style.dotSpan}>T</span></div>
+        <div style={dotStyles[5]}><span style={style.dotSpan}>F</span></div>
+        <div style={dotStyles[6]}><span style={style.dotSpan}>S</span></div>
       </div>
     );
   }
@@ -71,6 +71,7 @@ const style = {
     color: c.white,
     display: 'flex',
     fontSize: '10px',
+    lineHeight: '10px',
     height: '20px',
     justifyContent: 'center',
     margin: '0 4px',
@@ -96,6 +97,9 @@ const style = {
   },
   [`dot:goal-status-${m.GoalStatus.FUTURE}`]: {
     background: c.greyTransparent,
+  },
+  dotSpan: {
+    paddingTop: '1px',
   },
 };
 
