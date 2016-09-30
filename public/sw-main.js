@@ -12,7 +12,20 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- */
+*/
+
+// DO NOT EDIT THIS GENERATED OUTPUT DIRECTLY!
+// This file should be overwritten as part of your build process.
+// If you need to extend the behavior of the generated service worker, the best approach is to write
+// additional code and include it using the importScripts option:
+//   https://github.com/GoogleChrome/sw-precache#importscripts-arraystring
+//
+// Alternatively, it's possible to make changes to the underlying template file and then use that as the
+// new base for generating output, via the templateFilePath option:
+//   https://github.com/GoogleChrome/sw-precache#templatefilepath-string
+//
+// If you go that route, make sure that whenever you update your sw-precache dependency, you reconcile any
+// changes made to this original template file with your modified copy.
 
 // This generated service worker JavaScript will precache your site's resources.
 // The code needs to be saved in a .js file at the top-level of your site, and registered
@@ -24,7 +37,7 @@
 /* eslint-disable indent, no-unused-vars, no-multiple-empty-lines, max-nested-callbacks, space-before-function-paren, quotes, comma-spacing */
 'use strict';
 
-var precacheConfig = [["/images/icons/android-chrome-192x192.png","125bd1c31ff9e09b300e668ffd67e0e4"],["/images/icons/android-chrome-512x512.png","36f8352fc64bda6e8076dd4c26d58055"],["/images/icons/apple-touch-icon.png","dfee41b5b959895bb233f1184d77183e"],["/images/icons/favicon-16x16.png","bfc4b6e9d9f7c7a1c27931142c647b29"],["/images/icons/favicon-32x32.png","88bd97e4d921f91f2506bedca0052030"],["/images/icons/mstile-150x150.png","1d5b1fc73821217b6d3187118767b0e9"],["/index.html","00d47cd76b9c87a895cffb88d9601526"]];
+var precacheConfig = [["/images/icons/android-chrome-192x192.png","125bd1c31ff9e09b300e668ffd67e0e4"],["/images/icons/android-chrome-512x512.png","36f8352fc64bda6e8076dd4c26d58055"],["/images/icons/apple-touch-icon.png","dfee41b5b959895bb233f1184d77183e"],["/images/icons/favicon-16x16.png","bfc4b6e9d9f7c7a1c27931142c647b29"],["/images/icons/favicon-32x32.png","88bd97e4d921f91f2506bedca0052030"],["/images/icons/mstile-150x150.png","1d5b1fc73821217b6d3187118767b0e9"],["/index.html","4b4d06be30e047fe9b52252304f1bbc8"]];
 var cacheName = 'sw-precache-v2-my-minutes-' + (self.registration ? self.registration.scope : '');
 
 
@@ -127,8 +140,10 @@ self.addEventListener('install', function(event) {
         );
       });
     }).then(function() {
+      
       // Force the SW to transition from installing -> active state
       return self.skipWaiting();
+      
     })
   );
 });
@@ -148,7 +163,9 @@ self.addEventListener('activate', function(event) {
         );
       });
     }).then(function() {
+      
       return self.clients.claim();
+      
     })
   );
 });
@@ -190,7 +207,12 @@ self.addEventListener('fetch', function(event) {
     if (shouldRespond) {
       event.respondWith(
         caches.open(cacheName).then(function(cache) {
-          return cache.match(urlsToCacheKeys.get(url));
+          return cache.match(urlsToCacheKeys.get(url)).then(function(response) {
+            if (response) {
+              return response;
+            }
+            throw Error('The cached response that was expected is missing.');
+          });
         }).catch(function(e) {
           // Fall back to just fetch()ing the request if some unexpected error
           // prevented the cached response from being valid.
