@@ -9,7 +9,6 @@ injectTapEventPlugin();
 import * as connectionActions from './actions/connection';
 import * as snackbarActions from './actions/snackbar';
 import config from './config';
-import pushClient from './pushClient';
 import { createRouter } from './router';
 import sentryClient from './sentryClient';
 import store from './store';
@@ -52,8 +51,6 @@ if ('serviceWorker' in navigator) {
   // *Don't* register service worker file in, e.g., a scripts/ sub-directory!
   // See https://github.com/slightlyoff/ServiceWorker/issues/468
   (<any> navigator).serviceWorker.register('/sw-main.js').then(registration => {
-    pushClient.initialize(registration);
-
     // updatefound is fired if the service worker has changed.
     registration.onupdatefound = function() {
       // The updatefound event implies that registration.installing is set; see

@@ -1,7 +1,6 @@
 {
   "background_color": "#0D82C7",
   "display": "standalone",
-  "gcm_sender_id": "98956424557",
   "icons": [
     {
       "src": "/images/icons/android-chrome-192x192.png",

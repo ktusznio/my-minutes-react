@@ -1,14 +1,6 @@
 import * as firebase from 'firebase';
 import { cloneDeep } from 'lodash';
 
-// Push payload.
-
-export interface IPushPayload {
-  onNotificationClickUrl: string;
-  title: string;
-  body: string;
-}
-
 // User.
 
 export type UserId = string;
