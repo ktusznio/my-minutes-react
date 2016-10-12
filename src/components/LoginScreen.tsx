@@ -5,7 +5,7 @@ import ActionPermIdentity from 'material-ui/svg-icons/action/perm-identity';
 
 import * as authActions from '../actions/auth';
 import * as actionTypes from '../actionTypes';
-import firebase, { ProviderId } from '../firebase/firebase';
+import { ProviderId } from '../firebase/firebaseClient';
 import { IAppState } from '../reducer';
 import { IAuthState } from '../reducers/auth';
 import { IRouteParams } from '../router';

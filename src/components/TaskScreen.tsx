@@ -7,7 +7,6 @@ import TextField from 'material-ui/TextField';
 import Toggle from 'material-ui/Toggle';
 import NavigationClose from 'material-ui/svg-icons/navigation/close';
 import { browserHistory } from 'react-router';
-import NavigationArrowBack from 'material-ui/svg-icons/navigation/arrow-back';
 import { cloneDeep } from 'lodash';
 
 import { saveTask, deleteTask } from '../actions/tasks';

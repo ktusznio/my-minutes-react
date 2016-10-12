@@ -2,7 +2,7 @@ import { omit } from 'lodash';
 
 import * as actionTypes from '../actionTypes';
 import * as db from '../firebase/database';
-import { buildTask, ITask, TaskId } from '../models';
+import { ITask } from '../models';
 
 export interface ITasksState {
   tasks: ITasksStateTasks;

@@ -2,6 +2,7 @@
   "globalDependencies": {
     "bluebird": "registry:dt/bluebird#2.0.0+20160701023356",
     "history": "registry:dt/history#1.8.0+20160316155526",
+    "lodash": "registry:dt/lodash#4.14.0+20161004174455",
     "material-ui": "registry:dt/material-ui#0.15.1+20160701192820",
     "moment": "registry:dt/moment#2.8.0+20160316155526",
     "moment-duration-format": "file:lib/typings/moment-duration-format.d.ts",
@@ -23,8 +24,5 @@
     "uglify-js": "registry:dt/uglify-js#2.6.1+20160316155526",
     "webpack": "registry:dt/webpack#1.12.9+20160523035535",
     "whatwg-fetch": "registry:dt/whatwg-fetch#0.0.0+20160728142841"
-  },
-  "dependencies": {
-    "lodash": "registry:npm/lodash#4.0.0+20160701205107"
   }
 }

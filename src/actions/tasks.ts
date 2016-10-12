@@ -3,39 +3,34 @@ import * as Promise from 'bluebird';
 import * as m from '../models';
 import * as actionTypes from '../actionTypes';
 import * as db from '../firebase/database';
-import { IAppState, IGetAppState } from '../reducer';
-import { ITasksState } from '../reducers/tasks';
+import { IGetAppState } from '../reducer';
 import { IViewTask } from '../selectors';
-import * as routes from '../utils/routes';
-import * as taskUtils from '../utils/task';
-import * as urlUtils from '../utils/url';
 
-export const startListeningToTasks = (user) =>
-  (dispatch: Redux.Dispatch) => {
-    const ref = db.listenToTasks(user.uid, (event: string, taskOrTaskId) => {
-      switch (event) {
-      case 'child_added':
-        dispatch(taskAdded(taskOrTaskId));
-        return;
+export const startListeningToTasks = (user) => (dispatch: Redux.Dispatch) => {
+  const ref = db.listenToTasks(user.uid, (event: string, taskOrTaskId) => {
+    switch (event) {
+    case 'child_added':
+      dispatch(taskAdded(taskOrTaskId));
+      return;
 
-      case 'child_changed':
-        dispatch(taskChanged(taskOrTaskId));
-        return;
+    case 'child_changed':
+      dispatch(taskChanged(taskOrTaskId));
+      return;
 
-      case 'child_removed':
-        dispatch(taskRemoved(taskOrTaskId));
-        return;
+    case 'child_removed':
+      dispatch(taskRemoved(taskOrTaskId));
+      return;
 
-      default:
-        throw new Error('unknown event emitted by listenToTasks');
-      }
-    });
+    default:
+      throw new Error('unknown event emitted by listenToTasks');
+    }
+  });
 
-    dispatch({
-      type: actionTypes.LISTEN_TO_TASKS,
-      ref,
-    });
-  }
+  dispatch({
+    type: actionTypes.LISTEN_TO_TASKS,
+    ref,
+  });
+}
 
 const taskAdded = (task) => ({
   type: actionTypes.TASK_ADDED,
@@ -52,17 +47,16 @@ const taskRemoved = (taskId) => ({
   taskId,
 });
 
-export const stopListeningToTasks = () =>
-  (dispatch: Redux.Dispatch, getState: IGetAppState) => {
-    const { tasksRef } = getState().tasks;
-    if (tasksRef) {
-      db.stopListeningToTasks(tasksRef);
-      dispatch({ type: actionTypes.STOP_LISTENING_TO_TASKS });
-    }
+export const stopListeningToTasks = () => (dispatch: Redux.Dispatch, getState: IGetAppState) => {
+  const { tasksRef } = getState().tasks;
+  if (tasksRef) {
+    db.stopListeningToTasks(tasksRef);
+    dispatch({ type: actionTypes.STOP_LISTENING_TO_TASKS });
   }
+}
 
-export const saveTask = (task: m.ITask) => {
-  return (dispatch: Redux.Dispatch, getState: IGetAppState): Promise<m.ITask> => {
+export const saveTask = (task: m.ITask) =>
+  (dispatch: Redux.Dispatch, getState: IGetAppState): Promise<m.ITask> => {
     // Task will be assigned an id by db.saveTask.
     db.saveTask(getState().auth.user.uid, task)
       .catch(error => {
@@ -71,7 +65,6 @@ export const saveTask = (task: m.ITask) => {
 
     return Promise.resolve(task);
   }
-};
 
 export const saveTaskError = (error: Error) => ({
   type: actionTypes.SAVE_TASK_ERROR,
@@ -83,11 +76,10 @@ interface IDeleteTaskAction {
   task: m.ITask;
 }
 
-export const deleteTask = (task: m.ITask) =>
-  (dispatch: Redux.Dispatch, getState: IGetAppState) =>
-    db.deleteTask(getState().auth.user.uid, task).catch(
-      (error) => dispatch(deleteTaskError(error, task))
-    );
+export const deleteTask = (task: m.ITask) => (dispatch: Redux.Dispatch, getState: IGetAppState) =>
+  db.deleteTask(getState().auth.user.uid, task).catch(
+    (error) => dispatch(deleteTaskError(error, task))
+  );
 
 const deleteTaskError = (error, task: m.ITask) => ({
   type: actionTypes.DELETE_TASK_ERROR,
@@ -95,28 +87,26 @@ const deleteTaskError = (error, task: m.ITask) => ({
   error,
 });
 
-export const startTask = (task: IViewTask) =>
-  (dispatch: Redux.Dispatch, getState: IGetAppState) => {
-    db.startTask(
-      getState().auth.user.uid,
-      task
-    )
-    .catch(error => dispatch(startTaskError(error)));
-  }
+export const startTask = (task: IViewTask) => (dispatch: Redux.Dispatch, getState: IGetAppState) => {
+  db.startTask(
+    getState().auth.user.uid,
+    task
+  )
+  .catch(error => dispatch(startTaskError(error)));
+}
 
 const startTaskError = (error: Error) => ({
   type: actionTypes.START_TASK_ERROR,
   error,
 });
 
-export const stopTask = (task: IViewTask) =>
-  (dispatch: Redux.Dispatch, getState: IGetAppState) => {
-    db.stopTask(
-      getState().auth.user.uid,
-      task
-    )
-    .catch(error => dispatch(stopTaskError(error)));
-  }
+export const stopTask = (task: IViewTask) => (dispatch: Redux.Dispatch, getState: IGetAppState) => {
+  db.stopTask(
+    getState().auth.user.uid,
+    task
+  )
+  .catch(error => dispatch(stopTaskError(error)));
+}
 
 const stopTaskError = (error: Error) => ({
   type: actionTypes.STOP_TASK_ERROR,

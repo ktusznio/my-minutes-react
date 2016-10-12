@@ -13,8 +13,8 @@ interface IGoalIconProps {
   isSelected?: boolean;
 }
 
-// Used when passing icons into material-ui's button components so that their
-// styling gets applied.
+// Used when passing icons into material-ui's button components so that the
+// icon has its styling applied.
 export const buildGoalIcon = (props: IGoalIconProps) => {
   const task = props.task;
   const goalType = props.goalType || (task && task.goal.type);

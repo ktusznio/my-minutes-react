@@ -1,31 +1,29 @@
 import * as m from '../models';
 import * as actionTypes from '../actionTypes';
 import * as db from '../firebase/database';
-import { IAppState, IGetAppState } from '../reducer';
-import { ISessionsState } from '../reducers/sessions';
+import { IGetAppState } from '../reducer';
 
-export const startListeningToSessions = (user) =>
-  (dispatch: Redux.Dispatch, getState: IGetAppState) => {
-    const ref = db.listenToSessions(user.uid, (event: string, taskId: m.TaskId, sessionByDateOrSessionId) => {
-      switch (event) {
-      case 'child_added':
-        dispatch(sessionAdded(taskId, sessionByDateOrSessionId));
-        return;
+export const startListeningToSessions = (user) => (dispatch: Redux.Dispatch) => {
+  const ref = db.listenToSessions(user.uid, (event: string, taskId: m.TaskId, sessionByDateOrSessionId) => {
+    switch (event) {
+    case 'child_added':
+      dispatch(sessionAdded(taskId, sessionByDateOrSessionId));
+      return;
 
-      case 'child_changed':
-        dispatch(sessionChanged(taskId, sessionByDateOrSessionId));
-        return;
+    case 'child_changed':
+      dispatch(sessionChanged(taskId, sessionByDateOrSessionId));
+      return;
 
-      default:
-        throw new Error('unknown event emitted by listenToTasks');
-      }
-    });
+    default:
+      throw new Error('unknown event emitted by listenToTasks');
+    }
+  });
 
-    dispatch({
-      type: actionTypes.LISTEN_TO_SESSIONS,
-      ref,
-    } as db.IListenToRefAction);
-  }
+  dispatch({
+    type: actionTypes.LISTEN_TO_SESSIONS,
+    ref,
+  } as db.IListenToRefAction);
+}
 
 const sessionAdded = (taskId, sessionsByDate) => ({
   type: actionTypes.SESSION_ADDED,
@@ -39,11 +37,10 @@ const sessionChanged = (taskId, sessionsByDate) => ({
   taskId,
 });
 
-export const stopListeningToSessions = () =>
-  (dispatch: Redux.Dispatch, getState: IGetAppState) => {
-    const sessionsRef = getState().sessions;
-    if (sessionsRef) {
-      db.stopListeningToSessions(sessionsRef);
-      dispatch({ type: actionTypes.STOP_LISTENING_TO_SESSIONS });
-    }
+export const stopListeningToSessions = () => (dispatch: Redux.Dispatch, getState: IGetAppState) => {
+  const sessionsRef = getState().sessions;
+  if (sessionsRef) {
+    db.stopListeningToSessions(sessionsRef);
+    dispatch({ type: actionTypes.STOP_LISTENING_TO_SESSIONS });
   }
+}

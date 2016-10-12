@@ -1,8 +1,6 @@
-import { browserHistory } from 'react-router';
-
 import * as actionTypes from '../actionTypes';
-import firebase, { ProviderId, FirebaseAccountExistsError, FirebaseUncaughtError } from '../firebase/firebase';
-import { IUser } from '../models';
+import firebaseClient, { ProviderId, FirebaseAccountExistsError, FirebaseUncaughtError } from '../firebase/firebaseClient';
+import * as m from '../models';
 import sentryClient from '../sentryClient';
 import * as snackbarActions from './snackbar';
 
@@ -10,20 +8,19 @@ export interface IAuthAction {
   existingProviderId?: ProviderId;
   requestedProviderId?: ProviderId;
   type: string;
-  user?: IUser;
+  user?: m.IUser;
 }
 
 export const startListeningToAuth = () => (dispatch: Redux.Dispatch) => {
   dispatch({ type: actionTypes.ATTEMPT_LOGIN });
-  firebase.auth.onAuthStateChanged((user: firebase.User) => {
+  firebaseClient.auth.onAuthStateChanged((user: firebase.User) => {
     dispatch(user ? loginSuccess(user) : logout());
   });
 };
 
 export const signInWithProvider = (requestedProviderId: ProviderId) => (dispatch: Redux.Dispatch) => {
   dispatch({ type: actionTypes.ATTEMPT_LOGIN, requestedProviderId });
-
-  firebase.signInWithProvider(requestedProviderId).catch(error => {
+  firebaseClient.signInWithProvider(requestedProviderId).catch(error => {
     if (error instanceof FirebaseAccountExistsError) {
       dispatch(accountExists(error.existingProviderId));
     } else if (error instanceof FirebaseUncaughtError) {
@@ -50,7 +47,7 @@ export const loginSuccess = (user: firebase.User) => (dispatch: Redux.Dispatch) 
 }
 
 export const cancelLogin = () => (dispatch: Redux.Dispatch) => {
-  firebase.cancelLoginAttempt();
+  firebaseClient.cancelLoginAttempt();
   dispatch(snackbarActions.postMessage('Login failed.'));
   dispatch(logout());
 }
@@ -60,7 +57,7 @@ export interface ILogout {
 }
 
 export const logout = () => (dispatch: Redux.Dispatch) => {
-  firebase.auth.signOut();
+  firebaseClient.auth.signOut();
   sentryClient.setUserContext();
 
   dispatch({ type: actionTypes.LOGOUT });

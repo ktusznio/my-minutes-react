@@ -8,7 +8,6 @@ import { saveTask } from '../actions/tasks';
 import * as db from '../firebase/database';
 import * as m from '../models';
 import { IAppState } from '../reducer';
-import { getTasks } from '../reducers/tasks';
 import { tasksSelector, viewTaskToTask, IViewTask } from '../selectors';
 import * as routes from '../utils/routes';
 import AddTaskDialog from './AddTaskDialog';

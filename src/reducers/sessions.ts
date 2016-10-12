@@ -1,5 +1,3 @@
-import * as moment from 'moment';
-
 import * as actionTypes from '../actionTypes';
 import * as db from '../firebase/database';
 import * as m from '../models';

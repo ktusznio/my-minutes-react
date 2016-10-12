@@ -1,6 +1,5 @@
 import * as React from 'react';
 import { connect } from 'react-redux';
-import { Link } from 'react-router';
 import AppBar from 'material-ui/AppBar';
 import IconButton from 'material-ui/IconButton';
 import IconMenu from 'material-ui/IconMenu';
@@ -28,23 +27,6 @@ const mapStateToProps = (state: IAppState, props) => ({
 const mapDispatchToProps = (dispatch: Redux.Dispatch) => ({
   logout: () => dispatch(logout()),
 });
-
-export const style = {
-  appBar: {
-    position: 'fixed',
-    top: 0,
-    left: 0,
-    right: 0,
-    height: '64px',
-    maxWidth: '768px',
-    margin: '0 auto',
-  },
-  appBarLink: {
-    color: c.white,
-    textDecoration: 'none',
-  },
-};
-
 
 class Navigation extends React.Component<INavigationProps, {}> {
   static defaultProps: INavigationProps = {
@@ -95,6 +77,22 @@ class Navigation extends React.Component<INavigationProps, {}> {
     return menuItems;
   }
 }
+
+export const style = {
+  appBar: {
+    position: 'fixed',
+    top: 0,
+    left: 0,
+    right: 0,
+    height: '64px',
+    maxWidth: '768px',
+    margin: '0 auto',
+  },
+  appBarLink: {
+    color: c.white,
+    textDecoration: 'none',
+  },
+};
 
 export default connect<{}, {}, INavigationProps>(
   mapStateToProps,

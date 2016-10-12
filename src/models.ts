@@ -1,6 +1,3 @@
-import * as firebase from 'firebase';
-import { cloneDeep } from 'lodash';
-
 // User.
 
 export type UserId = string;

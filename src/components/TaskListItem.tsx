@@ -1,13 +1,10 @@
 import * as React from 'react';
-import { connect } from 'react-redux';
 import { browserHistory, Link } from 'react-router';
 
 import * as c from './theme/colors';
 import * as m from '../models';
 import { IViewTask } from '../selectors';
-import { IAppState } from '../reducer';
 import * as routes from '../utils/routes';
-import * as format from '../utils/format';
 import { RunningTaskDuration, RunningGoalDuration } from './RunningDuration';
 import StartTaskButton from './StartTaskButton';
 import TaskHistoryDots from './TaskHistoryDots';
@@ -40,7 +37,7 @@ const TaskListItem = (props: ITaskListItemProps) => {
       <hr style={style.hr} />
     </div>
   );
-}
+};
 
 const style = {
   root: {
@@ -82,6 +79,5 @@ const style = {
     fontSize: '12px',
   },
 };
-
 
 export default TaskListItem;

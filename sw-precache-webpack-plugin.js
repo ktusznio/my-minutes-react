@@ -4,9 +4,7 @@ module.exports = new SWPrecacheWebpackPlugin({
   cacheId: 'my-minutes',
   filename: 'sw-main.js',
   handleFetch: process.env.NODE_ENV !== 'development',
-  importScripts: [
-    '/sw-push.js',
-  ],
+  importScripts: [],
   staticFileGlobs: [
     'public/bundle.js',
     'public/index.html',

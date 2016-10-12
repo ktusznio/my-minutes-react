@@ -5,7 +5,6 @@ import FileCloudOff from 'material-ui/svg-icons/file/cloud-off';
 import { Column } from './Flex';
 import Navigation from './Navigation';
 import { Screen, ScreenContent } from './Screen';
-import Interval from './Interval';
 
 interface INoConnectionScreenState {
   timeoutId: any;

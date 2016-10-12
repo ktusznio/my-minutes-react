@@ -2,12 +2,6 @@
 
 An implementation of My Minutes in React and Redux.
 
-## Prerequisites
-
-```
-npm install -g ts-node
-```
-
 ## Running
 
 1. Install dependencies: `npm install`

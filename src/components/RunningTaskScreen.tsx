@@ -91,7 +91,6 @@ const style = {
   },
 };
 
-
 export default connect(
   mapStateToProps,
   mapDispatchToProps

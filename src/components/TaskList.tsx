@@ -1,6 +1,5 @@
 import * as React from 'react';
 import { browserHistory } from 'react-router';
-import NavigationArrowDownward from 'material-ui/svg-icons/navigation/arrow-downward';
 
 import * as m from '../models';
 import TaskListItem from '../components/TaskListItem';

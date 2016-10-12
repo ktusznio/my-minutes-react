@@ -1,4 +1,3 @@
-import FlatButton from 'material-ui/FlatButton';
 import Snackbar from 'material-ui/Snackbar';
 import { MuiThemeProvider } from 'material-ui/styles';
 import * as React from 'react';
@@ -10,9 +9,8 @@ import { startListeningToTasks, stopListeningToTasks } from '../actions/tasks';
 import * as actionTypes from '../actionTypes';
 import { IUser } from '../models';
 import { IAppState } from '../reducer';
-import { Row } from './Flex';
 import NoConnectionScreen from './NoConnectionScreen';
-import { muiTheme } from './theme';
+import muiTheme from './theme/muiTheme';
 
 interface IAppProps {
   isOnline: boolean;
@@ -118,7 +116,7 @@ class App extends React.Component<IAppProps, _IAppState> {
         onActionTouchTap={onActionTouchTap}
         onRequestClose={this.props.onSnackbarClose}
       />
-    )
+    );
   }
 }
 

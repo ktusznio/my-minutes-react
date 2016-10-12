@@ -1,8 +1,7 @@
 import 'whatwg-fetch';
 
 import * as actionTypes from '../actionTypes';
-import firebase from '../firebase/firebase';
-import { sendFetch } from '../utils/fetch';
+import firebaseClient from '../firebase/firebaseClient';
 import * as authActions from './auth';
 
 export interface IConnectionChangedAction {
@@ -34,7 +33,7 @@ const handleConnectionChange = (isOnline: boolean, store: Redux.Store, dispatch:
   const wasOnline = state.connection.isOnline;
 
   if (!wasOnline && isOnline) {
-    firebase.initialize();
+    firebaseClient.initialize();
     dispatch(authActions.startListeningToAuth());
   }
 

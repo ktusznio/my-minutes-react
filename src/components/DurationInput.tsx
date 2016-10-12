@@ -1,6 +1,6 @@
 import * as React from 'react';
 import TextField from 'material-ui/TextField';
-import { padStart, replace } from 'lodash';
+import { padStart } from 'lodash';
 
 import * as format from '../utils/format';
 

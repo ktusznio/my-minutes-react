@@ -1,5 +1,4 @@
 import * as React from 'react';
-import { browserHistory } from 'react-router';
 import { connect } from 'react-redux';
 import IconButton from 'material-ui/IconButton';
 import AvPlayCircleOutline from 'material-ui/svg-icons/av/play-circle-outline';
@@ -8,7 +7,6 @@ import AvPauseCircleOutline from 'material-ui/svg-icons/av/pause-circle-outline'
 import { startTask, stopTask } from '../actions/tasks';
 import * as m from '../models';
 import { IViewTask } from '../selectors';
-import * as routes from '../utils/routes';
 import * as c from './theme/colors';
 import RaisedButton from './RaisedButton';
 

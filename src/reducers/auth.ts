@@ -1,7 +1,7 @@
 import * as m from '../models';
 import * as authActions from '../actions/auth';
 import * as actionTypes from '../actionTypes';
-import { ProviderId } from '../firebase/firebase';
+import { ProviderId } from '../firebase/firebaseClient';
 
 export interface IAuthState {
   [key: string]: any;
@@ -12,8 +12,7 @@ export interface IAuthState {
 }
 
 export default function auth(authState: IAuthState = {
-  // Initial status is ATTEMPT_LOGIN to prevent flash of login button when
-  // authentication is checked on app start.
+  // Initial status is ATTEMPT_LOGIN to prevent flash of login button on app start.
   status: actionTypes.ATTEMPT_LOGIN,
 }, action: authActions.IAuthAction): IAuthState {
   switch (action.type) {

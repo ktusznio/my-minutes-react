@@ -21,7 +21,7 @@ interface IFirebaseAuthenticationError extends Error {
 const FIREBASE_ERROR_ACCOUNT_EXISTS = 'auth/account-exists-with-different-credential';
 const PENDING_CREDENTIAL_KEY = 'pendingCredential';
 
-class Firebase {
+class FirebaseClient {
   public auth: firebase.auth.Auth;
   public db: firebase.database.Database;
 
@@ -133,7 +133,7 @@ class Firebase {
   }
 }
 
-export default new Firebase();
+export default new FirebaseClient();
 
 export function FirebaseAccountExistsError(existingProviderId) {
   this.existingProviderId = existingProviderId;
