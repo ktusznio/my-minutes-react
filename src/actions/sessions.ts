@@ -1,10 +1,10 @@
 import * as m from '../models';
 import * as actionTypes from '../actionTypes';
-import * as db from '../firebase/database';
+import * as firebaseClient from '../firebase';
 import { IGetAppState } from '../reducer';
 
 export const startListeningToSessions = (user) => (dispatch: Redux.Dispatch) => {
-  const ref = db.listenToSessions(user.uid, (event: string, taskId: m.TaskId, sessionByDateOrSessionId) => {
+  const ref = firebaseClient.listenToSessions(user.uid, (event: string, taskId: m.TaskId, sessionByDateOrSessionId) => {
     switch (event) {
     case 'child_added':
       dispatch(sessionAdded(taskId, sessionByDateOrSessionId));
@@ -22,7 +22,7 @@ export const startListeningToSessions = (user) => (dispatch: Redux.Dispatch) => 
   dispatch({
     type: actionTypes.LISTEN_TO_SESSIONS,
     ref,
-  } as db.IListenToRefAction);
+  } as firebaseClient.IListenToRefAction);
 }
 
 const sessionAdded = (taskId, sessionsByDate) => ({
@@ -40,7 +40,7 @@ const sessionChanged = (taskId, sessionsByDate) => ({
 export const stopListeningToSessions = () => (dispatch: Redux.Dispatch, getState: IGetAppState) => {
   const sessionsRef = getState().sessions;
   if (sessionsRef) {
-    db.stopListeningToSessions(sessionsRef);
+    firebaseClient.stopListeningToSessions(sessionsRef);
     dispatch({ type: actionTypes.STOP_LISTENING_TO_SESSIONS });
   }
 }

@@ -1,40 +1,40 @@
 import * as actionTypes from '../actionTypes';
-import firebaseClient, { ProviderId, FirebaseAccountExistsError, FirebaseUncaughtError } from '../firebase/firebaseClient';
+import * as firebaseClient from '../firebase';
 import * as m from '../models';
 import sentryClient from '../sentryClient';
 import * as snackbarActions from './snackbar';
 
 export interface IAuthAction {
-  existingProviderId?: ProviderId;
-  requestedProviderId?: ProviderId;
+  existingProviderId?: firebaseClient.ProviderId;
+  requestedProviderId?: firebaseClient.ProviderId;
   type: string;
   user?: m.IUser;
 }
 
 export const startListeningToAuth = () => (dispatch: Redux.Dispatch) => {
   dispatch({ type: actionTypes.ATTEMPT_LOGIN });
-  firebaseClient.auth.onAuthStateChanged((user: firebase.User) => {
+  firebaseClient.onAuthStateChanged((user: firebaseClient.IUser) => {
     dispatch(user ? loginSuccess(user) : logout());
   });
 };
 
-export const signInWithProvider = (requestedProviderId: ProviderId) => (dispatch: Redux.Dispatch) => {
+export const signInWithProvider = (requestedProviderId: firebaseClient.ProviderId) => (dispatch: Redux.Dispatch) => {
   dispatch({ type: actionTypes.ATTEMPT_LOGIN, requestedProviderId });
   firebaseClient.signInWithProvider(requestedProviderId).catch(error => {
-    if (error instanceof FirebaseAccountExistsError) {
+    if (error instanceof firebaseClient.AccountExistsError) {
       dispatch(accountExists(error.existingProviderId));
-    } else if (error instanceof FirebaseUncaughtError) {
+    } else if (error instanceof firebaseClient.UncaughtError) {
       dispatch(cancelLogin());
     }
   });
 }
 
-export const accountExists = (existingProviderId: ProviderId): IAuthAction => ({
+export const accountExists = (existingProviderId: firebaseClient.ProviderId): IAuthAction => ({
   type: actionTypes.ACCOUNT_EXISTS,
   existingProviderId,
 });
 
-export const loginSuccess = (user: firebase.User) => (dispatch: Redux.Dispatch) => {
+export const loginSuccess = (user: firebaseClient.IUser) => (dispatch: Redux.Dispatch) => {
   sentryClient.setUserContext({
     email: user.email,
     id: user.uid,
@@ -57,7 +57,7 @@ export interface ILogout {
 }
 
 export const logout = () => (dispatch: Redux.Dispatch) => {
-  firebaseClient.auth.signOut();
+  firebaseClient.signOut();
   sentryClient.setUserContext();
 
   dispatch({ type: actionTypes.LOGOUT });

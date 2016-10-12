@@ -1,12 +1,12 @@
 import { omit } from 'lodash';
 
 import * as actionTypes from '../actionTypes';
-import * as db from '../firebase/database';
+import * as firebaseClient from '../firebase';
 import { ITask } from '../models';
 
 export interface ITasksState {
   tasks: ITasksStateTasks;
-  tasksRef: firebase.database.Reference;
+  tasksRef: firebaseClient.IReference;
 }
 
 interface ITasksStateTasks {
@@ -19,7 +19,7 @@ export default function tasks(
 ): ITasksState {
   switch(action.type) {
   case actionTypes.LISTEN_TO_TASKS: {
-    const listenToTasksAction: db.IListenToRefAction = action;
+    const listenToTasksAction: firebaseClient.IListenToRefAction = action;
     return Object.assign({}, tasksState, {
       tasksRef: listenToTasksAction.ref,
     });

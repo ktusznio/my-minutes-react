@@ -8,6 +8,7 @@ import MoreVertIcon from 'material-ui/svg-icons/navigation/more-vert';
 
 import { IAppState } from '../reducer';
 import { logout, ILogout } from '../actions/auth';
+import * as firebaseClient from '../firebase';
 import * as routes from '../utils/routes';
 import * as c from './theme/colors';
 
@@ -16,7 +17,7 @@ interface INavigationProps {
   leftIcon?: JSX.Element;
   rightIcon?: JSX.Element;
   logout?: ILogout;
-  user?: firebase.User;
+  user?: firebaseClient.IUser;
 }
 
 const mapStateToProps = (state: IAppState, props) => ({

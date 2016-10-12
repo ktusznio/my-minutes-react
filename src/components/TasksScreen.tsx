@@ -5,7 +5,6 @@ import FloatingActionButton from 'material-ui/FloatingActionButton';
 import ContentAdd from 'material-ui/svg-icons/content/add';
 
 import { saveTask } from '../actions/tasks';
-import * as db from '../firebase/database';
 import * as m from '../models';
 import { IAppState } from '../reducer';
 import { tasksSelector, viewTaskToTask, IViewTask } from '../selectors';

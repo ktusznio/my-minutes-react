@@ -1,3 +1,5 @@
+import * as firebaseClient from './firebase';
+
 // User.
 
 export type UserId = string;
@@ -32,8 +34,7 @@ export interface ITask {
 
 export const buildTask = (props: ITaskProps = {}): ITask => ({
   id: undefined,
-  // Firebase replaces this placeholder with the server's current time.
-  createdAt: (<any>firebase.database).ServerValue.TIMESTAMP,
+  createdAt: firebaseClient.SERVER_TIMESTAMP,
   name: props.name || '',
   state: TaskState.STOPPED,
   goal: buildGoal(props.goal),

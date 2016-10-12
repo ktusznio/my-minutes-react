@@ -127,3 +127,5 @@ export const listenToSessions = (uid: m.UserId, callback: ISessionsListener): fi
 
 export const stopListeningToSessions = (sessionsRef) =>
   sessionsRef.off();
+
+export const SERVER_TIMESTAMP = (<any>firebase.database).ServerValue.TIMESTAMP;

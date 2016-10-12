@@ -5,7 +5,7 @@ import ActionPermIdentity from 'material-ui/svg-icons/action/perm-identity';
 
 import * as authActions from '../actions/auth';
 import * as actionTypes from '../actionTypes';
-import { ProviderId } from '../firebase/firebaseClient';
+import * as firebaseClient from '../firebase';
 import { IAppState } from '../reducer';
 import { IAuthState } from '../reducers/auth';
 import { IRouteParams } from '../router';
@@ -25,7 +25,7 @@ const providerNames = {
 
 interface ILoginScreenProps {
   auth: IAuthState;
-  signInWithProvider: (provider: ProviderId) => void;
+  signInWithProvider: (provider: firebaseClient.ProviderId) => void;
   cancelLogin: () => void;
   params: IRouteParams;
   location: any;
@@ -36,7 +36,7 @@ const mapStateToProps = (state: IAppState) => ({
 });
 
 const mapDispatchToProps = (dispatch: Redux.Dispatch) => ({
-  signInWithProvider: (providerId: ProviderId) => {
+  signInWithProvider: (providerId: firebaseClient.ProviderId) => {
     dispatch(authActions.signInWithProvider(providerId));
   },
   cancelLogin: () => {
@@ -52,7 +52,7 @@ class LoginScreen extends React.Component<ILoginScreenProps, {}> {
     }
   }
 
-  handleLoginTap = (providerId: ProviderId) => {
+  handleLoginTap = (providerId: firebaseClient.ProviderId) => {
     this.props.signInWithProvider(providerId);
   }
 

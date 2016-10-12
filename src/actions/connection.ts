@@ -1,7 +1,7 @@
 import 'whatwg-fetch';
 
 import * as actionTypes from '../actionTypes';
-import firebaseClient from '../firebase/firebaseClient';
+import * as firebaseClient from '../firebase';
 import * as authActions from './auth';
 
 export interface IConnectionChangedAction {
