@@ -1,14 +1,14 @@
 import * as m from '../models';
 import * as authActions from '../actions/auth';
 import * as actionTypes from '../actionTypes';
-import * as firebaseClient from '../firebase';
+import * as api from '../api';
 
 export interface IAuthState {
   [key: string]: any;
   status: string;
   user?: m.IUser;
-  requestedProviderId?: firebaseClient.ProviderId;
-  existingProviderId?: firebaseClient.ProviderId;
+  requestedProviderId?: api.ProviderId;
+  existingProviderId?: api.ProviderId;
 }
 
 export default function auth(authState: IAuthState = {

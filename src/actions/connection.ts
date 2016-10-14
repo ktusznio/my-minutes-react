@@ -1,7 +1,7 @@
 import 'whatwg-fetch';
 
 import * as actionTypes from '../actionTypes';
-import * as firebaseClient from '../firebase';
+import * as api from '../api';
 import * as authActions from './auth';
 
 export interface IConnectionChangedAction {
@@ -16,15 +16,16 @@ export const startListeningToConnection = (store: Redux.Store) => (dispatch: Red
 
 const pollConnection = (store: Redux.Store, dispatch: Redux.Dispatch) => {
   fetch('/images/icons/favicon-16x16.png?' + Date.now())
-    .then(response => {
-      handleConnectionChange(true, store, dispatch);
-    })
     .catch(error => {
+      console.error('connection poll failed', error);
       handleConnectionChange(false, store, dispatch);
       setTimeout(
         () => pollConnection(store, dispatch),
         1500
       );
+    })
+    .then(response => {
+      handleConnectionChange(true, store, dispatch);
     });
 };
 
@@ -33,7 +34,7 @@ const handleConnectionChange = (isOnline: boolean, store: Redux.Store, dispatch:
   const wasOnline = state.connection.isOnline;
 
   if (!wasOnline && isOnline) {
-    firebaseClient.initialize();
+    api.initialize();
     dispatch(authActions.startListeningToAuth());
   }
 

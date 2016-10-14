@@ -1,10 +1,10 @@
 import * as actionTypes from '../actionTypes';
-import * as firebaseClient from '../firebase';
+import * as api from '../api';
 import * as m from '../models';
 
 export interface ISessionsState {
   sessions: ISessionsStateSessions;
-  sessionsRef: firebaseClient.IReference;
+  sessionsRef: api.IReference;
 }
 
 interface ISessionsStateSessions {
@@ -21,7 +21,7 @@ export default function sessions(
 ): ISessionsState {
   switch (action.type) {
   case actionTypes.LISTEN_TO_SESSIONS: {
-    const listenToSessionsAction: firebaseClient.IListenToRefAction = action;
+    const listenToSessionsAction: api.IListenToRefAction = action;
     return Object.assign({}, sessionsState, {
       sessionsRef: listenToSessionsAction.ref,
     });

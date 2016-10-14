@@ -1,9 +1,9 @@
 import * as React from 'react';
 import SvgIcon from 'material-ui/SvgIcon';
 
-import * as firebaseClient from '../firebase';
+import * as api from '../api';
 
-export const renderAuthProviderIcon = (providerId: firebaseClient.ProviderId) => {
+export const renderAuthProviderIcon = (providerId: api.ProviderId) => {
   switch (providerId) {
   case 'google.com':
     return <Google />;

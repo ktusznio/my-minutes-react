@@ -1,10 +1,9 @@
-import * as Promise from 'bluebird';
 import * as firebase from 'firebase';
 
-import config from '../config';
+import { ProviderId, UncaughtError, AccountExistsError } from './types';
 
-// These correspond to PROVIDER_IDs (eg. firebase.auth.FacebookAuthProvider.PROVIDER_ID).
-export type ProviderId = 'facebook.com' | 'google.com' | 'twitter.com';
+const FIREBASE_ERROR_ACCOUNT_EXISTS = 'auth/account-exists-with-different-credential';
+const PENDING_CREDENTIAL_KEY = 'pendingCredential';
 
 interface IFirebaseProviderCredential {
   accessToken: string;
@@ -18,22 +17,14 @@ interface IFirebaseAuthenticationError extends Error {
   credential: IFirebaseProviderCredential;
 }
 
-const FIREBASE_ERROR_ACCOUNT_EXISTS = 'auth/account-exists-with-different-credential';
-const PENDING_CREDENTIAL_KEY = 'pendingCredential';
-
-class FirebaseClient {
-  public auth: firebase.auth.Auth;
-  public db: firebase.database.Database;
-
-  private app: firebase.app.App;
-  private authProviderMap: {
+export default class Auth {
+  private auth: firebase.auth.Auth;
+  private providerMap: {
     [key: string]: firebase.auth.AuthProvider;
   };
 
   initialize() {
-    this.app = firebase.initializeApp(config.firebase);
     this.auth = firebase.auth();
-    this.db = firebase.database();
 
     const facebookAuthProvider = new firebase.auth.FacebookAuthProvider();
     facebookAuthProvider.addScope('email');
@@ -43,11 +34,15 @@ class FirebaseClient {
 
     const twitterAuthProvider = new firebase.auth.TwitterAuthProvider();
 
-    this.authProviderMap = {
+    this.providerMap = {
       'facebook.com': facebookAuthProvider,
       'google.com': googleAuthProvider,
       'twitter.com': twitterAuthProvider,
     };
+  }
+
+  onAuthStateChanged(callback) {
+    this.auth.onAuthStateChanged(callback);
   }
 
   signInWithProvider(providerId: ProviderId): Promise<{}> {
@@ -57,7 +52,7 @@ class FirebaseClient {
       if (window.localStorage.hasOwnProperty(PENDING_CREDENTIAL_KEY)) {
         this.signInWithPendingCredential(providerId).then(
           () => resolve(),
-          (error: IFirebaseAuthenticationError) => reject(new FirebaseUncaughtError(error.code)),
+          (error: IFirebaseAuthenticationError) => reject(new UncaughtError(error.code)),
         );
         return;
       }
@@ -79,12 +74,12 @@ class FirebaseClient {
             // Get registered providers for this email.
             this.auth.fetchProvidersForEmail(error.email).then(providerIds => {
               // Recommend the first existing provider.
-              reject(new FirebaseAccountExistsError(providerIds[0]));
+              reject(new AccountExistsError(providerIds[0]));
             });
             break;
 
           default:
-            reject(new FirebaseUncaughtError(error.code));
+            reject(new UncaughtError(error.code));
           }
         }
       );
@@ -93,6 +88,10 @@ class FirebaseClient {
 
   cancelLoginAttempt() {
     window.localStorage.removeItem(PENDING_CREDENTIAL_KEY);
+  }
+
+  signOut() {
+    this.auth.signOut();
   }
 
   private signInWithPendingCredential(providerId: ProviderId): firebase.Promise<any> {
@@ -129,27 +128,6 @@ class FirebaseClient {
   }
 
   private getProvider(providerId: ProviderId): firebase.auth.AuthProvider {
-    return this.authProviderMap[providerId];
+    return this.providerMap[providerId];
   }
 }
-
-export default new FirebaseClient();
-
-export function FirebaseAccountExistsError(existingProviderId) {
-  this.existingProviderId = existingProviderId;
-}
-Object.setPrototypeOf(FirebaseAccountExistsError, Error);
-FirebaseAccountExistsError.prototype = Object.create(Error.prototype);
-FirebaseAccountExistsError.prototype.name = "FirebaseAccountExistsError";
-FirebaseAccountExistsError.prototype.message = "";
-FirebaseAccountExistsError.prototype.constructor = FirebaseAccountExistsError;
-
-
-export function FirebaseUncaughtError(firebaseErrorCode) {
-  this.firebaseErrorCode = firebaseErrorCode;
-}
-Object.setPrototypeOf(FirebaseUncaughtError, Error);
-FirebaseUncaughtError.prototype = Object.create(Error.prototype);
-FirebaseUncaughtError.prototype.name = "UncaughtFirebaseError";
-FirebaseUncaughtError.prototype.message = "";
-FirebaseUncaughtError.prototype.constructor = FirebaseUncaughtError;

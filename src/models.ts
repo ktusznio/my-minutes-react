@@ -1,4 +1,4 @@
-import * as firebaseClient from './firebase';
+import * as api from './api';
 
 // User.
 
@@ -34,7 +34,7 @@ export interface ITask {
 
 export const buildTask = (props: ITaskProps = {}): ITask => ({
   id: undefined,
-  createdAt: firebaseClient.SERVER_TIMESTAMP,
+  createdAt: api.database.getServerTimestamp(),
   name: props.name || '',
   state: TaskState.STOPPED,
   goal: buildGoal(props.goal),

@@ -2,12 +2,12 @@ import * as Promise from 'bluebird';
 
 import * as m from '../models';
 import * as actionTypes from '../actionTypes';
-import * as firebaseClient from '../firebase';
+import * as api from '../api';
 import { IGetAppState } from '../reducer';
 import { IViewTask } from '../selectors';
 
 export const startListeningToTasks = (user) => (dispatch: Redux.Dispatch) => {
-  const ref = firebaseClient.listenToTasks(user.uid, (event: string, taskOrTaskId) => {
+  const ref = api.database.listenToTasks(user.uid, (event: string, taskOrTaskId) => {
     switch (event) {
     case 'child_added':
       dispatch(taskAdded(taskOrTaskId));
@@ -50,15 +50,15 @@ const taskRemoved = (taskId) => ({
 export const stopListeningToTasks = () => (dispatch: Redux.Dispatch, getState: IGetAppState) => {
   const { tasksRef } = getState().tasks;
   if (tasksRef) {
-    firebaseClient.stopListeningToTasks(tasksRef);
+    api.database.stopListeningToTasks(tasksRef);
     dispatch({ type: actionTypes.STOP_LISTENING_TO_TASKS });
   }
 }
 
 export const saveTask = (task: m.ITask) =>
   (dispatch: Redux.Dispatch, getState: IGetAppState): Promise<m.ITask> => {
-    // Task will be assigned an id by firebaseClient.saveTask.
-    firebaseClient.saveTask(getState().auth.user.uid, task)
+    // Task will be assigned an id by saveTask.
+    api.database.saveTask(getState().auth.user.uid, task)
       .catch(error => {
         dispatch(saveTaskError(error));
       });
@@ -77,7 +77,7 @@ interface IDeleteTaskAction {
 }
 
 export const deleteTask = (task: m.ITask) => (dispatch: Redux.Dispatch, getState: IGetAppState) =>
-  firebaseClient.deleteTask(getState().auth.user.uid, task).catch(
+  api.database.deleteTask(getState().auth.user.uid, task).catch(
     (error) => dispatch(deleteTaskError(error, task))
   );
 
@@ -88,7 +88,7 @@ const deleteTaskError = (error, task: m.ITask) => ({
 });
 
 export const startTask = (task: IViewTask) => (dispatch: Redux.Dispatch, getState: IGetAppState) => {
-  firebaseClient.startTask(
+  api.database.startTask(
     getState().auth.user.uid,
     task
   )
@@ -101,7 +101,7 @@ const startTaskError = (error: Error) => ({
 });
 
 export const stopTask = (task: IViewTask) => (dispatch: Redux.Dispatch, getState: IGetAppState) => {
-  firebaseClient.stopTask(
+  api.database.stopTask(
     getState().auth.user.uid,
     task
   )
