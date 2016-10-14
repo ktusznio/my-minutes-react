@@ -12,17 +12,11 @@ const config = {
     },
   },
   development: {
-    facebookAppId: '<found in facebook developer site>',
-    firebase: {
-      apiKey: '<found in firebase>',
-      authDomain: 'my-minutes-development.firebaseapp.com',
-      databaseURL: 'https://my-minutes-development.firebaseio.com',
-      storageBucket: 'my-minutes-development.appspot.com',
-    },
-    sentry: {
-      dsn: null,
-    },
+    // ...
   },
+  test: {
+    // ...
+  }
 };
 
 export default config[process.env.NODE_ENV];
