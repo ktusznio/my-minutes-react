@@ -3,6 +3,9 @@ import test from 'ava';
 import store from '../../src/store';
 import tasks from '../../src/reducers/tasks';
 import { startListeningToTasks } from '../../src/actions/tasks';
+import * as api from '../../src/api';
+
+api.initialize();
 
 const user = { uid: 'test-uid' };
 

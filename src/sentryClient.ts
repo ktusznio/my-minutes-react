@@ -1,15 +1,18 @@
-import * as Raven from 'raven-js';
-
 import config from './config';
 
 declare var __COMMIT_HASH__: any;
 declare var __VERSION__: any;
 
+let Raven;
+if (typeof window !== 'undefined') {
+  Raven = require('raven-js');
+}
+
 class SentryClient {
   private isInitialized = false;
 
   initialize() {
-    if (config.sentry.dsn) {
+    if (Raven && config.sentry && config.sentry.dsn) {
       Raven.config(config.sentry.dsn).install();
       Raven.setExtraContext({
         'my-minutes-commit-hash': __COMMIT_HASH__,
@@ -29,11 +32,15 @@ class SentryClient {
   }
 
   captureBreadcrumb(crumb) {
-    Raven.captureBreadcrumb(crumb);
+    if (this.isInitialized) {
+      Raven.captureBreadcrumb(crumb);
+    }
   }
 
   setUserContext(context = undefined) {
-    Raven.setUserContext(context);
+    if (this.isInitialized) {
+      Raven.setUserContext(context);
+    }
   }
 }
 

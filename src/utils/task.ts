@@ -60,7 +60,7 @@ export const buildTaskHistory = (task: m.ITask, sessionsByDate = {}, today: mome
   // Build the current week.
   let date = moment(today).startOf('week');
   let history = {};
-  for (var i = 0; i < 7; i++) {
+  for (let i = 0; i < 7; i++) {
     const dateString = date.format('YYYY-MM-DD');
     history[dateString] = getGoalStatusForDate(task, date, sessionsByDate, today);
 

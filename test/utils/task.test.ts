@@ -5,14 +5,17 @@ import * as m from '../../src/models';
 import { IViewTask, IViewTaskHistory } from '../../src/selectors';
 import * as taskUtils from '../../src/utils/task';
 
+const today = moment('2016-08-19');
+const createdAt = moment('2016-08-14');
+
 const task: IViewTask = {
   id: 'test-task',
-  createdAt: Date.now(),
+  createdAt: createdAt.valueOf(),
   name: 'Test',
   state: m.TaskState.STOPPED,
   goal: {
     type: m.GoalType.AT_LEAST,
-    duration: 1 * 60 * 1000, // 1 minute
+    duration: 60 * 1000, // 1 minute
     repeats: [true, true, true, true, true, true, true],
   },
   currentSessionPath: '',
@@ -20,29 +23,27 @@ const task: IViewTask = {
   activeSession: null,
   durationOfCompleteSessions: 0,
   history: null,
-  msLeftForGoal: 1 * 60 * 1000,
+  msLeftForGoal: 60 * 1000, // 1 minute
 };
 
 const sessionsByDate = {
   '2016-08-16': {
-    'id_fail-because-only-30-seconds': {
+    'fail-because-only-30-seconds': {
       startedAt: 0,
       stoppedAt: 1000 * 30,
     },
   },
   '2016-08-17': {
-    'id_pass-because...': {
+    'pass-because...': {
       startedAt: 0,
       stoppedAt: 1000 * 30,
     },
-    'id_...combined-minute': {
+    '...combined-minute': {
       startedAt: 0,
       stoppedAt: 1000 * 30,
     },
   },
 };
-
-const today = moment('2016-08-19');
 
 test('buildTaskHistory', t => {
   const result = taskUtils.buildTaskHistory(
@@ -60,8 +61,5 @@ test('buildTaskHistory', t => {
     '2016-08-20': m.GoalStatus.FUTURE,
   };
 
-  t.deepEqual(
-    result,
-    expected
-  );
+  t.deepEqual(result, expected);
 });
