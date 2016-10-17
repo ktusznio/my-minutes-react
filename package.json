@@ -13,8 +13,8 @@
     "type": "git",
     "url": "https://github.com/ktusznio/my-minutes-react.git"
   },
-  "author": "Kamil Tusznio",
-  "license": "MIT",
+  "author": "Kamil Tusznio <kamil@earlier.io>",
+  "license": "GPL-3.0+",
   "homepage": "https://github.com/ktusznio/my-minutes-react",
   "dependencies": {
     "bluebird": "^3.4.6",

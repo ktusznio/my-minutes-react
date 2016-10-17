@@ -58,3 +58,7 @@ firebase deploy
 * Web push notifications.
 * Cache selector results in `src/selectors`.
 * More tests.
+
+## License
+
+This code is made available under the [GNU GPLv3](http://choosealicense.com/licenses/gpl-3.0/#) license.
