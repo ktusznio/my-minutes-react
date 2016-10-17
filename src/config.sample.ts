@@ -2,13 +2,13 @@ const config = {
   beta: {
     facebookAppId: '<found in facebook developer site>',
     firebase: {
-      apiKey: '<found in firebase>',
-      authDomain: 'my-minutes-beta-cea4c.firebaseapp.com',
-      databaseURL: 'https://my-minutes-beta-cea4c.firebaseio.com',
-      storageBucket: 'my-minutes-beta-cea4c.appspot.com',
+      apiKey: '<found in firebase console>',
+      authDomain: '<found in firebase console>',
+      databaseURL: '<found in firebase console>',
+      storageBucket: '<found in firebase console>',
     },
     sentry: {
-      dsn: 'https://9d05ae52b7ef497e8ac6f3293d7d88ee@app.getsentry.com/92072',
+      dsn: '<found in sentry>',
     },
   },
   development: {
