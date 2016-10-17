@@ -1,10 +1,9 @@
 {
   "name": "my-minutes-react",
   "version": "1.0.0",
-  "description": "My Minutes built with React, Redux, and TypeScript.",
+  "description": "My Minutes built with Firebase, React, Redux, and TypeScript.",
   "scripts": {
     "start": "webpack-dev-server --config webpack.dev.js --content-base public --progress --colors",
-    "start:push": "NODE_ENV=development node push-server",
     "test": "NODE_ENV=test ava",
     "build": "NODE_ENV=development webpack --config webpack.dev.js --progress --colors",
     "build:beta": "NODE_ENV=beta webpack --config webpack.beta.js --progress --colors",

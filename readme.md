@@ -1,20 +1,55 @@
 # My Minutes
 
-An implementation of My Minutes in TypeScript, React/Redux, and Firebase.
+## Demo
+
+You can demo My Minutes [here](https://my-minutes-beta-2.firebaseapp.com/).
+
+Try it on a mobile device with [service-worker support](http://caniuse.com/#feat=serviceworkers) to preview its [Progressive Web App (PWA) affordances](https://developers.google.com/web/progressive-web-apps/).
 
 ## Running
 
 1. Install dependencies: `npm install`
 2. Install typings: `typings install`
 3. Create config.ts: `cp config.sample.ts config.ts` and fill in required values.
-3. Start dev server: `npm start`
-4. Open [localhost:8080](http://localhost:8080).
+4. [Create a Firebase app](https://console.firebase.google.com/) and fill in config values.
+5. [Create a Facebook app](https://developers.facebook.com/apps/) and fill in config values.
+6. Start dev server: `npm start`
+7. Open [localhost:8080](http://localhost:8080).
 
 ## Deploying
 
 ```
 npm install -g firebase-tools
 npm run-script build:beta
-firebase use beta
+firebase use <your firebase app>
 firebase deploy
 ```
+
+## Architecture
+
+My Minutes is built using:
+
+* [TypeScript](https://www.typescriptlang.org/)
+* [Firebase](https://firebase.google.com/)
+* [React](https://facebook.github.io/react/)
+* [Redux](http://redux.js.org/)
+* [Webpack](https://webpack.github.io/)
+* [service-worker](https://developer.mozilla.org/en/docs/Web/API/Service_Worker_API)
+
+Most architectural choices stem from these tools.
+
+* Authentication is handled by Firebase.
+* App state is stored in reducers.
+* UI interactions dispatch Redux actions.
+* [Redux-thunk](https://github.com/gaearon/redux-thunk) is used to dispatch async actions where necessary (eg. interactions with Firebase, other network calls).
+* Firebase usage is encapsulated in a client exposed by `src/api/index.ts`
+
+## Limitations
+
+* Offline support: the app is resilient when network connectivity is lost (thanks to Firebase) but still requires a network connection to authenticate on launch. This is a limitation in Firebase's web client.
+
+## TODOs
+
+* Web push notifications.
+* Cache selector results in `src/selectors`.
+* More tests.
