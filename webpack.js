@@ -28,7 +28,7 @@ module.exports = {
     new webpack.optimize.OccurenceOrderPlugin(),
     new webpack.DefinePlugin({
       'process.env': {
-        'NODE_ENV': JSON.stringify('beta'),
+        'NODE_ENV': JSON.stringify('production'),
       },
       __COMMIT_HASH__: JSON.stringify(commitHash),
       __VERSION__: JSON.stringify(packageJson.version),

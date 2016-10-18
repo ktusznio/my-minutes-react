@@ -1,5 +1,5 @@
 const config = {
-  beta: {
+  production: {
     facebookAppId: '<found in facebook developer site>',
     firebase: {
       apiKey: '<found in firebase console>',

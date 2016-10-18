@@ -48,7 +48,7 @@ Most architectural choices stem from these tools.
 
 ```
 npm install -g firebase-tools
-npm run-script build:beta
+npm run-script build
 firebase use <firebase app id>
 firebase deploy
 ```
