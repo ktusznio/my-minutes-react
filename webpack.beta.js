@@ -43,7 +43,7 @@ module.exports = {
   module: {
     loaders: [
       {
-        loader: 'ts-loader',
+        loader: 'babel-loader?presets[]=es2015&presets[]=react!ts-loader',
         test: /\.tsx?$/,
         include: path.join(__dirname, 'src'),
       },
