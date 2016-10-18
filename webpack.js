@@ -1,5 +1,6 @@
 var path = require('path');
 var webpack = require('webpack');
+var WebpackNotifierPlugin = require('webpack-notifier');
 
 var packageJson = require('./package.json');
 var swPrecacheWebpackPlugin = require('./sw-precache-webpack-plugin');
@@ -25,6 +26,7 @@ module.exports = {
     publicPath: '/',
   },
   plugins: [
+    new WebpackNotifierPlugin(),
     new webpack.optimize.OccurenceOrderPlugin(),
     new webpack.DefinePlugin({
       'process.env': {
