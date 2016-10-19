@@ -6,7 +6,7 @@ Find more info about the app, and its iOS-only progenitor, [here](http://www.mym
 
 ## Demo
 
-You can demo My Minutes [here](https://my-minutes-beta-2.firebaseapp.com/).
+You can demo My Minutes [here](https://beta.myminutesapp.com/).
 
 Try it on a mobile device with [service-worker support](http://caniuse.com/#feat=serviceworkers) to preview its [Progressive Web App (PWA) affordances](https://developers.google.com/web/progressive-web-apps/).
 
