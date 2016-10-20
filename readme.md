@@ -2,7 +2,7 @@
 
 My Minutes is a simple time-tracker to set goals for your time. You can set "at most" goals to limit time spent, or "at least" goals to build a habit.
 
-Find more info about the app, and its iOS-only progenitor, [here](http://www.myminutesapp.com/).
+Find more info about the app [here](http://www.myminutesapp.com/).
 
 ## Demo
 
