@@ -1,0 +1,120 @@
+@import url(http://fonts.googleapis.com/css?family=Open+Sans);
+/* # Font
+-------------------------------------*/
+a {
+  color: #e54b00; }
+  a:hover {
+    color: #b73a00; }
+
+/* # Google Web Font
+-------------------------------------*/
+h1, h2, h3, h4, h5, h6, #header-left {
+  font-family: 'Open Sans', sans-serif;
+  font-weight: 400; }
+
+/* # SPLASH
+-------------------------------------*/
+#splash {
+  background-color: #333;
+}
+
+#product-info {
+  font-family: 'Trebuchet MS', Helvetica, Arial;
+}
+
+#product-info .app-icon img {
+  margin-bottom: 15px;
+  margin-left: 15px;
+}
+
+#product-info .app-title {
+  font-size: 62px;
+}
+
+#product-info p.description {
+  margin-top: 15px;
+  margin-bottom: 35px;
+}
+
+#created-by a {
+  color: #ffffff;
+}
+#created-by a:hover {
+  color: #ffffff;
+}
+#created-by a:visited {
+  color: #ffffff;
+}
+
+.underline {
+  border-bottom: 1px solid #DDD;
+}
+
+.mission {
+  margin-left: 3%;
+  text-size: 17px;
+}
+
+.email_subscription input[type="submit"] {
+  background: #555555 url(../images/chess.png) repeat;
+  color: #fff !important;
+  display: inline-block;
+  *display: inline;
+  padding: 4px 14px;
+  margin-bottom: 0;
+  *margin-left: .3em;
+  font-size: 14px;
+  line-height: 20px;
+  *line-height: 20px;
+  color: #333333;
+  text-align: center;
+  text-shadow: 0 1px 1px rgba(255, 255, 255, 0.75);
+  cursor: pointer;
+  border: 1px solid rgba(0, 0, 0, 0.1);
+  -webkit-border-radius: 4px;
+     -moz-border-radius: 4px;
+          border-radius: 4px;
+  filter: progid:dximagetransform.microsoft.gradient(startColorstr='#ffffffff', endColorstr='#ffe6e6e6', GradientType=0);
+  filter: progid:dximagetransform.microsoft.gradient(enabled=false);
+  *zoom: 1;
+  -webkit-box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.2), 0 1px 2px rgba(0, 0, 0, 0.05);
+     -moz-box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.2), 0 1px 2px rgba(0, 0, 0, 0.05);
+          box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.2), 0 1px 2px rgba(0, 0, 0, 0.05);
+}
+
+.block {
+  display: inline-block;
+}
+
+#appleBadge {
+  vertical-align: top;
+}
+#appleBadge img {
+  margin-top: 1px;
+}
+
+#created-by {
+  margin-bottom: 35px;
+}
+
+#created-by a {
+  border-bottom: 1px dashed #ffffff;
+}
+
+#want-to-hear {
+  margin-bottom: 5px;
+}
+
+.fb-like {
+  margin: 0 20px;
+}
+
+#info {
+  max-width: 405px;
+}
+
+@media (max-width: 1140px) {
+  #info {
+    margin: 0 auto;
+  }
+}

@@ -1,9 +1,0 @@
-export const black = '#000';
-export const blue = '#1A95D3';
-export const green = '#00C853';
-export const grey = '#CBCBCB';
-export const greyTransparent = 'rgba(50, 50, 50, 0.5)';
-export const red = '#F93943';
-export const white = '#FFF';
-export const whiteTransparent = 'rgba(0, 0, 0, 0.5)';
-export const transparent = 'transparent';

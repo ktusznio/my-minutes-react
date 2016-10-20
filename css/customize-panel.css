@@ -1,0 +1,84 @@
+/* # MIXINS
+-------------------------------------*/
+/* # CUSTOMIZE PANEL
+-------------------------------------*/
+#mColorPicker {
+  z-index: 10000; }
+
+#mColorPickerInput {
+  padding: 4px; }
+
+#customize-panel {
+  -webkit-box-shadow: 0px 0px 5px 2px rgba(0, 0, 0, 0.1);
+  -moz-box-shadow: 0px 0px 5px 2px rgba(0, 0, 0, 0.1);
+  box-shadow: 0px 0px 5px 2px rgba(0, 0, 0, 0.1);
+  position: fixed;
+  left: -252px;
+  top: 40px;
+  background: #FAFAFA;
+  z-index: 9999;
+  width: 252px;
+  padding: 0; }
+  #customize-panel input[type='text'] {
+    width: 100px;
+    padding: 5px 5px;
+    margin: 0 5px 0 0; }
+  #customize-panel section {
+    border-bottom: 1px solid #DDD;
+    padding: 20px 15px;
+    background: #FAFAFA;
+    position: relative;
+    z-index: 1000;
+    display: none; }
+  #customize-panel .item {
+    margin: 0 0 10px 0; }
+  #customize-panel .title {
+    font-weight: bold;
+    margin: 0 0 10px 0; }
+  #customize-panel .item-title {
+    font-size: 10px;
+    color: #888; }
+  #customize-panel .toggler {
+    width: 45px;
+    height: 45px;
+    background: white url(../images/customize/gear.png) center center no-repeat;
+    position: absolute;
+    top: 0;
+    right: -46px;
+    cursor: pointer;
+    -webkit-box-shadow: 0px 0px 5px 3px rgba(0, 0, 0, 0.1);
+    -moz-box-shadow: 0px 0px 5px 3px rgba(0, 0, 0, 0.1);
+    box-shadow: 0px 0px 5px 3px rgba(0, 0, 0, 0.1);
+    -moz-border-radius-topleft: 0px;
+    -moz-border-radius-topright: 4px;
+    -moz-border-radius-bottomright: 4px;
+    -moz-border-radius-bottomleft: 0px;
+    -webkit-border-radius: 0px 4px 4px 0px;
+    border-radius: 0px 4px 4px 0px;
+    border-left: 1px dotted #CCC; }
+  #customize-panel.open .toggler {
+    background: white url(../images/customize/close.png) center center no-repeat; }
+  #customize-panel .custom-list li {
+    -webkit-border-radius: 1px;
+    -moz-border-radius: 1px;
+    border-radius: 1px;
+    padding: 0;
+    background: none;
+    border: 2px solid #FFF;
+    float: left;
+    margin: 0 5px 5px 0;
+    width: 30px;
+    height: 20px;
+    overflow: hidden;
+    cursor: pointer;
+    position: relative; }
+    #customize-panel .custom-list li.scheme.red {
+      background: #e90000; }
+    #customize-panel .custom-list li.scheme.green {
+      background: #8cae03; }
+    #customize-panel .custom-list li.scheme.blue {
+      background: #0095e2; }
+    #customize-panel .custom-list li.scheme.orange {
+      background: #ff4100; }
+    #customize-panel .custom-list li.scheme.black {
+      background: #333; }

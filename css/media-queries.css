@@ -1,0 +1,154 @@
+/*  #MOBILE (Portrait)
+================================================== */
+@media only screen and (max-width: 767px) {
+  .container {
+    width: 290px; }
+
+  #product-container {
+    width: 100%;
+  }
+
+  #tasks-screenshot {
+    max-width: 365px;
+    margin: 0 5px -7px;
+  }
+
+  /* SPLASH */
+  #splash {
+    background-attachment: scroll; }
+    #splash .pattern {
+      background-attachment: scroll; }
+
+  #product-container #product-info {
+    width: 100% !important;
+    text-align: center;
+    position: relative; }
+    #product-container #product-info .button {
+      margin-right: 0; }
+  #product-container #device,
+  #product-container #device-2nd {
+    display: none !important; }
+
+  /* HEADER */
+  header #header-left {
+    text-align: center;
+    float: none; }
+  header #header-right {
+    display: none; }
+
+  /* FOOTER */
+  footer #footer-right {
+    float: left;
+    margin: 0 0 10px 0; }
+    footer #footer-right li {
+      margin: 0 15px 10px 0; }
+
+  /* CONTENT */
+  #content h2 {
+    font-size: 25px; }
+  #content h3 {
+    font-size: 22px; }
+  #content h4 {
+    font-size: 19px; }
+  #content h5 {
+    font-size: 16px; }
+  #content h6 {
+    font-size: 15px; }
+  #content .section-title span em {
+    width: 35px;
+    height: 35px; }
+
+  /* ELEMENTS */
+  .frame {
+    border: none;
+    padding: 0; }
+
+  .slide-control {
+    display: none; }
+
+  .gallery-list li {
+    width: 290px;
+    opacity: 1; }
+
+  #twitter-box,
+  #twitter-box .tweet_list li {
+    height: 10em; } }
+/*  #TABLET (Portrait)
+================================================== */
+@media screen and (min-width:768px) and (max-width:1140px) {
+  .container {
+    width: 740px; }
+
+  /* SPLASH */
+  #splash {
+    background-attachment: scroll; }
+    #splash .pattern {
+      background-attachment: scroll; }
+
+  #tasks-screenshot {
+    max-width: 405px;
+    margin-bottom: -7px;
+  }
+
+  #product-container #device {
+    width: 100% !important;
+    bottom: 0 !important; }
+  #product-container #product-info {
+    width: 100% !important;
+    text-align: center;
+    position: relative; }
+  #product-container.ipad-portrait #device-2nd, #product-container.android-tablet-portrait #device-2nd {
+    left: 55px; }
+  #product-container.ipad-landscape #device-2nd, #product-container.android-tablet-landscape #device-2nd {
+    right: 0; }
+
+  /* FOOTER */
+  footer #footer-right {
+    margin: 0 0 10px 0;
+    float: left; }
+    footer #footer-right li {
+      margin: 0 15px 10px 0; }
+
+  /* ELEMENTS */
+  .gallery-list li {
+    width: 365px;
+    opacity: 1; } }
+/* # VISIBLE & HIDDEN
+-------------------------------------*/
+.visible-phone,
+.visible-tablet,
+.hidden-desktop {
+  display: none !important; }
+
+@media only screen and (max-width: 767px) {
+  .visible-phone,
+  .hidden-desktop,
+  .hidden-tablet {
+    display: inherit !important; }
+
+  .visible-desktop,
+  .visible-tablet,
+  .hidden-phone {
+    display: none !important; } }
+@media screen and (min-width:768px) and (max-width:1140px) {
+  #tasks-screenshot {
+    max-width: 405px;
+    margin-bottom: -7px;
+  }
+  .visible-tablet,
+  .hidden-desktop,
+  .hidden-phone {
+    display: inherit !important; }
+
+  .visible-desktop,
+  .visible-phone,
+  .hidden-tablet {
+    display: none !important; } }
+
+@media screen and (min-width: 1141px) {
+  #tasks-screenshot {
+    max-width: 405px;
+    margin-bottom: -7px;
+  }
+
+}

@@ -1,0 +1,24 @@
+My Minutes App Store Description
+
+My Minutes is an elegant personal time tracker that lets you structure your time to become more effective in your day-to-day tasks.
+
+Becoming more effective is all about creating structure in your routine and that's exactly what My Minutes helps you do.
+
+Think you're spending too much time surfing the web? Create a task, track the time you're spending, and then create a goal to cut down on time you think is wasted.
+
+Want to put more time into a side project? Track the time you do put into it, then create a more ambitious goal to take things to the next level.
+
+My Minutes keeps you motivated by keeping track of when you hit your goals. You'll see a streak of green when you hit your goals consistently, and red when you don't.
+
+Features:
+
+* Elegant design. My Minutes is easy and a joy to use.
+* Set the amount of time you want to put into a task, either “At least” or “At most”.
+* Set the days on which your task repeats.
+* Track the time you put into a task so you can see where your time goes.
+* Get a daily notification with goals you need to hit today.
+* Get a notification when you’ve hit your goal, or when you’re close to going over it.
+* See a weekly streak view of how you’re doing. Green dots mean you’re hitting your goals, so keep it up!
+* Inspiring quotes to keep you going.
+* Tweet your progress to let others know what you’re up to.
+
